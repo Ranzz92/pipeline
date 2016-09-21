@@ -43,7 +43,7 @@
       <scope>test</scope>
     </dependency>
     <!--
-        OSGi runtime dependencies
+        runtime dependencies (for javax.xml.stream.XMLInputFactory)
     -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>

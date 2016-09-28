@@ -24,7 +24,7 @@
     <module>parent</module>
     <module>asciimath-utils</module>
     <module>common-entities</module>
-    <!-- <module>css-utils</module> -->
+    <module>css-utils</module>
     <module>daisy202-utils</module>
     <module>daisy3-utils</module>
     <module>dtbook-utils</module>

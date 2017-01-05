@@ -1,0 +1,303 @@
+<category name="resource"> <!-- 2007-12-19 -->
+	<!-- TODO when done, check that all specref links are ok -->
+	<category name="resource_fileIntegrity">
+		<!-- tests for file-system-level stuff -->
+		<test id="resource_fileExtn" type="requirement">
+			<testDesc>resource file has .res extension</testDesc>
+			<appliesToFile>resource</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#para_53c"/>
+			<onFalseMsg>
+				<msg class="long">resource file does not have a .res extension</msg>
+				<msg class="short">file extension</msg>
+			</onFalseMsg>
+		</test>
+		
+		<test id="resource_fileName" type="requirement">
+			<testDesc>resource file filename contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+			<appliesToFile>resource</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#Allowed-Char"/>
+			<onFalseMsg>
+				<msg class="long">resource file name contains disallowed
+					characters</msg>
+				<msg class="short">filename chars</msg>
+			</onFalseMsg>
+		</test>
+		
+		<test id="resource_relPath" type="requirement">
+			<testDesc>file path (relative to OPF) contains only characters as specified in
+				section 3.3.1 of z3986-2005 specification</testDesc>
+			<appliesToFile>resource</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#Allowed-Char"/>
+			<onFalseMsg>
+				<msg class="long">file path contains disallowed characters</msg>
+				<msg class="short">path chars</msg>
+			</onFalseMsg>
+		</test>
+		
+	</category>
+	
+	<category name="resource_internal"> <!-- tests for internal grammar stuff -->
+		<category name="resource_internal_generic">
+			<!-- internal grammar tests that reoccur for every XML file -->
+			<test id="resource_isDtdValid" type="requirement">
+				<testDesc>resource file is valid to DTD</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">resource file is not valid to DTD</msg>
+					<msg class="short">invalid to DTD</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_prologPubId" type="recommendation">
+				<testDesc>resource file public identifier equals "-//NISO//DTD
+					resource v2005-1//EN"</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#h1_25"/>
+				<onFalseMsg>
+					<msg class="long">resource file public identifier does not equal
+						"-//NISO//DTD resource 2005-1//EN"</msg>
+					<msg class="short">public identifier</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_versionPresence" type="requirement">
+				<testDesc>resource file must have a non-DTD-inferred version attribute
+					on the root element</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">resources version attribute missing</msg>
+					<msg class="short">version attribute</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_versionValue" type="requirement">
+				<testDesc>version attribute on root element must have value
+					2005-1</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">resources version attribute value is not
+						2005-1</msg>
+					<msg class="short">version value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_xmlnsPresence" type="requirement">
+				<testDesc>resource file must have a non-DTD-inferred xmlns attribute on
+					the root element</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">resource file does not have xmlns attribute</msg>
+					<msg class="short">xmlns attribute</msg>
+				</onFalseMsg>
+				<comment>FIXME for testdesc, add 'default' in all ents where this test
+					occurs</comment>
+			</test>
+			
+			<test id="resource_xmlnsValue" type="requirement">
+				<testDesc>resource xmlns attribute value must be
+					'http://www.daisy.org/z3986/2005/resource/'</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">resource file xmlns value is not
+						'http://www.daisy.org/z3986/2005/resource/'</msg>
+					<msg class="short">xmlns attribute value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_xmlLangAttrValue" type="requirement">
+				<testDesc>any occuring xml:lang attribute value is valid to
+					rfc3066</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_466"/>
+				<onFalseMsg>
+					<msg class="long">xml:lang attribute value is not valid to
+						rfc3066</msg>
+					<msg class="short">xml:lang value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_entityDeclInternal" type="requirement">
+				<testDesc>referenced entities must be declared in the internal DTD
+					subset</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#FileConform"/>
+				<onFalseMsg>
+					<msg class="long">a reference occured to an entity that was not
+						declared in the internal DTD subset</msg>
+					<msg class="short">entity decl</msg>
+				</onFalseMsg>
+				<comment>[mg]This test really only makes sense for opf since its the only
+					grammar where the DTD defines entities. Perhaps also to Dtbook if
+					someone hooks up a module</comment>
+			</test>
+		</category> <!-- end resource_internal_generic -->
+		
+		<category name="resource_internal_specific">
+			<!-- internal grammar tests that are unique to this grammar -->
+			
+			<test id="resource_chldrNodeSet" type="requirement">
+				<testDesc>Child elements of the nodeSet element must be informational
+					equivalents in different languages</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">children of a nodeSet in a resource file are not
+						information equivalents</msg>
+					<msg class="short">children of nodeset not info equivalent</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_nodeSetLangUnique" type="requirement">
+				<testDesc>Within a nodeSet, no two resources can have the same
+					language</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">nodeSet has two resources with the same
+						language</msg>
+					<msg class="short">duplicate language in nodeSet</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_resNsUriAtt" type="requirement">
+				<testDesc>nsuri attribute must be unique within document</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176a"/>				
+				<onFalseMsg>
+					<msg class="long">resource file with non-unique nsuri
+						attribute</msg>
+					<msg class="short">non-unique nsuri attribute</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_XPathSubset" type="requirement">
+				<testDesc>The W3C XPath 1.0 subset strings, shall conform to the XPath 1.0
+					Subset EBNF grammar given in section 10.3 of the z3986-2005
+					specification</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176c"/>
+				<onFalseMsg>
+					<msg class="long">XPath string not compliant with subset
+						grammar</msg>
+					<msg class="short">invalid XPath string</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_resourceSrcValue" type="requirement">
+				<testDesc>resource child element src attribute value is a valid URI</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_473"/>
+				<onFalseMsg>
+					<msg class="long">resource child element src attribute value is not a valid
+						URI</msg>
+					<msg class="short">resource src value not valid URI</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_clipBeginValue" type="requirement">
+				<testDesc>resource child audio element clipBegin attribute value uses valid
+					syntax</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_473"/>
+				<onFalseMsg>
+					<msg class="long">resource element clipBegin attribute value does
+						not use valid syntax</msg>
+					<msg class="short">clipBegin value invalid</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="resource_clipEndValue" type="requirement">
+				<testDesc>resource child audio element clipEnd attribute value uses valid
+					syntax</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_473"/>
+				<onFalseMsg>
+					<msg class="long">resource element clipEnd attribute value does not
+						use valid syntax</msg>
+					<msg class="short">clipEnd value invalid</msg>
+				</onFalseMsg>
+			</test>
+			
+		</category> <!-- end resource_internal_specific -->
+	</category> <!-- end resource_internal -->
+	
+	<category name="resource_relations">
+		<category name="resource_relations_generic">
+			<test id="resource_manifestRefs" type="requirement">
+				<testDesc>all local references to files are to files that are listed in
+					manifest</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">a reference was made to a file that is not a member of
+						manifest</msg>
+					<msg class="short">reference to nonmember</msg>
+				</onFalseMsg>
+			</test>
+		</category> <!-- end resource_relations_generic -->
+		
+		<category name="resource_relations_specific">
+			
+			<test id="resource_escStructResEntry" type="requirement">
+				<testDesc>Every escapable structure must have an associated resource
+					file entry</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_108d"/>
+				<onFalseMsg>
+					<msg class="long">An escapable structure lacks an associated
+						resource file entry</msg>
+					<msg class="short">smil file: escapable structure lacks resource
+						file entry</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+			<test id="resource_skipStructResEntry" type="requirement">
+				<testDesc>Every skippable structure must have a resource file
+					entry</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_110c"/>
+				<onFalseMsg>
+					<msg class="long">Skippable structure lacks a resource file
+						entry</msg>
+					<msg class="short">structure missing resource file entry</msg>
+				</onFalseMsg>
+				<comment>AS102004</comment>
+			</test>
+			
+		</category> <!-- end resource_relations_specific -->
+		
+	</category> <!-- end resource_relations -->
+	
+	<!-- res collection area for tests commented out during map authoring -->
+	
+	<!-- end res collection area for commented out tests -->
+	
+	<!-- end res -->
+</category>

@@ -1,0 +1,733 @@
+<category name="smil"> <!-- 2007-12-19 -->
+  <!-- TODO when done, check that all specref links are ok -->
+  <category name="smil_fileIntegrity"> <!-- tests for file-system-level stuff -->        
+    <test id="smil_fileExtn" type="requirement">
+      <testDesc>smil file has .smil extension</testDesc>
+      <appliesToFile>smil</appliesToFile>
+      <appliesToDtbType>all</appliesToDtbType>
+      <specRef href="z3986.html#para_53c"/>
+      <onFalseMsg>
+        <msg class="long">smil file does not have a .smil extension</msg>
+        <msg class="short">file extension</msg>
+      </onFalseMsg>      
+    </test>  
+    
+    <test id="smil_fileName" type="requirement">
+      <testDesc>smil file filename contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+      <appliesToFile>smil</appliesToFile>
+      <appliesToDtbType>all</appliesToDtbType>
+      <specRef href="z3986.html#Allowed-Char"/>
+      <onFalseMsg>
+        <msg class="long">smil file name contains disallowed characters</msg>
+        <msg class="short">filename chars</msg>
+      </onFalseMsg>
+    </test>    
+	  
+    <test id="smil_relPath" type="requirement">
+      <testDesc>file path (relative to OPF) contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+      <appliesToFile>smil</appliesToFile>
+      <appliesToDtbType>all</appliesToDtbType>
+      <specRef href="z3986.html#Allowed-Char"/>
+      <onFalseMsg>
+        <msg class="long">file path contains disallowed characters</msg>
+        <msg class="short">path chars</msg>
+      </onFalseMsg>
+    </test>    
+  </category>  
+  
+  <category name="smil_internal"> <!-- tests for internal grammar stuff -->    
+    <category name="smil_internal_generic"> <!-- internal grammar tests that reoccur for every XML file -->      
+      <test id="smil_isDtdValid" type="requirement">
+        <testDesc>smil file is valid to DTD</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+        <specRef href="z3986.html#para_101"/>
+        <onFalseMsg>
+          <msg class="long">smil file is not valid to DTD</msg>
+          <msg class="short">invalid to DTD</msg>
+        </onFalseMsg>
+      </test>
+    
+      <test id="smil_prologPubId_2005_1" type="recommendation">
+        <testDesc>smil file public identifier equals "-//NISO//DTD dtbsmil v2005-1//EN"</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+        <specRef href="z3986.html#App1DTDs"/>
+        <onFalseMsg>
+          <msg class="long">smil file public identifier does not equal "-//NISO//DTD dtbsmil 2005-1//EN"</msg>
+          <msg class="short">public identifier</msg>
+        </onFalseMsg>
+      </test>          
+
+      <test id="smil_prologPubId_2005_2" type="recommendation">
+        <testDesc>smil file public identifier equals "-//NISO//DTD dtbsmil v2005-2//EN"</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+        <specRef href="z3986.html#App1DTDs"/>
+        <onFalseMsg>
+          <msg class="long">smil file public identifier does not equal "-//NISO//DTD dtbsmil 2005-2//EN"</msg>
+          <msg class="short">public identifier</msg>
+        </onFalseMsg>
+      </test>          
+      
+      <test id="smil_xmlnsPresence" type="requirement">
+        <testDesc>smil file must have a non-DTD-inferred xmlns attribute on the root element</testDesc>
+        <appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>        
+        <specRef href="z3986.html#FileConform" />
+        <onFalseMsg>
+          <msg class="long">smil file does not have xmlns attribute</msg>
+          <msg class="short">xmlns attribute</msg>
+        </onFalseMsg>
+      </test>
+   
+      <test id="smil_xmlnsValue" type="requirement">
+        <testDesc>smil xmlns attribute value must be 'http://www.w3.org/2001/SMIL20/'</testDesc>
+        <appliesToFile>smil</appliesToFile>
+    	<appliesToDtbType>all</appliesToDtbType>                
+        <specRef href="z3986.html#App1DTDs" />
+        <onFalseMsg>
+          <msg class="long">smil file xmlns attribute value is not 'http://www.w3.org/2001/SMIL20/' </msg>
+          <msg class="short">xmlns value</msg>
+        </onFalseMsg>
+      </test>
+                  
+      <test id="smil_xmlLangAttrValue" type="requirement">
+        <testDesc>any occuring xml:lang attribute value is valid to rfc3066</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#h3_49a"/>
+		<onFalseMsg>
+		  <msg class="long">xml:lang attribute value is not valid to rfc3066</msg>
+		  <msg class="short">xml:lang value</msg>
+		</onFalseMsg>
+     </test>
+      
+     <test id="smil_entityDeclInternal" type="requirement">
+        <testDesc>referenced entities must be declared in the internal DTD subset</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#FileConform"/>
+		<onFalseMsg>
+		  <msg class="long">a reference occured to an entity that was not declared in the internal DTD subset</msg>
+		  <msg class="short">entity decl</msg>
+		</onFalseMsg>
+		<comment>[mg]This test really only makes sense for opf since its the only grammar where the DTD defines entities. Perhaps also to Dtbook if someone hooks up a module</comment>
+     </test> 
+           
+    </category> <!-- end smil_internal_generic -->
+    
+    <category name="smil_internal_specific"> <!-- internal grammar tests that are unique to this grammar -->
+      <test id="smil_metaDtbPrefixRestriction" type="requirement">
+        <testDesc>meta elements whose name attribute value begins with "dtb:" concludes with one of: uid, generator, totalElapsedTime.</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+        <specRef href="z3986.html#h2_28"/>
+        <onFalseMsg>
+          <msg class="long">metadata names may not begin with the prefix "dtb:" unless defined in Z39.86.</msg>
+          <msg class="short">dtb: prefix not allowed</msg>
+        </onFalseMsg>
+      </test>
+      
+      <test id="smil_metaDtbGenPresence" type="recommendation">
+        <testDesc>dtb:generator meta element exists</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+        <specRef href="z3986.html#li_338"/>
+        <onFalseMsg>
+          <msg class="long">meta element dtb:generator is missing</msg>
+          <msg class="short">dtb:generator missing</msg>
+        </onFalseMsg>
+      </test>
+      
+      <test id="smil_metaDtbTotElaPresence" type="requirement">
+        <testDesc>dtb:totalElapsedTime meta element exists</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_341"/>
+		<onFalseMsg>
+		  <msg class="long">meta element dtb:totalElapsedTime is missing</msg>
+		  <msg class="short">dtb:totalElapsedTime missing</msg>
+		</onFalseMsg>	
+      </test>
+      
+      <test id="smil_metaDtbTotElaSyntax" type="requirement">
+        <testDesc>dtb:totalElapsedTime content attribute value uses valid syntax</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_341"/>
+		<onFalseMsg>
+		  <msg class="long">invalid value on meta element dtb:totalElapsedTime content attribute</msg>
+		  <msg class="short">dtb:totalElapsedTime content attr value</msg>
+		</onFalseMsg>
+      </test>
+      
+      <test id="smil_metaTextDtbTotElaAccurate" type="requirement">
+        <testDesc>dtb:totalElapsedTime contains value of 0</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="z3986.html#li_344"/>
+		<onFalseMsg>
+		  <msg class="long">dtb:totalElapsedTime invalid</msg>
+		  <msg class="short">ttlElapsedTime invalid</msg>
+		</onFalseMsg>
+      </test>
+      
+      <test id="smil_metaDtbUidPresence" type="requirement">
+        <testDesc>dtb:uid meta element exists</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_345"/>
+		<onFalseMsg>
+		  <msg class="long">meta element dtb:uid is missing</msg>
+		  <msg class="short">dtb:uid missing</msg>
+        </onFalseMsg>
+      </test>
+      
+      <test id="smil_CstTstDefStAttr" type="requirement">
+        <testDesc>customTest element has a non-DTD-inferred defaultState attribute</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#para_110"/>
+		<onFalseMsg>
+		  <msg class="long">customTest element has no defaultState attribute</msg>
+		  <msg class="short">customTest defaultState attr</msg>
+	        </onFalseMsg>
+		<comment>note: dtd parse introduces this element if not in physical file</comment>
+      </test>
+      
+      <test id="smil_CstTstOverrideAttr" type="requirement">
+        <testDesc>customTest element has a non-DTD-inferred override attribute</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#para_112"/>
+		<onFalseMsg>
+		  <msg class="long">customTest element has no override attribute</msg>
+		  <msg class="short">customTest override attr</msg>
+		</onFalseMsg>
+		<comment>note: dtd parse introduces this element if not in physical file</comment>
+      </test>
+      
+      <test id="smil_seqDurValue" type="requirement">
+        <testDesc>seq dur attribute value uses valid syntax</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#h2_30"/>
+		<onFalseMsg>
+		  <msg class="long">Seq element dur attribute value does not use valid syntax</msg>
+		  <msg class="short">seq dur value invalid</msg>
+		</onFalseMsg>
+      </test>
+      
+      <test id="smil_parContent" type="requirement">
+        <testDesc>Each par contains no more than one each of text, audio, image, and seq.</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#para_118"/>
+		<onFalseMsg>
+		  <msg class="long">par contains more than one each of text, audio, image, and seq</msg>
+		  <msg class="short">par content</msg>
+		</onFalseMsg>
+        <comment>7.4.7 Content of pars</comment>
+      </test>
+
+      <test id="smil_textSrcValue" type="requirement">
+		<testDesc>text element src attribute value is a valid URI</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_314"/>
+		<onFalseMsg>
+		  <msg class="long">text element src attribute value is not a valid URI</msg>
+		  <msg class="short">text src value</msg>
+        </onFalseMsg>
+      </test>
+
+      <test id="smil_audioSrcValue" type="requirement">
+        <testDesc>audio element src attribute value is a valid URI</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioOnly</appliesToDtbType>
+		<appliesToDtbType>audioNCX</appliesToDtbType>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+		<appliesToDtbType>audioFullText</appliesToDtbType>
+		<appliesToDtbType>textPartAudio</appliesToDtbType>
+		<specRef href="z3986.html#li_319"/>
+		<onFalseMsg>
+		  <msg class="long">audio element src attribute value is not a valid URI</msg>
+		  <msg class="short">audio src value</msg>
+        </onFalseMsg>
+      </test>
+
+      <test id="smil_imgSrcValue" type="requirement">
+        <testDesc>img element src attribute value is a valid URI</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_326"/>
+		<onFalseMsg>
+		  <msg class="long">img element src attribute value is not a valid URI</msg>
+		  <msg class="short">img src value</msg>
+		</onFalseMsg>
+      </test>
+
+      <test id="smil_clipBeginValue" type="requirement">
+        <testDesc>audio element clipBegin attribute value uses valid syntax</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioOnly</appliesToDtbType>
+		<appliesToDtbType>audioNCX</appliesToDtbType>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+		<appliesToDtbType>audioFullText</appliesToDtbType>
+		<appliesToDtbType>textPartAudio</appliesToDtbType>
+		<specRef href="z3986.html#li_319"/>
+		<onFalseMsg>
+		  <msg class="long">audio element clipBegin attribute value does not use valid syntax</msg>
+		  <msg class="short">clipBegin value</msg>
+        </onFalseMsg>
+      </test>
+
+      <test id="smil_clipEndValue" type="requirement">
+        <testDesc>audio element clipEnd attribute value uses valid syntax</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioOnly</appliesToDtbType>
+		<appliesToDtbType>audioNCX</appliesToDtbType>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+		<appliesToDtbType>audioFullText</appliesToDtbType>
+		<appliesToDtbType>textPartAudio</appliesToDtbType>
+		<specRef href="z3986.html#li_319"/>
+		<onFalseMsg>
+		  <msg class="long">audio element clipEnd attribute value does not use valid syntax</msg>
+		  <msg class="short">clipEnd value</msg>
+		</onFalseMsg>
+      </test>
+	
+      <test id="smil_clipEndAfterclipBegin" type="requirement">
+        <testDesc>audio element clipEnd attribute value is greater than clipBegin</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioOnly</appliesToDtbType>
+		<appliesToDtbType>audioNCX</appliesToDtbType>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+		<appliesToDtbType>audioFullText</appliesToDtbType>
+		<appliesToDtbType>textPartAudio</appliesToDtbType>
+		<specRef href="z3986.html#li_319"/>
+		<onFalseMsg>
+		  <msg class="long">audio element clipEnd attribute value is less than clipBegin</msg>
+		  <msg class="short">clipEnd before clipBegin</msg>
+		</onFalseMsg>
+      </test>
+            
+      <test id="smil_validRegion" type="requirement">
+        <testDesc>region attribute on media object points to region defined in layout</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_318"/>
+		<onFalseMsg>
+		  <msg class="long">region attribute points to undefined region</msg>
+		  <msg class="short">undefined region</msg>
+		</onFalseMsg>
+        <comment>mg: why is this not an IDREF?</comment>
+      </test>
+	      
+      <test id="smil_hrefValue" type="requirement">
+        <testDesc>href attribute on the a element is a valid URI</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_334"/>
+		<onFalseMsg>
+		  <msg class="long">href attribute on the a element is not a valid URI</msg>
+		  <msg class="short">a/@href URI</msg>
+		</onFalseMsg>
+      </test>
+      
+      <test id="smil_hrefSMIL" type="requirement">
+        <testDesc>href attribute on anchor elements with attribute external='false' points to a SMIL file</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_334"/>
+		<onFalseMsg>
+		  <msg class="long">href attribute on anchor element does not point to SMIL</msg>
+		  <msg class="short">a/@href not SMIL</msg>
+		</onFalseMsg>
+		<comment>[mg]: added support for the external link type</comment>
+      </test>
+      
+      <test id="smil_endValue" type="requirement">
+        <testDesc>any occuring end attribute value is valid to section 7.8.1</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#End-Vals"/>
+		<onFalseMsg>
+		  <msg class="long">end attribute value is not valid</msg>
+		  <msg class="short">end attr value</msg>
+		</onFalseMsg>
+      </test>
+      
+      <test id="smil_escStructIsSeq" type="requirement">
+        <testDesc>SMIL entry for any escapable structure must be a seq element</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+        <specRef href="z3986.html#para_108a" />
+        <onFalseMsg>
+          <msg class="long">escapable structure does not consist of seq element</msg>
+          <msg class="short">escapable not seq</msg>
+        </onFalseMsg>
+        <comment>
+          [mg]implementation: check that only seqs have [@end startswith 'DTBuserEscape;' ]
+        </comment>
+      </test>
+
+      <test id="smil_escStructHasChildTc" type="requirement">
+        <testDesc>any escapable structure must contain at least one child time container</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>        
+        <specRef href="z3986.html#para_108a" />
+        <onFalseMsg>
+          <msg class="long">escapable structure does not contain at least one child time container</msg>
+          <msg class="short">escapable seq children</msg>
+        </onFalseMsg>
+      </test>
+
+      <test id="smil_escStructChildIdValue" type="requirement">
+        <testDesc>seq element end attribute values beginning with "DTBuserEscape;" ends with "childId-value.end", where childID-value is the id value of the last child time container of the seq element.</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>        
+        <specRef href="z3986.html#para_108a" />
+        <onFalseMsg>
+          <msg class="long">escapable structure end attribute value invalid</msg>
+          <msg class="short">escapable seq end attr value</msg>
+        </onFalseMsg>      
+      </test>
+
+      <test id="smil_escStrucClassAttr" type="requirement">
+        <testDesc>Each escapable structure has a class attribute</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>        
+        <specRef href="z3986.html#para_108a" />
+        <onFalseMsg>
+          <msg class="long">class attribute on parent of escapable structure missing </msg>
+          <msg class="short">missing class attribute</msg>
+        </onFalseMsg>
+        <comment>Note: table and list values are checked in smil_tableListClass</comment>
+      </test>
+
+      <test id="smil_pauseStructIsSeq" type="requirement">
+        <testDesc>SMIL entry for any pausable structure must be a seq element</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>        
+        <specRef href="z3986.html#para_126b" />
+        <onFalseMsg>
+          <msg class="long">pausable structure does not consist of seq element</msg>
+          <msg class="short">pausable not seq</msg>
+        </onFalseMsg>
+        <comment>
+          [mg]implementation: check that only seqs have [@end startswith 'DTBuserResume;' ]
+          TODO [pk] should it not be contains('DTBuserResume') to account also for DTBuserEscape; DTBuserResume;childId-value.end+Clock-value
+        </comment>
+      </test>
+
+      <test id="smil_pauseStructHasChildTc" type="requirement">
+        <testDesc>any pausable structure must contain at least one child time container</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>        
+        <specRef href="z3986.html#para_126b" />
+        <onFalseMsg>
+          <msg class="long">pausable structure does not contain at least one child time container</msg>
+          <msg class="short">pausable seq children</msg>
+        </onFalseMsg>
+      </test>
+      
+      <test id="smil_anchorsNotNested" type="requirement">
+        <testDesc>an anchor element must not have an anchor descendant</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>        
+        <specRef href="z3986.html#SMILLinks" />
+        <onFalseMsg>
+          <msg class="long">anchor with anchor descendant</msg>
+          <msg class="short">nested anchors</msg>
+        </onFalseMsg>        
+      </test>
+
+	 <test id="smil_customTestAttrResolvesToCustomTestElement" type="requirement">
+        <testDesc>customTest attribute on smil:body descendants refer via IDREF to the id of a customTest element in smil:head</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+        <specRef href="z3986.html#h2_28"/>
+        <onFalseMsg>
+          <msg class="long">customTest attribute value does not refer to a customTest element in head</msg>
+          <msg class="short">customTest idref destination</msg>
+        </onFalseMsg>
+      </test>
+	
+		
+    </category> <!-- end smil_internal_specific -->
+  </category> <!-- end smil_internal -->
+  
+  <category name="smil_relations">
+    <category name="smil_relations_generic">
+      
+      <test id="smil_metaAudioDtbTotElaAccurate" type="requirement">
+        <testDesc>dtb:totalElapsedTime contains total time in all SMILs preceding this instance</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioOnly</appliesToDtbType>
+		<appliesToDtbType>audioNCX</appliesToDtbType>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+		<appliesToDtbType>audioFullText</appliesToDtbType>
+		<appliesToDtbType>textPartAudio</appliesToDtbType>
+		<specRef href="z3986.html#li_341"/>
+        <onFalseMsg>
+		  <msg class="long">dtb:totalElapsedTime is inaccurate</msg>
+		  <msg class="short">ttlElapsedTime inaccurate</msg>
+		</onFalseMsg>
+      </test>
+    </category>
+    <category name="smil_relations_specific">
+      
+      <test id="smil_ncxCustomTestMatch" type="requirement">
+			<testDesc>each customTest element in SMIL has
+				 its id, override, and defaultState attrs 
+				 duplicated in one smilCustomTest element in NCX
+			</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_353"/>
+				<onFalseMsg>
+					<msg class="long">smilCustomTest from SMIL missing in NCX</msg>
+					<msg class="short">smilCustomTest missing in NCX</msg>
+				</onFalseMsg>
+				<comment>
+				 Added by jp, 1 Nov 2005 (separating presence/value tests)
+				 mg: means: each customTest element in SMIL has
+				 its id, override, and defaultState attrs 
+				 duplicated in a smilCustomTest element in NCX				 
+				 (see ncx_smilCustomTestMatch)
+      			 </comment>
+		</test>
+      
+      
+      <test id="smil_anchorManifestExternalAttributeFalse" type="requirement">      
+        <testDesc>All files referenced from SMIL are represented in package file manifest, except those files referenced from anchor elements where the external attribute is valued 'true'</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#Manifest"/>
+        <onFalseMsg>
+		  <msg class="long">reference to file not represented in manifest</msg>
+		  <msg class="short">file not in manifest</msg>
+		</onFalseMsg>
+      </test>
+
+      <test id="smil_anchorManifestExternalAttributeTrue" type="requirement">      
+        <testDesc>All files referenced from SMIL anchor elements where the external attribute is valued 'true' are not represented in package file manifest</testDesc>
+        <appliesToFile>smil</appliesToFile>
+        <appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#SMILLinks"/>
+        <onFalseMsg>
+		  <msg class="long">smil external link refernces file that is represented in manifest</msg>
+		  <msg class="short">external link - file in manifest</msg>
+		</onFalseMsg>        
+        <comment>[mg] FIXME James - is this right? Are they in distInfo?</comment>
+      </test>
+
+      
+      <test id="smil_textSrcResolves" type="requirement">
+        <testDesc>text element src attribute URI resolves</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li314" />
+		<onFalseMsg>
+		  <msg class="long">text element src attribute URI does not resolve</msg>
+		  <msg class="short">text src URI does not resolve</msg>
+		</onFalseMsg>
+        <comment>Added by JP; this is not same as smil_textSrcValue</comment>
+      </test>
+
+      <test id="smil_metaDtbUidValue" type="requirement">
+        <testDesc>dtb:uid meta element content attribute matches value of package unique-identifier</testDesc>
+	    <appliesToFile>smil</appliesToFile>
+     	<appliesToDtbType>all</appliesToDtbType>
+	    <specRef href="z3986.html#li_345"/>
+	    <onFalseMsg>
+	      <msg class="long">invalid value on meta element dtb:uid content attribute</msg>
+	      <msg class="short">dtb:uid content attr value</msg>
+	    </onFalseMsg>	
+      </test>
+      
+      <test id="smil_srcDtbook" type="requirement">
+        <testDesc>src attribute on text element references dtbook file</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+		<appliesToDtbType>audioFullText</appliesToDtbType>
+		<appliesToDtbType>textPartAudio</appliesToDtbType>
+		<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="z3986.html#para_67"/>
+		<onFalseMsg>
+		  <msg class="long">text element src attribute does not reference dtbook file</msg>
+		  <msg class="short">text src not dtbook</msg>
+		</onFalseMsg>
+      </test>
+      
+      <test id="smil_srcAudio" type="requirement">
+        <testDesc>src attribute on audio element references audio file</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioOnly</appliesToDtbType>
+		<appliesToDtbType>audioNCX</appliesToDtbType>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+		<appliesToDtbType>audioFullText</appliesToDtbType>
+		<appliesToDtbType>textPartAudio</appliesToDtbType>
+		<specRef href="z3986.html#li_321"/>
+		<onFalseMsg>
+		  <msg class="long">audio element src attribute does not reference audio file</msg>
+		  <msg class="short">audio src not audio</msg>
+        </onFalseMsg>
+      </test>
+
+      <test id="smil_srcImg" type="requirement">
+        <testDesc>src attribute on img element references image file</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>all</appliesToDtbType>
+		<specRef href="z3986.html#li_328"/>
+		<onFalseMsg>
+		  <msg class="long">img element src attribute does not reference image file</msg>
+		  <msg class="short">img src not image</msg>
+        </onFalseMsg>
+      </test>
+
+      <test id="smil_clipEndBeforeEOF" type="requirement">
+        <testDesc>audio element clipEnd attribute value is less than end of audio file</testDesc>
+	    <appliesToFile>smil</appliesToFile>
+	    <appliesToDtbType>audioOnly</appliesToDtbType>
+	    <appliesToDtbType>audioNCX</appliesToDtbType>
+	    <appliesToDtbType>audioPartText</appliesToDtbType>
+	    <appliesToDtbType>audioFullText</appliesToDtbType>
+	    <appliesToDtbType>textPartAudio</appliesToDtbType>
+	    <specRef href="z3986.html#li_319"/>
+	    <onFalseMsg>
+	      <msg class="long">audio element clipEnd attribute value is greater than end of file</msg>
+	      <msg class="short">clipEnd after EOF</msg>
+	    </onFalseMsg>
+      </test>
+				
+      <test id="smil_noterefLink" type="strongRecommendation">
+        <testDesc>all smil constructs representing dtbook noterefs have links</testDesc>
+	    <appliesToFile>smil</appliesToFile>
+	    <appliesToDtbType>audioPartText</appliesToDtbType>
+	    <appliesToDtbType>audioFullText</appliesToDtbType>
+	    <appliesToDtbType>textPartAudio</appliesToDtbType>
+	    <specRef href="z3986.html#para_122"/>
+	    <onFalseMsg>
+	      <msg class="long">noteref does not have a link</msg>
+	      <msg class="short">noteref link</msg>
+	    </onFalseMsg>
+	    <comment>
+	      only implementable when dtbook is available
+          assumes that anchor wraps the relevant tc	
+	    </comment>
+      </test>
+				
+      <test id="smil_annorefLink" type="strongRecommendation">
+        <testDesc>all smil constructs representing dtbook annorefs have links</testDesc>
+    	<appliesToFile>smil</appliesToFile>
+	    <appliesToDtbType>audioPartText</appliesToDtbType>
+	    <appliesToDtbType>audioFullText</appliesToDtbType>
+	    <appliesToDtbType>textPartAudio</appliesToDtbType>
+	    <specRef href="z3986.html#para_122"/>
+	    <onFalseMsg>
+	      <msg class="long">annoref does not have a link</msg>
+	      <msg class="short">annoref link</msg>
+	    </onFalseMsg>
+	    <comment>
+	      only implementable when dtbook is available
+          assumes that anchor wraps the relevant tc
+	    </comment>
+      </test>
+
+     <test id="smil_noterefNoText" type="strongRecommendation">
+        <testDesc>all smil constructs representing dtbook noterefs have links</testDesc>
+	    <appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+	    <specRef href="z3986.html#para_122"/>
+	    <onFalseMsg>
+	      <msg class="long">noteref does not have a link</msg>
+	      <msg class="short">noteref link</msg>
+	    </onFalseMsg>
+	    <comment>
+	      only implementable when dtbook is available
+          assumes that anchor wraps the relevant tc	
+	    </comment>
+      </test>
+				
+      <test id="smil_annorefLinkNoText" type="strongRecommendation">
+        <testDesc>all smil constructs representing dtbook annorefs have links</testDesc>
+    	<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+	    <specRef href="z3986.html#para_122"/>
+	    <onFalseMsg>
+	      <msg class="long">annoref does not have a link</msg>
+	      <msg class="short">annoref link</msg>
+	    </onFalseMsg>
+	    <comment/>
+      </test>
+	
+    <test id="smil_overrideVis" type="recommendation">
+      <testDesc>customTest element override attribute has 'visible' value</testDesc>
+      <appliesToFile>smil</appliesToFile>
+	    <appliesToDtbType>all</appliesToDtbType>              
+        <specRef href="z3986.html#para_112" />
+        <onFalseMsg>
+          <msg class="long">value other than visible on override attribute</msg>
+          <msg class="short">override attribute value</msg>
+        </onFalseMsg>     
+    </test>
+
+    </category> <!-- end smil_relations_specific -->    
+        
+  </category> <!-- end smil_relations -->       
+  
+  <!-- smil collection area for tests commented out during map authoring -->
+    <!-- commented out for now - is this really an error? /mg
+    <test id="smil_metaDtbGenSyntax" type="requirement">
+      <testDesc>dtb:generator content attribute value is not null</testDesc>
+      <appliesToFile>smil</appliesToFile>
+      <appliesToDtbType>all</appliesToDtbType>
+      <specRef href="z3986.html#li_338"/>
+      <onFalseMsg>
+        <msg class="long">invalid value on meta element dtb:generator content attribute</msg>
+        <msg class="short">dtb:generator content attr value</msg>
+      </onFalseMsg>
+    </test>
+    -->
+    <!-- mg: not in 2005
+    <test id="smil_CstTestIdValue" type="requirement">
+      <testDesc>customTest element id attribute value equals a dtbook element name</testDesc>
+        <appliesToFile>smil</appliesToFile>
+    	<appliesToDtbType>all</appliesToDtbType>
+	   <specRef href="z3986.html#para_110"/>
+	<onFalseMsg>
+	  <msg class="long">id attribute of customTest element does not equal a dtbook element name</msg>
+	  <msg class="short">customTest id</msg>
+        </onFalseMsg>
+      </test>
+     -->
+
+     <!--  
+      [mg] this one readded as smil_escStructIsSeq; note: we now determine escapability by relying on the end attribute on the seq, which was not the case for 2002
+      <test id="smil_EscStrSeqWrap" type="requirement">
+        <testDesc>escapable structures are wrapped in a seq</testDesc>
+	<appliesToFile>smil</appliesToFile>
+	<appliesToDtbType>all</appliesToDtbType>
+	<specRef href="z3986.html#para_108"/>
+	<onFalseMsg>
+	  <msg class="long">escapable structure not wrapped in a seq</msg>
+	  <msg class="short">escapable structure: no seq</msg>
+	</onFalseMsg>
+	<comment>mg TODO this is unimplemented since v2002 - fix via capturing values during dtbook sax parse</comment>
+      </test>
+     -->
+
+
+
+  <!-- end smil collection area for commented out tests -->
+   
+<!-- end smil -->
+</category>
+    

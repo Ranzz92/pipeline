@@ -1,0 +1,2387 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE zedTestMap [
+<!ELEMENT testDesc (#PCDATA)*>
+<!ELEMENT appliesToFile (#PCDATA)*>
+<!ELEMENT specRef EMPTY>
+<!ATTLIST specRef href CDATA #REQUIRED>
+<!ELEMENT category (((category|test))*)>
+<!ATTLIST category name CDATA #REQUIRED>
+<!ELEMENT appliesToDtbType (#PCDATA)*>
+<!ELEMENT msg (#PCDATA)*>
+<!ATTLIST msg class (long|short) #REQUIRED>
+<!ELEMENT zedTestMap ((category)+)>
+<!ATTLIST zedTestMap version CDATA #REQUIRED>
+<!ATTLIST zedTestMap date CDATA #REQUIRED>
+<!ELEMENT onFalseMsg ((msg)*)>
+<!ELEMENT comment (#PCDATA)*>
+<!ELEMENT test (testDesc,appliesToFile,(appliesToDtbType)*,specRef,onFalseMsg,(comment)?)>
+<!ATTLIST test id ID #REQUIRED>
+<!ATTLIST test type (requirement|recommendation|strongRecommendation) #REQUIRED>
+<!-- <!ENTITY extensions SYSTEM "file:///C:/Documents and Settings/jwp/My Documents/Work/ZedVal/src/zedsuite/maps/testMapExtensions.xml"> -->
+]>
+<zedTestMap version="1.1.0" date="2005-04-14">
+<!--
+** Begin description of testMap grammar **
+The category element
+  ELEMENT category
+    The category element is a wrapper of test elements.
+    It is an arbitrary wrapper; not for use by machines.
+  ATTRIBUTE name
+    Some descriptor string for human consumption.
+
+The test element
+  ELEMENT test
+    constitutes the atomic level of the test map.
+  ATTRIBUTE id
+    unique identifier of this test in the test map.
+    Note that in the case of test failure,
+    the Zedval report will return a referenc to this value.
+  ATTRIBUTE type
+    Identifies the type of specification requirement.
+    ENUM ('requirement'|'recommendation'|'strongRecommendation')
+
+The testDesc element
+  ELEMENT testDesc
+    Plain statement of specification requirement,
+    answerable only by true or false.
+    If false means that specification requirement was not met.
+
+The appliesToFile element
+  ELEMENT appliesToFile
+    Identifies which document/file types of the Z39.86 that this test applies to.
+    Even in relational (interdocument) tests, there is only one appliesToFile element.
+    Multidirectional dependencies are made unidirectional by splitting into two or more tests.
+
+The appliesToDtbType element
+  ELEMENT appliesToDtbType
+    Contains the name of the DTB type that this test applies to.
+    Value can be either one of the strings allowed for Z3986 dtb:multimediaType element, or a sum:
+    ENUM ('audioOnly' | 'audioNCX' | 'audioPartText' | 'audioFullText' | 'textPartAudio' | 'textNCX' | 'all')
+
+The specRef element
+  ELEMENT specRef
+    URI. Reference to normative statement that has been used as basis for including the test.
+
+The onFalseMsg element
+  ELEMENT onFalseMsg
+    empty
+  ELEMENT msg
+    message to return if test returns false (normative reference was not met)
+  ATTRIBUTE class
+    ENUM ('long'|'short')
+
+The comment element
+  ELEMENT comment
+    Arbitrary comment field for developers.
+
+** End description of testMap grammar: **
+-->
+	<category name="opf">
+		<category name="opf_integrity">
+			<test id="opf_exists" type="requirement">
+				<testDesc>package file exists</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_34"/>
+				<onFalseMsg>
+					<msg class="long">Package file does not exist</msg>
+					<msg class="short">opf not found</msg>
+				</onFalseMsg>
+				<comment>This test is practically redundant since the application will take opf path as input param and not continue unless existing. [TN5]</comment>
+			</test>
+			<!-- From NLS: Q:"TN5. Only one opf file exists.
+      This requires that all files for a given DTB exist in a separate directory.
+      Is that a reasonable requirement, in order for the validator to work?"
+      A: There is as far as we know no restriction that only one opf can exist in a given directory,
+      nor does the validator depend on this since the full path to the opf is taken as an input parameter.
+      -->
+			<test id="opf_isReadable" type="requirement">
+				<testDesc>package file is readable</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_34"/>
+				<onFalseMsg>
+					<msg class="long">Package file is not readable</msg>
+					<msg class="short">opf not readable</msg>
+				</onFalseMsg>
+				<comment>[TN5]</comment>
+			</test>
+			<test id="opf_fileExtn" type="requirement">
+				<testDesc>package file has .opf extension</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_34"/>
+				<onFalseMsg>
+					<msg class="long">package file does not have an .opf extension.</msg>
+					<msg class="short">invalid extension</msg>
+				</onFalseMsg>
+				<comment>??</comment>
+			</test>
+		</category>
+		<category name="opf_internal">
+			<test id="opf_prologPubId" type="requirement">
+				<testDesc>package file public identifier equals "+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Package//EN"</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#h3_13"/>
+				<onFalseMsg>
+					<msg class="long">package file public identifier does not equal "+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Package//EN"</msg>
+					<msg class="short">public identifier value</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="opf_isDtdValid" type="requirement">
+				<testDesc>package file is valid to DTD</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_34"/>
+				<onFalseMsg>
+					<msg class="long">package file is not valid to DTD</msg>
+					<msg class="short">invalid to dtd</msg>
+				</onFalseMsg>
+				<comment>[TN5]</comment>
+			</test>
+			<category name="opf_metadata">
+				<category name="dcmeta">
+					<test id="opf_DcDcNamespace" type="requirement">
+						<testDesc>dc-metadata has an attribute of xmlns:dc="http://purl.org/dc/elements/1.0/"</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#para_45"/>
+						<onFalseMsg>
+							<msg class="long">Attribute xmlns:dc="http://purl.org/dc/elements/1.0/" missing from dc-metadata element.</msg>
+							<msg class="short">xmlns:dc attr</msg>
+						</onFalseMsg>
+						<comment>Although the oebpkg101.dtd declares this as fixed, the oeb spec states it must be physically there, hence dtd validation does not suffice [TN15]</comment>
+					</test>
+					<test id="opf_DcOebNamespace" type="requirement">
+						<testDesc>dc-metadata has an attribute of xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/"</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#para_45"/>
+						<onFalseMsg>
+							<msg class="long">Attribute xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/" missing from dc-metadata element.</msg>
+							<msg class="short">xmlns:oebpackage attr</msg>
+						</onFalseMsg>
+						<comment>[TN15]</comment>
+					</test>
+					<!-- From NLS. This test is covered by DTD
+       TN9
+	<test id="" type="requirement">
+    		<testDesc>Unique-identifier attribute on package element exists</testDesc>
+    		<appliesToFile>opf</appliesToFile>
+    		<specRef href="z3986.html#para_37" />
+    		<tool type="" uses="" />
+    		<onFalseMsg>
+      		<msg class="long">Unique-identifier attribute on package element is missing.</msg>
+      		<msg class="short">unique-identifier attribute missing</msg>
+    		</onFalseMsg>
+	</test>
+	-->
+					<test id="opf_DcIdUniqIdref" type="requirement">
+						<testDesc>dc:Identifier id attribute matches the value of unique-identifier attribute</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#para_37"/>
+						<onFalseMsg>
+							<msg class="long">Value of unique-identifier attribute on package element does not match id value of any dc:Identifier.</msg>
+							<msg class="short">unique-identifier doesn't match any dc:Identifier</msg>
+						</onFalseMsg>
+						<comment>[TN9]</comment>
+					</test>
+					<test id="opf_DcIdentifierValue" type="requirement">
+						<testDesc>dc:Identifier contains a value</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_181"/>
+						<onFalseMsg>
+							<msg class="long">dc:Identifier is not valued</msg>
+							<msg class="short">dc:Identifier not valued</msg>
+						</onFalseMsg>
+						<comment>[TN22]</comment>
+					</test>
+					<!-- From NLS. This test is covered by DTD - dupe id will be reported
+	<test id="" type="requirement">
+    	<testDesc caseSens="CS"> id attribute of exactly one dc:Identifier element matches the value of unique-identifier attribute on package element</testDesc>
+    	<appliesToFile primary="">opf</appliesToFile>
+    	<specRef href="z3986.html#para_37" />
+    	<tool type="" uses="" />
+    	<onFalseMsg>
+      	<msg class="long">id attribute of more than one dc:Identifier element matches the value of unique-identifier attribute on package element</msg>
+      	<msg class="short">multiple matches between  dc:Identifier id and unique-identifier</msg>
+      	</onFalseMsg>
+	</test>
+	-->
+					<test id="opf_DcTitleValue" type="requirement">
+						<testDesc>dc:Title contains a value</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_146"/>
+						<onFalseMsg>
+							<msg class="long">dc:Title is not valued</msg>
+							<msg class="short">dc:Title not valued</msg>
+						</onFalseMsg>
+						<comment>is this really required by the spec?[TN16]</comment>
+					</test>
+					<test id="opf_DcPubPresent" type="requirement">
+						<testDesc>dc:Publisher is present at least once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_161"/>
+						<onFalseMsg>
+							<msg class="long">dc:Publisher is missing.</msg>
+							<msg class="short">dc:Publisher missing</msg>
+						</onFalseMsg>
+						<comment>[TN19]</comment>
+					</test>
+					<test id="opf_DcPubValue" type="requirement">
+						<testDesc>dc:Publisher element value is not null</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_161"/>
+						<onFalseMsg>
+							<msg class="long">dc:Publisher is not valued</msg>
+							<msg class="short">dc:Publisher not valued</msg>
+						</onFalseMsg>
+						<comment>[TN19]</comment>
+					</test>
+					<test id="opf_DcDatePresent" type="requirement">
+						<testDesc>dc:Date is present at least once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_170"/>
+						<onFalseMsg>
+							<msg class="long">dc:Date is missing.</msg>
+							<msg class="short">dc:Date missing</msg>
+						</onFalseMsg>
+						<comment>[TN20]</comment>
+					</test>
+					<test id="opf_DcDateValue" type="requirement">
+						<testDesc>dc:Date value complies with ISO8601</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_170"/>
+						<onFalseMsg>
+							<msg class="long">dc:Date value is not compliant with ISO8601.</msg>
+							<msg class="short">dc:Date value invalid</msg>
+						</onFalseMsg>
+						<comment>[TN20]</comment>
+					</test>
+					<test id="opf_DcFormatPresent" type="requirement">
+						<testDesc>dc:Format is present at least once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_178"/>
+						<onFalseMsg>
+							<msg class="long">dc:Format is missing</msg>
+							<msg class="short">dc:Format missing</msg>
+						</onFalseMsg>
+						<comment>[TN21]</comment>
+					</test>
+					<test id="opf_DcFormatValue" type="requirement">
+						<testDesc>dc:Format value is "ANSI/NISO Z39.86-2002"</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_178"/>
+						<onFalseMsg>
+							<msg class="long">value in dc:Format is not "ANSI/NISO Z39.86-2002"</msg>
+							<msg class="short">dc:Format invalid value</msg>
+						</onFalseMsg>
+						<comment>[TN21]</comment>
+					</test>
+					<test id="opf_DcLangPresent" type="requirement">
+						<testDesc>dc:Language is present at least once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_189"/>
+						<onFalseMsg>
+							<msg class="long">dc:Language is missing.</msg>
+							<msg class="short">dc:Language missing</msg>
+						</onFalseMsg>
+						<comment>[TN23]</comment>
+					</test>
+					<test id="opf_DcLangValue" type="requirement">
+						<testDesc>dc:Language value is a valid RFC 1766 code</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_189"/>
+						<onFalseMsg>
+							<msg class="long">value in dc:Language is not valid RFC 1766 code</msg>
+							<msg class="short">dc:Language value invalid</msg>
+						</onFalseMsg>
+						<comment>[TN23]</comment>
+					</test>
+				</category>
+				<!-- From NLS. This test is redundant - meta not allowed anywhere else in opf than under x-metadata ??
+         TN24 Do we need to create a separate test for each of the "dtb:" names included below?
+	<test id="" type="requirement">
+    	<testDesc caseSens="CS">The names dtb:sourceDate, dtb:sourceEdition, dtb:sourcePublisher, dtb:sourceRights, dtb:sourceTitle, dtb:multimediaType, dtb:narrator, dtb:producer, dtb:producedDate, dtb:revision, dtb:revisionDate, dtb:revisionDescription, dtb:totalTime, and dtb:audioFormat may only appear within the x-metadata containing element, as values of the name attribute on the meta element.</testDesc>
+    	<appliesToFile>opf</appliesToFile>
+    	<specRef href="z3986.html#para_50" />
+    	<tool type="" uses="" />
+    	<onFalseMsg>
+      		<msg class="long">The name dtb:??? is used in incorrect location.</msg>
+      		<msg class="short">dtb:??? used in wrong location.</msg>
+    	</onFalseMsg>     (???): How do you handle the different names? Just do a different test for each?
+	</test>
+	-->
+				<category name="xmeta">
+					<test id="opf_xMetaDtbSourceDatePresence" type="requirement">
+						<testDesc>x-metadata element dtb:sourceDate occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_201"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:sourceDate occured more than one time</msg>
+							<msg class="short">dtb:sourceDate ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbSourceDateValue" type="requirement">
+						<testDesc>x-metadata element dtb:sourceDate value is valid to iso8601</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_201"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:sourceDate value is not valid to iso8601</msg>
+							<msg class="short">dtb:sourceDate value</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbSourceEditionPresence" type="requirement">
+						<testDesc>x-metadata element dtb:sourceEdition occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_204"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:sourceEdition occured more than one time</msg>
+							<msg class="short">dtb:sourceEdition ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbSourcePublisherPresence" type="requirement">
+						<testDesc>x-metadata element dtb:sourcePublisher occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_207"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:sourcePublisher occured more than one time</msg>
+							<msg class="short">dtb:sourcePublisher ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbSourceRightsPresence" type="requirement">
+						<testDesc>x-metadata element dtb:sourceRights occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_210"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:sourceRights occured more than one time</msg>
+							<msg class="short">dtb:sourceRights ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbSourceTitlePresence" type="requirement">
+						<testDesc>x-metadata element dtb:sourceTitle occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_213"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:sourceTitle occured more than one time</msg>
+							<msg class="short">dtb:sourceTitle ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<!-- NLS Q:"TN 31 Do we really need two tests for "exactly one occurrence of": one with onFalseMsg "x is missing,"
+       and one with Msg "too many x's"?  Both are given here." A: No, test only for "exactly one". -->
+					<test id="opf_xMetaMmTypePresence" type="requirement">
+						<testDesc>x-metadata element dtb:multimediaType occurs exactly once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_216"/>
+						<onFalseMsg>
+							<msg class="long">dtb:multimediaType is missing or duplicated in x-metadata</msg>
+							<msg class="short">zero or several dtb:multimediaType</msg>
+						</onFalseMsg>
+						<comment>[TN31]</comment>
+					</test>
+					<test id="opf_xMetaMmTypeValue" type="requirement">
+						<testDesc>x-metadata dtb:multimediaType value is one of: audioOnly, audioNCX, audioPartText, audioFullText, textPartAudio, textNCX</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_216"/>
+						<onFalseMsg>
+							<msg class="long">invalid value in dtb:multimediaType</msg>
+							<msg class="short">invalid dtb:multimediaType value</msg>
+						</onFalseMsg>
+						<comment>[TN31]</comment>
+					</test>
+					<test id="opf_xMetaTotTimePresence" type="requirement">
+						<testDesc>x-metadata element dtb:totalTime occurs exactly once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_234"/>
+						<onFalseMsg>
+							<msg class="long">dtb:totalTime is missing or duplicated in x-metadata</msg>
+							<msg class="short">zero or several dtb:totalTime</msg>
+						</onFalseMsg>
+						<comment>[TN36]</comment>
+					</test>
+					<test id="opf_xMetaTotTimeValue" type="requirement">
+						<testDesc>x-metadata dtb:totalTime value uses valid syntax</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_234"/>
+						<onFalseMsg>
+							<msg class="long">Format of value in dtb:totalTime is invalid</msg>
+							<msg class="short">dtb:totalTime invalid</msg>
+						</onFalseMsg>
+						<comment>[TN36]</comment>
+					</test>
+					<test id="opf_xMetaTotTimeAccurate" type="requirement">
+						<testDesc>x-metadata dtb:totalTime value is the sum of the durations of all SMIL files in the spine</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_234"/>
+						<onFalseMsg>
+							<msg class="long">Value in dtb:totalTime does not match sum of actual durations of all SMIL files in spine</msg>
+							<msg class="short">dtb:totalTime inaccurate</msg>
+						</onFalseMsg>
+						<comment>Added by jwpritchett, 25 Oct 2004 for version 1.0.1</comment>
+					</test>
+					<test id="opf_xMetaDtbProducedDatePresence" type="requirement">
+						<testDesc>x-metadata element dtb:producedDate occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_225"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:producedDate occured more than one time</msg>
+							<msg class="short">dtb:producedDate ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbProducedDateValue" type="requirement">
+						<testDesc>x-metadata element dtb:producedDate value is valid to iso8601</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_225"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:producedDate value is not valid to iso8601</msg>
+							<msg class="short">dtb:producedDate value</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbRevisionPresence" type="requirement">
+						<testDesc>x-metadata element dtb:revision occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_228"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:revision occured more than one time</msg>
+							<msg class="short">dtb:revision ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbRevisionValue" type="requirement">
+						<testDesc>x-metadata element dtb:revision value is a non negative integer</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_228"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:revision value is not a non negative integer</msg>
+							<msg class="short">dtb:revision value</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbRevisionDatePresence" type="requirement">
+						<testDesc>x-metadata element dtb:revisionDate occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_231"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:revisionDate occured more than one time</msg>
+							<msg class="short">dtb:revisionDate ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbRevisionDateValue" type="requirement">
+						<testDesc>x-metadata element dtb:revisionDate value is valid to iso8601</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_231"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:revisionDate value is not valid to iso8601</msg>
+							<msg class="short">dtb:revisionDate value</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbRevisionDescriptionPresence" type="requirement">
+						<testDesc>x-metadata element dtb:revisionDescription occurs zero or once</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_231a"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:revisionDescription occured more than one time</msg>
+							<msg class="short">dtb:revisionDescription ocurrence</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbAudioFormatValue" type="requirement">
+						<testDesc>x-metadata element dtb:audioFormat has allowed value</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#li_237"/>
+						<onFalseMsg>
+							<msg class="long">x-metadata element dtb:audioFormat value is not allowed</msg>
+							<msg class="short">dtb:audioFormat value</msg>
+						</onFalseMsg>
+						<comment/>
+					</test>
+					<test id="opf_xMetaDtbPrefixRestriction" type="requirement">
+						<testDesc>x-metadata meta element name attributes beginning with the prefix "dtb:" concludes with one of the following strings: sourceDate sourceEdition sourcePublisher sourceRights sourceTitle multimediaType narrator producer producedDate revision revisionDate totalTime audioFormat</testDesc>
+						<appliesToFile>opf</appliesToFile>
+						<appliesToDtbType>all</appliesToDtbType>
+						<specRef href="z3986.html#para_50"/>
+						<onFalseMsg>
+							<msg class="long">metadata names may not begin with the prefix "dtb:" unless defined in Z39.86</msg>
+							<msg class="short">dtb: prefix not allowed</msg>
+						</onFalseMsg>
+						<comment>[TN25]</comment>
+					</test>
+				</category>
+			</category>
+			<category name="opf_manifest">
+				<test id="opf_mnfNcxId" type="requirement">
+					<testDesc>manifest contains one item whose id value equals "ncx"</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_53"/>
+					<onFalseMsg>
+						<msg class="long">One manifest item in ncx must have id="ncx"</msg>
+						<msg class="short">manifest: no ncx id value</msg>
+					</onFalseMsg>
+					<comment>[TN41]</comment>
+				</test>
+				<test id="opf_mnfOneSmil" type="requirement">
+					<testDesc>manifest references at least one SMIL file</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_101"/>
+					<onFalseMsg>
+						<msg class="long">no SMIL file found</msg>
+						<msg class="short">no smil</msg>
+					</onFalseMsg>
+				</test>
+				<test id="opf_mnfOneAudio" type="requirement">
+					<testDesc>manifest references at least one audio file</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#para_101"/>
+					<onFalseMsg>
+						<msg class="long">no audio file found</msg>
+						<msg class="short">no audio</msg>
+					</onFalseMsg>
+				</test>
+				<test id="opf_mnfOneDtbook" type="requirement">
+					<testDesc>manifest references at least one dtbook file</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<appliesToDtbType>textNCX</appliesToDtbType>
+					<specRef href="z3986.html#para_101"/>
+					<onFalseMsg>
+						<msg class="long">no dtbook document found</msg>
+						<msg class="short">no dtbook</msg>
+					</onFalseMsg>
+				</test>
+				<test id="opf_mnfZeroDtbook" type="requirement">
+					<testDesc>manifest does not reference dtbook files</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<specRef href="z3986.html#para_101"/>
+					<onFalseMsg>
+						<msg class="long">dtbook document found</msg>
+						<msg class="short">dtbook</msg>
+					</onFalseMsg>
+				</test>
+				<test id="opf_mnfZeroAudio" type="requirement">
+					<testDesc>manifest does not reference audio files</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>textNCX</appliesToDtbType>
+					<specRef href="z3986.html#para_101"/>
+					<onFalseMsg>
+						<msg class="long">audio file found</msg>
+						<msg class="short">audio</msg>
+					</onFalseMsg>
+				</test>
+				<test id="opf_mnfDistInfo" type="requirement">
+					<testDesc>manifest does not reference a distInfo file</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_52"/>
+					<onFalseMsg>
+						<msg class="long">distInfo file listed in manifest -- not allowed</msg>
+						<msg class="short">manifest: distInfo listed</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<!-- Defer until ZedVal has knowledge of distinfo issues.
+				<test id="opf_mnfChangeMsg" type="requirement">
+					<testDesc>manifest does not reference a changeMsg file</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_52"/>
+					<onFalseMsg>
+						<msg class="long">changeMsg file listed in manifest - not allowed</msg>
+						<msg class="short">manifest: changeMsg listed</msg>
+					</onFalseMsg>
+					<comment/>
+				</test> -->
+				<test id="opf_mnfHrefUri" type="requirement">
+					<testDesc>item element href attribute value is a valid URI</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_52"/>
+					<onFalseMsg>
+						<msg class="long">item element href attribute value is not a valid URI</msg>
+						<msg class="short">item href value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="opf_mnfHrefUnique" type="requirement">
+					<testDesc>item element href attribute value is unique among items</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_52"/>
+					<onFalseMsg>
+						<msg class="long">Same file listed more than once in manifest</msg>
+						<msg class="short">duplicate filename in manifest</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="opf_mnfHrefFrag" type="requirement">
+					<testDesc>item element href attribute value does not contain a fragment identifier</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_52"/>
+					<onFalseMsg>
+						<msg class="long">Filename in manifest contains a fragment identifier</msg>
+						<msg class="short">item href: fragment identifier</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<!--
+	<test id="opf_mnfMime" type="requirement">
+    		<testDesc>In the manifest, media-type attributes on item elements must contain valid MIME media type values</testDesc>
+    		<appliesToFile>opf</appliesToFile>
+    		<appliesToDtbType>all</appliesToDtbType>
+    		<specRef href="z3986.html#para_53" />
+    		<onFalseMsg>
+      			<msg class="long">media-type attribute contains invalid MIME value.</msg>
+      			<msg class="short">invalid MIME value in manifest</msg>
+    		</onFalseMsg>
+    		<comment>Does an up-to-date list of valid MIME types exist? [TN40]</comment>
+	</test>
+	-->
+				<!-- TN 41 From NLS. This is not testable. See opf_mnfNcxId for alternative.
+	<test id="" type="requirement">
+    		<testDesc caseSens="CS">The NCX entry in the manifest must have an id value equal to "ncx"</testDesc>
+    		<appliesToFile>opf</appliesToFile>
+    		<specRef href="z3986.html#para_53" />
+    		<tool type="" uses="" />
+    		<onFalseMsg>
+      			<msg class="long">NCX entry in manifest has incorrect id.</msg>
+      			<msg class="short">wrong id on NCX in manifest</msg>
+    		</onFalseMsg>
+	</test> -->
+				<!-- From NLS. This is not testable. Resource file presence is determined by id value. @@ MANUAL??
+	<test id="" type="requirement">
+    		<testDesc caseSens="CS">If Resource file is present,the Resource entry in the manifest must have an id value equal to "resource"</testDesc>
+    		<appliesToFile>opf</appliesToFile>
+    		<specRef href="z3986.html#para_53" />
+    		<tool type="" uses="" />
+    		<onFalseMsg>
+      			<msg class="long">Resource entry in manifest has incorrect id.</msg>
+      			<msg class="short">wrong id on Resource in manifest</msg>
+    		</onFalseMsg>
+	</test> -->
+				<!-- From NLS. Not testable. There is no way other than media-type to determine if an item is SMIL, unless there is a file extension restriction. @@ MANUAL??
+	<test id="" type="requirement">
+    		<testDesc>Item elements listing SMIL files in the manifest must have a media-type attribute of "application/smil"</testDesc>
+    		<appliesToFile>opf</appliesToFile>
+    		<appliesToDtbType>all</appliesToDtbType>
+    		<specRef href="z3986.html#para_53" />
+    		<onFalseMsg>
+      			<msg class="long">Manifest item has invalid media-type attribute.</msg>
+      			<msg class="short">invalid media-type attribute</msg>
+    		</onFalseMsg>
+    		<comment>[TN42]</comment>
+	</test> -->
+				<test id="opf_mnfNcxMediaType" type="requirement">
+					<testDesc>item element for ncx in the manifest must have a media-type attribute of "text/xml"</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_53"/>
+					<onFalseMsg>
+						<msg class="long">Manifest item has invalid media-type attribute.</msg>
+						<msg class="short">invalid media-type attribute</msg>
+					</onFalseMsg>
+					<comment>[TN42] Method: locate id="ncx"</comment>
+				</test>
+				<test id="opf_opfInManifest" type="requirement">
+					<testDesc>package file is listed in manifest</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_52"/>
+					<onFalseMsg>
+						<msg class="long">package file is not listed in manifest</msg>
+						<msg class="short">opf not in manifest</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="opf_mnfOpfMediaType" type="requirement">
+					<testDesc>item element for package file in the manifest must have a media-type attribute of "text/xml"</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_53"/>
+					<onFalseMsg>
+						<msg class="long">Manifest item has invalid media-type attribute.</msg>
+						<msg class="short">invalid media-type attribute</msg>
+					</onFalseMsg>
+					<comment>[TN42] Method: locate id="opf"</comment>
+				</test>
+				<test id="opf_mnfResMediaType" type="requirement">
+					<testDesc>item element for resource file must, if listed in manifest, have a media-type attribute of "text/xml"</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_53"/>
+					<onFalseMsg>
+						<msg class="long">manifest item has invalid media-type attribute.</msg>
+						<msg class="short">invalid media-type attribute</msg>
+					</onFalseMsg>
+					<comment>[TN42] Method: locate id="resource"</comment>
+				</test>
+				<!-- From NLS. Not testable, since the only method to locate these are through media-type @@ MANUAL??
+	<test id="opf_mnfDtbkMediaType" type="requirement">
+    		<testDesc>If textual content (dtbook) file(s) are listed in manifest, item element must have a media-type attribute of "text/xml"</testDesc>
+    		<appliesToFile>opf</appliesToFile>
+    		<appliesToDtbType>all</appliesToDtbType>
+    		<specRef href="z3986.html#para_53" />
+    		<onFalseMsg>
+      			<msg class="long">Manifest item has invalid media-type attribute.</msg>
+      			<msg class="short">invalid media-type attribute</msg>
+    		</onFalseMsg>
+    		<comment>[TN42] Method: @@ </comment>
+	</test> -->
+			</category>
+			<category name="opf_spine">
+				<test id="opf_SpineRefAllSmilInMnf" type="requirement">
+					<testDesc>each smil file listed in manifest is referenced by spine</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_58"/>
+					<onFalseMsg>
+						<msg class="long">smil file in manifest not referenced in spine</msg>
+						<msg class="short">spine omits smil file</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="opf_spnItemRefIdrefSmil" type="requirement">
+					<testDesc>spine itemref idref attributes points to the id of a SMIL file listed in manifest</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_58"/>
+					<onFalseMsg>
+						<msg class="long">Manifest item referenced by itemref in spine is not a SMIL file</msg>
+						<msg class="short">spine references non-SMIL file</msg>
+					</onFalseMsg>
+					<comment>The IDREF DTD validation is not enough to make sure the target is actually a smil item. [TN43]</comment>
+				</test>
+			</category>
+		</category>
+		<category name="opf_relations">
+			<test id="opf_mnfIntegrityExists" type="requirement">
+				<testDesc>manifest only lists files that exist</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">File listed in manifest does not exist</msg>
+					<msg class="short">manifest: missing file</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="opf_mnfIntegrityReadable" type="requirement">
+				<testDesc>manifest only lists files that are readable</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">File listed in manifest is not readable</msg>
+					<msg class="short">file unreadable</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<!-- This test is done in another manner @@; in x_relations: - every refd file in x is listed in manifest
+	<test id="" type="requirement">
+    	<testDesc caseSens="CI">Every file in the DTB (directory???) is listed in the manifest</testDesc>
+    	<appliesToFile>opf</appliesToFile>
+    	<specRef href="z3986.html#para_52" />
+    	<tool type="" uses="" />
+    	<onFalseMsg>
+      		<msg class="long">File in DTB (directory???) is not listed in manifest</msg>
+      		<msg class="short">file missing from manifest</msg>
+    	</onFalseMsg>
+	</test>
+        -->
+		</category>
+	</category>
+	<category name="ncx">
+		<category name="ncx_integrity">
+			<!-- From NLS. this test is done by opf_relations @@
+    <test id="" type="requirement">
+    <testDesc>NCX file exists</testDesc>
+    <appliesToFile>ncx</appliesToFile>
+    <specRef href="z3986.html#para_144" />
+    <tool type="CLASS" uses="" />
+    <onFalseMsg>
+      <msg class="long">Navigation control file does not exist</msg>
+      <msg class="short">no ncx</msg>
+    </onFalseMsg>
+    </test>
+    -->
+			<test id="ncx_fileExtn" type="requirement">
+				<testDesc>NCX file has .ncx extension</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_144"/>
+				<onFalseMsg>
+					<msg class="long">Ncx does not have an .ncx extension.</msg>
+					<msg class="short">ncx extension</msg>
+				</onFalseMsg>
+			</test>
+			<!-- From NLS. This test is done in opf_mnfNcxId
+	<test id="" type="requirement">
+    		<testDesc>NCX file is unique</testDesc>
+    		<appliesToFile>ncx</appliesToFile>
+    		<specRef href="z3986.html#para_144" />
+    		<tool type="CLASS" uses="" />
+    		<onFalseMsg>
+      			<msg class="long">More than one navigation control file was found.</msg>
+      			<msg class="short">multiple NCXs</msg>
+    		</onFalseMsg>
+  	</test>
+  	-->
+			<!-- From NLS. This test is done in opf_manifestIntegrityReadable
+	<test id="" type="requirement">
+    	<testDesc>NCX file is readable</testDesc>
+    	<appliesToFile>ncx</appliesToFile>
+    	<specRef href="z3986.html#para_144" />
+	<tool type="CLASS" uses="" />
+    	<onFalseMsg>
+      		<msg class="long">Navigation control file is not readable</msg>
+      		<msg class="short">NCX not readable</msg>
+    	</onFalseMsg>
+  	</test>
+	-->
+		</category>
+		<category name="ncx_internal">
+			<test id="NCX_PrologPubId" type="recommendation">
+				<testDesc>NCX public identifier is "-//NISO//DTD ncx v1.1.0//EN"</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#h1_23"/>
+				<onFalseMsg>
+					<msg class="long">NCX Doctype decclaration does not point to current Z39.86 version</msg>
+					<msg class="short">NCX wrong public identifier</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="NCX_Version" type="requirement">
+				<testDesc>Version attribute on NCX element has value 1.1.0</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_144"/>
+				<onFalseMsg>
+					<msg class="long">NCX version attribute is not 1.1.0</msg>
+					<msg class="short">NCX version wrong or missing</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_isDtdValid" type="requirement">
+				<testDesc>NCX file is valid to DTD</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_144"/>
+				<onFalseMsg>
+					<msg class="long">navigation control file (ncx) is not valid to DTD</msg>
+					<msg class="short">ncx dtd invalid</msg>
+				</onFalseMsg>
+			</test>
+			<!-- This is done by DTD?? attr presence or only value?? @@test this
+TN92
+Version attribute on ncx = 1.1.0.
+
+<test id="" type="requirement">
+    <testDesc>Version attribute on NCX root element is 1.1.0.</testDesc>
+    <appliesToFile>ncx</appliesToFile>
+    <specRef href="z3986.html#para_144" />
+    <tool type="" uses="" />
+    <onFalseMsg>
+      <msg class="long">NCX is not a version 1.1.0 file.</msg>
+      <msg class="short">Wrong NCX version</msg>
+    </onFalseMsg>
+    <comment>[TN92]This is for reading systems that does not have aceess to the DTD</comment>
+  </test>
+-->
+			<category name="ncx_meta">
+				<!-- @@ question; can ncx meta dtb: element names be repeated? -->
+				<test id="ncx_metaDtbUid" type="requirement">
+					<testDesc>dtb:uid meta element exists</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_403"/>
+					<onFalseMsg>
+						<msg class="long">Unique identifier meta element does not exist in navigation control file</msg>
+						<msg class="short">uid meta missing</msg>
+					</onFalseMsg>
+					<comment>[TN95]</comment>
+				</test>
+				<test id="ncx_metaDbtDepthPresence" type="requirement">
+					<testDesc>dtb:depth meta element exists</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_406"/>
+					<onFalseMsg>
+						<msg class="long">dtb:depth does not exist in ncx</msg>
+						<msg class="short">dtb:depth missing</msg>
+					</onFalseMsg>
+					<comment>[TN96]</comment>
+				</test>
+				<!-- shouldnt this be done as below?
+<test id="ncx_metaDtbDepthValueOld" type="requirement">
+    <testDesc>The content of the ncx meta element named dtb:depth evaluates to an integer and is greater than 0.</testDesc>
+    <appliesToFile>ncx</appliesToFile>
+    <appliesToDtbType>all</appliesToDtbType>
+    <specRef href="z3986.html#li_406" />
+    <onFalseMsg>
+      <msg class="long">The content of dtb:depth in the navigation control file is not a positive whole number.</msg>
+      <msg class="short">ncx dtb:depth non-integer or less than 1</msg>
+    </onFalseMsg>
+  </test>
+-->
+				<test id="ncx_metaDtbDepthValue" type="requirement">
+					<testDesc>dtb:depth content attribute value is a positive integer</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_406"/>
+					<onFalseMsg>
+						<msg class="long">the value of dtb:depth is invalid</msg>
+						<msg class="short">dtb:depth value invalid</msg>
+					</onFalseMsg>
+					<comment>[TN96]</comment>
+				</test>
+				<test id="ncx_metaDtbDepthValueCorrelated" type="requirement">
+					<testDesc>dtb:depth content attribute value indicates depth of structure of the DTB as exposed by the NCX</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_406"/>
+					<onFalseMsg>
+						<msg class="long">the content of dtb:depth does not correspond to depth of structure of the DTB.</msg>
+						<msg class="short">dtb:depth value is incorrect</msg>
+					</onFalseMsg>
+					<comment>[TN96]</comment>
+				</test>
+				<test id="ncx_metaDtbGeneratorPresence" type="recommendation">
+					<testDesc>dtb:generator meta element exists</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_409"/>
+					<onFalseMsg>
+						<msg class="long">dtb:generator does not exist in ncx</msg>
+						<msg class="short">dtb:generator missing</msg>
+					</onFalseMsg>
+					<comment>[TN97]</comment>
+				</test>
+				<!-- postponed for now
+				<test id="ncx_metaDtbGeneratorValue" type="requirement">
+					<testDesc>dtb:generator content attribute value is not null</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_409"/>
+					<onFalseMsg>
+						<msg class="long">the value of dtb:generator is invalid.</msg>
+						<msg class="short">dtb:generator value</msg>
+					</onFalseMsg>
+					<comment>[TN97]</comment>
+				</test>
+-->
+				<test id="ncx_metaDtbMaxPageNormalPresence" type="requirement">
+					<testDesc>dtb:maxPageNormal meta element exists</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_414"/>
+					<onFalseMsg>
+						<msg class="long">dtb:maxPageNormal does not exist in ncx</msg>
+						<msg class="short">dtb:maxPageNormal missing</msg>
+					</onFalseMsg>
+					<comment>AS022005</comment>
+				</test>
+				<test id="ncx_metaDtbMaxPageNormalContentAttrValue" type="requirement">
+					<testDesc>dtb:maxPageNormal content attribute value is a non-negative integer</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_413"/>
+					<onFalseMsg>
+						<msg class="long">the value of dtb:maxPageNormal is invalid</msg>
+						<msg class="short">dtb:maxPageNormal value invalid</msg>
+					</onFalseMsg>
+					<comment>AS022005</comment>
+				</test>
+				<test id="ncx_metaDtbPageFrontPresence" type="requirement">
+					<testDesc>dtb:pageFront meta element exists</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_417"/>
+					<onFalseMsg>
+						<msg class="long">dtb:pageFront does not exist in ncx</msg>
+						<msg class="short">dtb:pageFront missing</msg>
+					</onFalseMsg>
+					<comment>AS022005</comment>
+				</test>
+				<test id="ncx_metaDtbPageFrontContentAttrValue" type="requirement">
+					<testDesc>dtb:pageFront content attribute value is a non-negative integer</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_416"/>
+					<onFalseMsg>
+						<msg class="long">the value of dtb:pageFront is invalid</msg>
+						<msg class="short">dtb:pageFront value invalid</msg>
+					</onFalseMsg>
+					<comment>AS022005</comment>
+				</test>
+				<test id="ncx_metaDtbPageNormalPresence" type="requirement">
+					<testDesc>dtb:pageNormal meta element exists</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_420"/>
+					<onFalseMsg>
+						<msg class="long">dtb:pageNormal does not exist in ncx</msg>
+						<msg class="short">dtb:pageNormal missing</msg>
+					</onFalseMsg>
+					<comment>AS022005</comment>
+				</test>
+				<test id="ncx_metaDtbPageNormalContentAttrValue" type="requirement">
+					<testDesc>dtb:pageNormal content attribute value is a non-negative integer</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_419"/>
+					<onFalseMsg>
+						<msg class="long">the value of dtb:pageNormal is invalid</msg>
+						<msg class="short">dtb:pageNormal value invalid</msg>
+					</onFalseMsg>
+					<comment>AS022005</comment>
+				</test>
+				<test id="ncx_metaDtbPageSpecialPresence" type="requirement">
+					<testDesc>dtb:pageSpecial meta element exists</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_423"/>
+					<onFalseMsg>
+						<msg class="long">dtb:pageSpecial does not exist in ncx</msg>
+						<msg class="short">dtb:pageSpecial missing</msg>
+					</onFalseMsg>
+					<comment>AS022005</comment>
+				</test>
+				<test id="ncx_metaDtbPageSpecialContentAttrValue" type="requirement">
+					<testDesc>dtb:pageSpecial content attribute value is a non-negative integer</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_422"/>
+					<onFalseMsg>
+						<msg class="long">the value of dtb:pageSpecial is invalid</msg>
+						<msg class="short">dtb:pageSpecial value invalid</msg>
+					</onFalseMsg>
+					<comment>AS022005</comment>
+				</test>
+
+				<test id="ncx_metaDtbPrefixRestriction" type="requirement">
+					<testDesc>meta elements whose name attribute value begins with "dtb:" concludes with one of: uid, generator, depth,  maxPageNormal, pageFront, pageNormal, or pageSpecial.</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_147"/>
+					<onFalseMsg>
+						<msg class="long">metadata names may not begin with the prefix "dtb:" unless defined in Z39.86.</msg>
+						<msg class="short">dtb: prefix not allowed</msg>
+					</onFalseMsg>
+					<comment>[TN93]</comment>
+				</test>
+			</category>
+			<category name="ncx_main">
+				<!-- Deferred til later...
+The standard doesn't require this; I think it would be a good idea
+<test id="" type="strongRecommendation">
+    <testDesc>ncx/docTitle/text node contains text</testDesc>
+    <appliesToFile>ncx</appliesToFile>
+    <specRef href="z3986.html#h1_23" />
+    <tool type="" uses="" />
+    <onFalseMsg>
+      <msg class="long">Warning: There is no text to display the document's title from the NCX.</msg>
+      <msg class="short">W: no textual info in docTitle in NCX</msg>
+    </onFalseMsg>
+  </test>
+-->
+				<!-- Deferred til later...
+This should be almost required when there is no text content file
+
+<test id="" type="recommendation">
+    <testDesc>ncx/docTitle/audio node exists</testDesc>
+    <appliesToFile>ncx</appliesToFile>
+    <specRef href="z3986.html#h1_23" />
+    <tool type="" uses="" />
+    <onFalseMsg>
+      <msg class="long">Warning: Audio element does not exist within docTitle of NCX</msg>
+      <msg class="short">no audio in docTitle in NCX</msg>
+    </onFalseMsg>
+  </test>
+-->
+				<!-- Redundant to the two clip value tests.
+				<test id="ncx_clockValueValid" type="requirement">
+					<testDesc>audio element clock values are valid to SMIL 2.0</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_368"/>
+					<onFalseMsg>
+						<msg class="long">audio element clock value is invalid</msg>
+						<msg class="short">clock value invalid</msg>
+					</onFalseMsg>
+				</test>
+				-->
+				<!-- Redundant to ncx_ClipBeginValue since clock values cannot be negative.
+				<test id="ncx_clipBeginPositive" type="requirement">
+					<testDesc>audio element clipBegin attribute value is non-negative</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#h2_30"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipBegin attribute value is negative</msg>
+						<msg class="short">clipBegin value negative</msg>
+					</onFalseMsg>
+				</test> -->
+				<test id="ncx_clipEndAfterclipBegin" type="requirement">
+					<testDesc>audio element clipEnd attribute value is greater than clipBegin</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_368"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipEnd attribute value is less than clipBegin</msg>
+						<msg class="short">clipEnd before clipBegin</msg>
+					</onFalseMsg>
+				</test>
+				<test id="ncx_clipEndBeforeEOF" type="requirement">
+					<testDesc>audio element clipEnd attribute value is less than end of file</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_368"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipEnd attribute value is greater than end of file</msg>
+						<msg class="short">clipEnd after EOF</msg>
+					</onFalseMsg>
+				</test>
+				<test id="ncx_navPointValueAttrValue" type="requirement">
+					<testDesc>navPoint element value attribute value is a non-negative integer</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_376"/>
+					<onFalseMsg>
+						<msg class="long">navPoint element value attribute value is not a non-negative integer</msg>
+						<msg class="short">value value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="ncx_contentSrcAttrValue" type="requirement">
+					<testDesc>content element src attribute value is a valid uri</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_390"/>
+					<onFalseMsg>
+						<msg class="long">content element src attribute value is not a valid uri</msg>
+						<msg class="short">content src value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="ncx_navListClassAttrValue" type="requirement">
+					<testDesc>navList element class attribute value is dtbook element name</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_393"/>
+					<onFalseMsg>
+						<msg class="long">navList element class attribute value is dtbook element name</msg>
+						<msg class="short">navList class value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+<!-- This test removed from map, since it is unreliable in Z39.86-2002 (JP, 4/26/2005)
+				<test id="ncx_mapRef" type="requirement">
+					<testDesc>mapRef attribute on navTarget points to id of innermost navPoint whose pageRef points to that navTarget</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_149"/>
+					<onFalseMsg>
+						<msg class="long">navTarget mapRef does not point to innermost navPoint whose pageRef points to this navTarget</msg>
+						<msg class="short">mapRef/pageRef inconsistency</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+-->
+				<test id="ncx_navPointToPage" type="requirement">
+					<testDesc>pageRef attribute on navPoint points to a navTarget in the pagenum navList</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_149"/>
+					<onFalseMsg>
+						<msg class="long">navPoint pageRef does not point to a navTarget in the pagenum navList</msg>
+						<msg class="short">pageRef points to invalid target</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="ncx_mapRefToNavPoint" type="requirement">
+					<testDesc>mapRef points to a navPoint</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_149"/>
+					<onFalseMsg>
+						<msg class="long">navTarget mapRef does not point to a navPoint</msg>
+						<msg class="short">mapRef points to invalid target</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="ncx_navTargetClassAttrValue" type="requirement">
+					<testDesc>navTarget element class attribute value is dtbook element name</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_396"/>
+					<onFalseMsg>
+						<msg class="long">navTarget element class attribute value is dtbook element name</msg>
+						<msg class="short">navTarget class value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="ncx_navTargetValueAttrValue" type="requirement">
+					<testDesc>navTarget element value attribute value is a non-negative integer</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_396"/>
+					<onFalseMsg>
+						<msg class="long">navTarget element value attribute value is not a non-negative integer</msg>
+						<msg class="short">navTarget value value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="ncx_audioSrcValue" type="requirement">
+					<testDesc>audio element src attribute value is a valid URI</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_368"/>
+					<onFalseMsg>
+						<msg class="long">audio element src attribute value is not a valid URI</msg>
+						<msg class="short">audio src value</msg>
+					</onFalseMsg>
+				</test>
+				<test id="ncx_clipBeginValue" type="requirement">
+					<testDesc>audio element clipBegin attribute value uses valid syntax</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_368"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipBegin attribute value does not use valid syntax</msg>
+						<msg class="short">clipBegin value</msg>
+					</onFalseMsg>
+				</test>
+				<test id="ncx_clipEndValue" type="requirement">
+					<testDesc>audio element clipEnd attribute value uses valid syntax</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_368"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipEnd attribute value does not use valid syntax</msg>
+						<msg class="short">clipEnd value</msg>
+					</onFalseMsg>
+				</test>
+				<test id="ncx_imgSrcValue" type="requirement">
+					<testDesc>img element src attribute value is a valid URI</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_386"/>
+					<onFalseMsg>
+						<msg class="long">img element src attribute value is not a valid URI</msg>
+						<msg class="short">img src value</msg>
+					</onFalseMsg>
+				</test>
+				<test id="ncx_multiNavLabel" type="recommendation">
+					<testDesc>If multiple navLabels exist within an NCX node, lang attribute is not repeated</testDesc>
+					<appliesToFile>ncx</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_384"/>
+					<onFalseMsg>
+						<msg class="long">Multiple navLabels with same lang attribute within an NCX node</msg>
+						<msg class="short">Multiple navLabels in same language</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+			</category>
+		</category>
+		<category name="ncx_relations">
+			<test id="ncx_audioFileExists" type="requirement">
+				<testDesc>all files referenced from &lt;audio src=""&gt; exist</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#h1_23"/>
+				<onFalseMsg>
+					<msg class="long">File referenced by audio element does not exist</msg>
+					<msg class="short">audio file missing</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_UidOpfUid" type="requirement">
+				<testDesc>dtb:uid value matches package unique-identifier</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_403"/>
+				<onFalseMsg>
+					<msg class="long">The unique ID in the navigation control file does not match the uid of the dtb.</msg>
+					<msg class="short">ncx/opf uid mismatch</msg>
+				</onFalseMsg>
+				<comment>original (nls) was: the value of the ncx meta element named dtb:uid is equal to the value of the dc:identifier element in the opf</comment>
+			</test>
+			<test id="ncx_manifestRefs" type="requirement">
+				<testDesc>ncx only references files that are items in manifest</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">a reference was made to a file that is not a member of manifest</msg>
+					<msg class="short">reference to nonmember</msg>
+				</onFalseMsg>
+				<comment>This should check all %URI; nodes and match to manifestitemname</comment>
+			</test>
+			<test id="ncx_smilCustomTest" type="requirement">
+				<testDesc>for each SMIL file listed in manifest, attributes of all customTest elements are duplicated once in smilCustomTest element in NCX head</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_150"/>
+				<onFalseMsg>
+					<msg class="long">customTest in smil file xx.smill not replicated in NCX</msg>
+					<msg class="short">ncx: smilCustomTest missing</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_srcSMIL" type="requirement">
+				<testDesc>src attribute on content element references SMIL file</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_392"/>
+				<onFalseMsg>
+					<msg class="long">content element src attribute does not reference SMIL</msg>
+					<msg class="short">content src not SMIL</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_srcSMILFragment" type="requirement">
+				<testDesc>src attribute on content element references SMIL file fragment</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_392"/>
+				<onFalseMsg>
+					<msg class="long">content element src attribute does not reference SMIL fragment</msg>
+					<msg class="short">content src not SMIL fragment</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_srcAudio" type="requirement">
+				<testDesc>src attribute on audio element references audio file</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#li_371"/>
+				<onFalseMsg>
+					<msg class="long">audio element src attribute does not reference audio file</msg>
+					<msg class="short">audio src not audio</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_srcImg" type="requirement">
+				<testDesc>src attribute on img element references image file</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_389"/>
+				<onFalseMsg>
+					<msg class="long">img element src attribute does not reference image file</msg>
+					<msg class="short">img src not image</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+		</category>
+	</category>
+	<category name="smil">
+		<category name="smil_integrity">
+			<!-- Redundant to opf_mnfIntegrityReadable (all manifest files are readable).
+			<test id="smil_isReadable" type="requirement">
+				<testDesc>SMIL file is readable</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_101"/>
+				<onFalseMsg>
+					<msg class="long">SMIL file is not readable</msg>
+					<msg class="short">SMIL not readable</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+-->
+		</category>
+		<category name="smil_internal">
+			<test id="smil_prologPubId" type="recommendation">
+				<testDesc>smil file public identifier equals "-//NISO//DTD dtbsmil v1.1.0//EN"</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#h1_23"/>
+				<onFalseMsg>
+					<msg class="long">smil file public identifier does not equal "-//NISO//DTD dtbsmil v1.1.0//EN"</msg>
+					<msg class="short">public identifier value</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="smil_isDtdValid" type="requirement">
+				<testDesc>SMIL file is valid to DTD</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_101"/>
+				<onFalseMsg>
+					<msg class="long">SMIL file is not valid to DTD</msg>
+					<msg class="short">dtd invalid</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<category name="smil_head">
+				<!-- From NLS. This is done by DTD.
+       7.4.3 Skippable Structures: if customAttributes exists in head, get list of ids there
+       Each customTest element in head must have attributes
+      <test id="" type="requirement">
+      <testDesc>customTest element must have id attribute</testDesc>
+      <appliesToFile>smil</appliesToFile>
+      <specRef href="z3986.html#para_110" />
+      <tool type="CLASS" uses="" />
+      <onFalseMsg>
+          <msg class="long">SMIL customTest element has no id attribute</msg>
+          <msg class="short">SMIL: no id on customTest</msg>
+      </onFalseMsg>
+      </test>
+        -->
+				<test id="smil_metaDtbPrefixRestriction" type="requirement">
+					<testDesc>meta elements whose name attribute value begins with "dtb:" concludes with one of: uid, generator, totalElapsedTime.</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#h2_28"/>
+					<onFalseMsg>
+						<msg class="long">metadata names may not begin with the prefix "dtb:" unless defined in Z39.86.</msg>
+						<msg class="short">dtb: prefix not allowed</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_metaDtbGenPresence" type="recommendation">
+					<testDesc>dtb:generator meta element exists</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_338"/>
+					<onFalseMsg>
+						<msg class="long">meta element dtb:generator is missing</msg>
+						<msg class="short">dtb:generator missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<!-- commented out for now - is this really an error? /mg
+				<test id="smil_metaDtbGenSyntax" type="requirement">
+					<testDesc>dtb:generator content attribute value is not null</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_338"/>
+					<onFalseMsg>
+						<msg class="long">invalid value on meta element dtb:generator content attribute</msg>
+						<msg class="short">dtb:generator content attr value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				-->
+				<test id="smil_metaDtbTotElaPresence" type="requirement">
+					<testDesc>dtb:totalElapsedTime meta element exists</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_341"/>
+					<onFalseMsg>
+						<msg class="long">meta element dtb:totalElapsedTime is missing</msg>
+						<msg class="short">dtb:totalElapsedTime missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_metaDtbTotElaSyntax" type="requirement">
+					<testDesc>dtb:totalElapsedTime content attribute value uses valid syntax</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_341"/>
+					<onFalseMsg>
+						<msg class="long">invalid value on meta element dtb:totalElapsedTime content attribute</msg>
+						<msg class="short">dtb:totalElapsedTime content attr value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_metaAudioDtbTotElaAccurate" type="requirement">
+					<testDesc>dtb:totalElapsedTime contains total time in all SMILs preceding this instance</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_341"/>
+					<onFalseMsg>
+						<msg class="long">dtb:totalElapsedTime is inaccurate</msg>
+						<msg class="short">ttlElapsedTime inaccurate</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_metaTextDtbTotElaAccurate" type="requirement">
+					<testDesc>dtb:totalElapsedTime contains value of 0</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>textNCX</appliesToDtbType>
+					<specRef href="z3986.html#li_344"/>
+					<onFalseMsg>
+						<msg class="long">dtb:totalElapsedTime invalid</msg>
+						<msg class="short">ttlElapsedTime invalid</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_metaDtbUidPresence" type="requirement">
+					<testDesc>dtb:uid meta element exists</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_345"/>
+					<onFalseMsg>
+						<msg class="long">meta element dtb:uid is missing</msg>
+						<msg class="short">dtb:uid missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_layoutXmlLangValue" type="requirement">
+					<testDesc>layout element xml:lang attribute value is valid to rfc1766</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#x"/>
+					<onFalseMsg>
+						<msg class="long">layout element xml:lang attribute value is valid to rfc1766</msg>
+						<msg class="short">layout xml:lang value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_customAttrsXmlLangValue" type="requirement">
+					<testDesc>customAttributes element xml:lang attribute value is valid to rfc1766</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#x"/>
+					<onFalseMsg>
+						<msg class="long">customAttributes element xml:lang attribute value is valid to rfc1766</msg>
+						<msg class="short">customAttributes xml:lang value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_customTestXmlLangValue" type="requirement">
+					<testDesc>customTest element xml:lang attribute value is valid to rfc1766</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#x"/>
+					<onFalseMsg>
+						<msg class="long">customTest element xml:lang attribute value is valid to rfc1766</msg>
+						<msg class="short">customTest xml:lang value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_bodyXmlLangValue" type="requirement">
+					<testDesc>body element xml:lang attribute value is valid to rfc1766</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#x"/>
+					<onFalseMsg>
+						<msg class="long">body element xml:lang attribute value is valid to rfc1766</msg>
+						<msg class="short">body xml:lang value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_CstTstDefStAttr" type="requirement">
+					<testDesc>customTest element has a defaultState attribute</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_110"/>
+					<onFalseMsg>
+						<msg class="long">customTest element has no defaultState attribute</msg>
+						<msg class="short">customTest defaultState attr</msg>
+					</onFalseMsg>
+					<comment>note: sax dtd parse introduces this element if not in physical file</comment>
+				</test>
+				<test id="smil_CstTstOverrideAttr" type="requirement">
+					<testDesc>customTest element has an override attribute</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_112"/>
+					<onFalseMsg>
+						<msg class="long">customTest element has no override attribute</msg>
+						<msg class="short">customTest override attr</msg>
+					</onFalseMsg>
+					<comment>note: sax dtd parse introduces this element if not in physical file</comment>
+				</test>
+				<test id="smil_CstTestIdValue" type="requirement">
+					<testDesc>customTest element id attribute value equals a dtbook element name</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_110"/>
+					<onFalseMsg>
+						<msg class="long">id attribute of customTest element does not equal a dtbook element name</msg>
+						<msg class="short">customTest id</msg>
+					</onFalseMsg>
+				</test>
+			</category>
+			<category name="smil_body">
+				<!-- From NLS.These two are tested by parser (dtbsmil110)
+
+        <test id="" type="requirement">
+            <testDesc>Every seq must have an id</testDesc>
+            <appliesToFile>smil</appliesToFile>
+            <specRef href="z3986.html#para_102" />
+            <tool type="" uses="" />
+            <onFalseMsg>
+              <msg class="long">SMIL seq without id</msg>
+              <msg class="short">SMIL: no seq id</msg>
+            </onFalseMsg>
+        </test>
+
+        <test id="" type="requirement">
+            <testDesc>Every par must have an id</testDesc>
+            <appliesToFile>smil</appliesToFile>
+            <specRef href="z3986.html#para_102" />
+            <tool type="" uses="" />
+            <onFalseMsg>
+              <msg class="long">SMIL par without id</msg>
+              <msg class="short">SMIL: no par id</msg>
+            </onFalseMsg>
+        </test>
+         -->
+				<test id="smil_seqDurValue" type="requirement">
+					<testDesc>seq dur attribute value uses valid syntax</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#h2_30"/>
+					<onFalseMsg>
+						<msg class="long">Seq element dur attribute value does not use valid syntax</msg>
+						<msg class="short">seq dur value invalid</msg>
+					</onFalseMsg>
+				</test>
+				<test id="smil_parContent" type="requirement">
+					<testDesc>Each par contains no more than one each of text, audio, image, and seq.</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_118"/>
+					<onFalseMsg>
+						<msg class="long">par contains more than one each of text, audio, image, and seq</msg>
+						<msg class="short">par content</msg>
+					</onFalseMsg>
+					<comment>7.4.7 Content of pars</comment>
+				</test>
+				<test id="smil_textSrcValue" type="requirement">
+					<testDesc>text element src attribute value is a valid URI</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_314"/>
+					<onFalseMsg>
+						<msg class="long">text element src attribute value is not a valid URI</msg>
+						<msg class="short">text src value</msg>
+					</onFalseMsg>
+				</test>
+				<test id="smil_textSrcResolves" type="requirement">
+				    <testDesc>text element src attribute URI resolves</testDesc>
+				    <appliesToFile>smil</appliesToFile>
+				    <appliesToDtbType>all</appliesToDtbType>
+				    <specRef href="z3986.html#li314" />
+				    <onFalseMsg>
+				        <msg class="long">text element src attribute URI does not resolve</msg>
+				        <msg class="short">text src URI does not resolve</msg>
+				    </onFalseMsg>
+				    <comment>Added by JP; this is not same as smil_textSrcValue</comment>
+				</test>
+				<test id="smil_audioSrcValue" type="requirement">
+					<testDesc>audio element src attribute value is a valid URI</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_319"/>
+					<onFalseMsg>
+						<msg class="long">audio element src attribute value is not a valid URI</msg>
+						<msg class="short">audio src value</msg>
+					</onFalseMsg>
+				</test>
+				<test id="smil_imgSrcValue" type="requirement">
+					<testDesc>img element src attribute value is a valid URI</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_326"/>
+					<onFalseMsg>
+						<msg class="long">img element src attribute value is not a valid URI</msg>
+						<msg class="short">img src value</msg>
+					</onFalseMsg>
+				</test>
+				<!-- all audio element checks apply to NCX too -->
+				<!-- Redundant to smil_clipBeginValue and smil_clipEndValue.
+				<test id="smil_clockValueValid" type="requirement">
+					<testDesc>audio element clock values are valid to SMIL 2.0</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_319"/>
+					<onFalseMsg>
+						<msg class="long">audio element clock value is invalid</msg>
+						<msg class="short">clock value invalid</msg>
+					</onFalseMsg>
+				</test>
+-->
+				<test id="smil_clipBeginValue" type="requirement">
+					<testDesc>audio element clipBegin attribute value uses valid syntax</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_319"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipBegin attribute value does not use valid syntax</msg>
+						<msg class="short">clipBegin value</msg>
+					</onFalseMsg>
+				</test>
+				<test id="smil_clipEndValue" type="requirement">
+					<testDesc>audio element clipEnd attribute value uses valid syntax</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_319"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipEnd attribute value does not use valid syntax</msg>
+						<msg class="short">clipEnd value</msg>
+					</onFalseMsg>
+				</test>
+				<!-- Redundant to smil_clipBeginValue.
+				<test id="smil_clipBeginPositive" type="requirement">
+					<testDesc>audio element clipBegin attribute value is non-negative</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_319"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipBegin attribute value is negative</msg>
+						<msg class="short">clipBegin value negative</msg>
+					</onFalseMsg>
+				</test>
+-->
+				<test id="smil_clipEndAfterclipBegin" type="requirement">
+					<testDesc>audio element clipEnd attribute value is greater than clipBegin</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_319"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipEnd attribute value is less than clipBegin</msg>
+						<msg class="short">clipEnd before clipBegin</msg>
+					</onFalseMsg>
+				</test>
+				<test id="smil_clipEndBeforeEOF" type="requirement">
+					<testDesc>audio element clipEnd attribute value is less than end of file</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>audioOnly</appliesToDtbType>
+					<appliesToDtbType>audioNCX</appliesToDtbType>
+					<appliesToDtbType>audioPartText</appliesToDtbType>
+					<appliesToDtbType>audioFullText</appliesToDtbType>
+					<appliesToDtbType>textPartAudio</appliesToDtbType>
+					<specRef href="z3986.html#li_319"/>
+					<onFalseMsg>
+						<msg class="long">audio element clipEnd attribute value is greater than end of file</msg>
+						<msg class="short">clipEnd after EOF</msg>
+					</onFalseMsg>
+				</test>
+				<test id="smil_anchorXmlLangValue" type="requirement">
+					<testDesc>anchor element xml:lang attribute value is valid to rfc1766</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#x"/>
+					<onFalseMsg>
+						<msg class="long">anchor element xml:lang attribute value not valid to rfc1766</msg>
+						<msg class="short">anchor xml:lang value invalid</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_EscStrSeqWrap" type="requirement">
+					<testDesc>escapable structures are wrapped in a seq</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_108"/>
+					<onFalseMsg>
+						<msg class="long">escapable structure not wrapped in a seq</msg>
+						<msg class="short">escapable structure: no seq</msg>
+					</onFalseMsg>
+					<comment>7.4.1 Escapable Structures: ???need list of table, list, prodnote, annotation, and note, can only test for e.g. class="table" on par, cannot test for missing class on seq</comment>
+				</test>
+				<test id="smil_noterefLink" type="strongRecommendation">
+					<testDesc>all noterefs have links</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_122"/>
+					<onFalseMsg>
+						<msg class="long">noteref does not have a link</msg>
+						<msg class="short">noteref link</msg>
+					</onFalseMsg>
+					<comment>7.4.8 Notes and Annotations</comment>
+				</test>
+				<test id="smil_annorefLink" type="strongRecommendation">
+					<testDesc>all annorefs have links</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_122"/>
+					<onFalseMsg>
+						<msg class="long">annoref does not have a link</msg>
+						<msg class="short">annoref link</msg>
+					</onFalseMsg>
+					<comment>7.4.8 Notes and Annotations</comment>
+				</test>
+				<test id="smil_seqParClassAttr" type="requirement">
+					<testDesc>class attribute on seq or par is a DTBook element name</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_307"/>
+					<onFalseMsg>
+						<msg class="long">class attribute on seq or par is not a DTBook element</msg>
+						<msg class="short">seq/par class not from DTBook</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_validRegion" type="requirement">
+					<testDesc>region attribute on media object points to region defined in layout</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_318"/>
+					<onFalseMsg>
+						<msg class="long">region attribute points to undefined region</msg>
+						<msg class="short">undefined region</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_hrefSMIL" type="requirement">
+					<testDesc>href attribute on the a element points to a SMIL file</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_334"/>
+					<onFalseMsg>
+						<msg class="long">href attribute on the a element does not point to SMIL</msg>
+						<msg class="short">a/@href not SMIL</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="smil_hrefValue" type="requirement">
+					<testDesc>href attribute on the a element is a valid URI</testDesc>
+					<appliesToFile>smil</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_334"/>
+					<onFalseMsg>
+						<msg class="long">href attribute on the a element does not resolve</msg>
+						<msg class="short">a/@href doesn't resolve</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+			</category>
+		</category>
+		<category name="smil_relations">
+			<test id="smil_metaDtbUidValue" type="requirement">
+				<testDesc>dtb:uid meta element content attribute matches value of package unique-identifier</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_345"/>
+				<onFalseMsg>
+					<msg class="long">invalid value on meta element dtb:uid content attribute</msg>
+					<msg class="short">dtb:uid content attr value</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="smil_manifestRefs" type="requirement">
+				<testDesc>smil only references files that are items in manifest</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">a reference was made to a file that is not a member of manifest</msg>
+					<msg class="short">reference to nonmember</msg>
+				</onFalseMsg>
+				<comment>This should check all %URI; nodes and match to manifestitemname</comment>
+			</test>
+			<test id="smil_srcDtbook" type="requirement">
+				<testDesc>src attribute on text element references dtbook file</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#para_67"/>
+				<onFalseMsg>
+					<msg class="long">text element src attribute does not reference dtbook file</msg>
+					<msg class="short">text src not dtbook</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="smil_srcAudio" type="requirement">
+				<testDesc>src attribute on audio element references audio file</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#li_321"/>
+				<onFalseMsg>
+					<msg class="long">audio element src attribute does not reference audio file</msg>
+					<msg class="short">audio src not audio</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="smil_srcImg" type="requirement">
+				<testDesc>src attribute on img element references image file</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_328"/>
+				<onFalseMsg>
+					<msg class="long">img element src attribute does not reference image file</msg>
+					<msg class="short">img src not image</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+		</category>
+	</category>
+	<category name="dtbook">
+		<category name="dtbook_integrity">
+			<!-- Redundant to opf_mnfIntegrityReadable (all manifest files are readable).
+			<test id="dtbook_isReadable" type="requirement">
+				<testDesc>Dtbook file is readable</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#para_67"/>
+				<onFalseMsg>
+					<msg class="long">dtbook file is not readable</msg>
+					<msg class="short">dtbook not readable</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+-->
+		</category>
+		<category name="dtbook_internal">
+			<test id="dtbook_isDtdValid" type="requirement">
+				<testDesc>dtbook file is valid to DTD</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#para_67"/>
+				<onFalseMsg>
+					<msg class="long">dtbook document is not valid to DTD</msg>
+					<msg class="short">invalid to dtd</msg>
+				</onFalseMsg>
+			</test>
+			<test id="dtbook_Version" type="requirement">
+				<testDesc>Version attribute on dtbook element has value 1.1.0</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#para_67"/>
+				<onFalseMsg>
+					<msg class="long">Dtbook version attribute is not 1.1.0</msg>
+					<msg class="short">dtbook version missing or wrong</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="dtbook_prologPubId" type="recommendation">
+				<testDesc>dtbook source file public identifier equals "-//NISO//DTD dtbook v1.1.0//EN"</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#h1_21"/>
+				<onFalseMsg>
+					<msg class="long">dtbook source file public identifier does not equal "-//NISO//DTD dtbook v1.1.0//EN"</msg>
+					<msg class="short">public identifier value incorrect</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+		</category>
+		<category name="dtbook_relations">
+			<test id="dtbook_SmilRef" type="requirement">
+				<testDesc>each dtbook element referenced from smil contains a smilRef attribute</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#para_76"/>
+				<onFalseMsg>
+					<msg class="long">element referenced from smil lacks smilRef attribute</msg>
+					<msg class="short">smilRef attribute missing</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="dtbook_SmilRefResolves" type="requirement">
+				<testDesc>The smilRef attribute is a URI that resolves to a SMIL time container referencing the current dtbook element</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#para_76"/>
+				<onFalseMsg>
+					<msg class="long">smilRef URI does not point to proper SMIL time container element</msg>
+					<msg class="short">smilRef URI does not resolve correctly</msg>
+				</onFalseMsg>
+				<comment>Added by JP in response to bug #763481</comment>
+			</test>
+			<test id="dtbk_manifestRefs" type="requirement">
+				<testDesc>dtbook only references files that are items in manifest</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">a reference was made to a file that is not a member of manifest</msg>
+					<msg class="short">referenced file not in manifest</msg>
+				</onFalseMsg>
+				<comment>This should check all %URI; nodes and match to manifestitemname</comment>
+			</test>
+		</category>
+	</category>
+	<category name="res">
+		<category name="res_integrity">
+			<test id="res_fileExtn" type="requirement">
+				<testDesc>resource file has .res extension</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">res file does not have an .opf extension.</msg>
+					<msg class="short">res extension</msg>
+				</onFalseMsg>
+			</test>
+		</category>
+		<category name="res_internal">
+			<test id="res_prologPubId" type="recommendation">
+				<testDesc>resource file public identifier equals "-//NISO//DTD resource v1.1.0//EN"</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#h1_25"/>
+				<onFalseMsg>
+					<msg class="long">resource file public identifier does not equal "-//NISO//DTD resource v1.1.0//EN"</msg>
+					<msg class="short">res public identifier invalid</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="res_isDtdValid" type="requirement">
+				<testDesc>resource file is valid to DTD</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">Resource file is not valid to DTD</msg>
+					<msg class="short">res invalid to dtd</msg>
+				</onFalseMsg>
+			</test>
+			<test id="resource_Version" type="requirement">
+				<testDesc>version attribute on resources element has value 1.1.0</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_176"/>
+				<onFalseMsg>
+					<msg class="long">resources version attribute is not 1.1.0</msg>
+					<msg class="short">res version missing or wrong</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="res_elmRefTypeNcx" type="requirement">
+				<testDesc>resource element elementRef attribute value is an ncx element name when type attribute equals "ncx"</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_170"/>
+				<onFalseMsg>
+					<msg class="long">resource element elementRef attribute value is not an ncx element name</msg>
+					<msg class="short">resource elementRef value incorrect</msg>
+				</onFalseMsg>
+			</test>
+			<test id="res_elmRefTypeDtbook" type="requirement">
+				<testDesc>resource element elementRef attribute value is a dtbook element name when type attribute equals "dtbook"</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_171"/>
+				<onFalseMsg>
+					<msg class="long">resource element elementRef attribute value is not a dtbook element name</msg>
+					<msg class="short">resource elementRef value incorrect</msg>
+				</onFalseMsg>
+			</test>
+			<test id="res_langAttr" type="requirement">
+				<testDesc>resource element lang attribute value is valid to rfc1766</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_466"/>
+				<onFalseMsg>
+					<msg class="long">resource element lang attribute value is not valid to rfc1766</msg>
+					<msg class="short">lang value invalid</msg>
+				</onFalseMsg>
+			</test>
+			<test id="res_audioSrcValue" type="requirement">
+				<testDesc>audio element src attribute value is a valid URI</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_473"/>
+				<onFalseMsg>
+					<msg class="long">audio element src attribute value is not a valid URI</msg>
+					<msg class="short">audio src value not valid URI</msg>
+				</onFalseMsg>
+			</test>
+			<test id="res_clipBeginValue" type="requirement">
+				<testDesc>audio element clipBegin attribute value uses valid syntax</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_473"/>
+				<onFalseMsg>
+					<msg class="long">audio element clipBegin attribute value does not use valid syntax</msg>
+					<msg class="short">clipBegin value invalid</msg>
+				</onFalseMsg>
+			</test>
+			<test id="res_clipEndValue" type="requirement">
+				<testDesc>audio element clipEnd attribute value uses valid syntax</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_473"/>
+				<onFalseMsg>
+					<msg class="long">audio element clipEnd attribute value does not use valid syntax</msg>
+					<msg class="short">clipEnd value invalid</msg>
+				</onFalseMsg>
+			</test>
+			<test id="res_imgSrcValue" type="requirement">
+				<testDesc>img element src attribute value is a valid URI</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_477"/>
+				<onFalseMsg>
+					<msg class="long">img element src attribute value is not a valid URI</msg>
+					<msg class="short">img src value not valid URI</msg>
+				</onFalseMsg>
+			</test>
+		</category>
+		<category name="res_relations">
+			<test id="res_manifestRefs" type="requirement">
+				<testDesc>resource file only references files that are items in manifest</testDesc>
+				<appliesToFile>resource</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">a reference was made to a file that is not a member of manifest</msg>
+					<msg class="short">reference to nonmember</msg>
+				</onFalseMsg>
+				<comment>This should check all %URI; nodes and match to manifestitemname</comment>
+			</test>
+			<!--
+      For example, encountering a paragraph (tagged with <p>...</p>) would call the resource with elementRef equal to "p".
+      3. Representations of skippable structures listed in the head of the NCX. The player will locate the resource whose type attribute equals "ncx", whose elementRef attribute value is smilCustomTest and whose idRef attribute references the id of the current smilCustomTest element. For example, the smilCustomTest element tagged <smilCustomTest id="prodnote" /> would call the resource with idRef equal to "prodnote".
+      The text, audio, and image alternatives allow a resource to be presented in a medium appropriate to the playback system's capabilities and the user's preferences. Images are conceived as holding iconic representations of heading types. The lang attribute on the resource element allows alternative representations to be supplied in multiple languages.
+      Resources would be called only when appropriate; that is, in response to clear user requirements and when needed. For example, a resource with type="ncx" and classRef="chapter" would not be called if a chapter heading with textual and audio content was already present.
+      -->
+		</category>
+	</category>
+	<category name="audio">
+		<category name="audio_integrity">
+			<!-- Redundant to opf_mnfIntegrityReadable (all manifest files are readable).
+			<test id="audio_isReadable" type="requirement">
+				<testDesc>audio file is readable</testDesc>
+				<appliesToFile>audio</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_85"/>
+				<onFalseMsg>
+					<msg class="long">audio file is not readable</msg>
+					<msg class="short">audio not readable</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+-->
+			<test id="audio_fileExtn" type="requirement">
+				<testDesc>audio file has legal file extension</testDesc>
+				<appliesToFile>audio</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_85"/>
+				<onFalseMsg>
+					<msg class="long">audio file has invalid file extension</msg>
+					<msg class="short">audio file extension invalid</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+		</category>
+		<category name="audio_internal">
+			<test id="audio_format" type="requirement">
+				<testDesc>audio file format matches extension</testDesc>
+				<appliesToFile>audio</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_85"/>
+				<onFalseMsg>
+					<msg class="long">audio file format does not match extension</msg>
+					<msg class="short">audio file format invalid</msg>
+				</onFalseMsg>
+				<comment>One example of a test done by reading and parsing info in audio file header. Others could be legal sample rate and constant bitrate; local requirements for legal bitrates could also be added.
+			</comment>
+			</test>
+		</category>
+	</category>
+	<category name="img">
+		<category name="image_integrity">
+			<!-- Redundant to opf_mnfIntegrityReadable (all manifest files are readable).
+			<test id="img_isReadable" type="requirement">
+				<testDesc>image file is readable</testDesc>
+				<appliesToFile>image</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_92"/>
+				<onFalseMsg>
+					<msg class="long">image file is not readable</msg>
+					<msg class="short">image not readable</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+-->
+			<test id="img_fileExtn" type="requirement">
+				<testDesc>image file has legal file extension</testDesc>
+				<appliesToFile>image</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_92"/>
+				<onFalseMsg>
+					<msg class="long">image file has invalid file extension</msg>
+					<msg class="short">image file extension invalid</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+		</category>
+		<category name="image_internal">
+			<test id="img_format" type="requirement">
+				<testDesc>image file format matches extension</testDesc>
+				<appliesToFile>image</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_92"/>
+				<onFalseMsg>
+					<msg class="long">image file format does not match extension</msg>
+					<msg class="short">image file format invalid</msg>
+				</onFalseMsg>
+				<comment>One example of a test done by reading and parsing info in image file header.
+			</comment>
+			</test>
+		</category>
+	</category>
+	<!--
+       	<test id="" type="requirement">
+    		<testDesc></testDesc>
+    		<appliesToFile></appliesToFile>
+    		<appliesToDtbType></appliesToDtbType>
+    		<specRef href="z3986.html#x" />
+    		<onFalseMsg>
+      			<msg class="long"></msg>
+      			<msg class="short"></msg>
+    		</onFalseMsg>
+
+        -->
+<!-- Now bring in any local extensions -->
+<!--    &extensions; -->
+</zedTestMap>

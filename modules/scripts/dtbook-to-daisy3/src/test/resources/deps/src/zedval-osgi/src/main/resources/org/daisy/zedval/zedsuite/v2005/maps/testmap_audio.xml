@@ -1,0 +1,70 @@
+<category name="audio"> <!-- 2007-12-19 -->
+  <!-- TODO when done, check that all specref links are ok -->
+
+
+    <category name="audio_fileIntegrity"> <!-- tests for file-system-level stuff -->        
+	    <test id="audio_fileExtn" type="requirement">
+	      <testDesc>audio file has a .mp4 .mp3 or .wav extension</testDesc>
+	      <appliesToFile>audio</appliesToFile>
+	      <appliesToDtbType>all</appliesToDtbType>
+	      <specRef href="z3986.html#para_92"/>
+	      <onFalseMsg>
+	        <msg class="long">audio file does not have a .mp4 .mp3 or .wav extension</msg>
+	        <msg class="short">audio file extension invalid</msg>
+	      </onFalseMsg>      
+	    </test>  
+	    
+	    <test id="audio_fileName" type="requirement">
+          <testDesc>Audio file filename contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+          <appliesToFile>audio</appliesToFile>
+          <appliesToDtbType>all</appliesToDtbType>
+          <specRef href="z3986.html#Allowed-Char"/>
+          <onFalseMsg>
+            <msg class="long">audio file name contains disallowed characters</msg>
+            <msg class="short">filename chars</msg>
+          </onFalseMsg>
+        </test>  
+ 
+  	<test id="audio_relPath" type="requirement">
+      <testDesc>file path (relative to OPF) contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+      <appliesToFile>audio</appliesToFile>
+      <appliesToDtbType>all</appliesToDtbType>
+      <specRef href="z3986.html#Allowed-Char"/>
+      <onFalseMsg>
+        <msg class="long">file path contains disallowed characters</msg>
+        <msg class="short">path chars</msg>
+      </onFalseMsg>
+    </test> 		
+
+		
+    </category>
+	
+	<category name="audio_internal">
+		<test id="audio_format" type="requirement">
+			<testDesc>audio file format matches extension</testDesc>
+			<appliesToFile>audio</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#para_92"/>
+			<onFalseMsg>
+				<msg class="long">audio file format invalid</msg>
+				<msg class="short">audio invalid</msg>
+			</onFalseMsg>
+			<comment/>
+		</test>
+		
+		<test id="audio_mp3vbr" type="recommendation">
+			<testDesc>Mp3 file does not use Variable Bit Rate (VBR)</testDesc>
+			<appliesToFile>audio</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#??"/>
+			<onFalseMsg>
+				<msg class="long">mp3 file uses Variable Bit Rate (VBR)</msg>
+				<msg class="short">mp3 vbr</msg>
+			</onFalseMsg>
+			<comment/>
+		</test>
+	</category>
+
+    
+</category>
+    

@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE zedProcessorMap [
+<!ELEMENT zedProcessorMap (testProcessor+)>
+<!ATTLIST zedProcessorMap 
+	version CDATA #REQUIRED 
+	date CDATA #REQUIRED 
+	basefile CDATA #REQUIRED 
+	specVersion CDATA #REQUIRED 
+	>
+<!ELEMENT testProcessor (label,testRef+)>
+<!ATTLIST testProcessor 
+	id ID #REQUIRED 
+	type (DTD|RNG|SCH|XSL|CUSTOM|MANUAL) #REQUIRED 
+	uses CDATA #REQUIRED 
+	appliesToFile (opf|ncx|smil|dtbook|resource|audio|image) #REQUIRED>
+<!ELEMENT testRef EMPTY >
+<!ATTLIST testRef 
+	name CDATA #IMPLIED 
+	href CDATA #REQUIRED 
+	comment CDATA #IMPLIED >
+<!ELEMENT label (#PCDATA)>
+]>
+
+<zedProcessorMap version="1.1.0" date="2005-04-14" basefile="testMap2002.xml" specVersion="ANSI/NISO Z39.86-2002" >
+  <testProcessor id="opf_0" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.OpfIntegrity" appliesToFile="opf">
+		<label>Package integrity tests</label>
+		<testRef href="opf_exists" />
+		<testRef href="opf_isReadable" />
+		<testRef href="opf_fileExtn" />
+	</testProcessor>
+
+  <testProcessor id="opf_0a" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.OpfInternal" appliesToFile="opf">
+    <label>Package internal tests</label>
+    <testRef href="opf_prologPubId" />
+  </testProcessor>
+
+  <testProcessor id="opf_1" type="DTD" uses="oebpkg101.dtd" appliesToFile="opf">
+		<label>Package DTD validity</label>
+		<testRef href="opf_isDtdValid" />
+	</testProcessor>
+
+  <testProcessor id="opf_2" type="RNG" uses="oebpkg101.rng" appliesToFile="opf">
+    <label>Package schema tests</label>
+    <testRef href="opf_DcDateValue"/>
+    <testRef href="opf_DcFormatValue"/>
+    <testRef href="opf_DcLangValue"/>
+    <testRef href="opf_xMetaDtbSourceDateValue"/>
+    <testRef href="opf_xMetaMmTypeValue"/>
+    <testRef href="opf_xMetaDtbProducedDateValue"/>
+    <testRef href="opf_xMetaDtbRevisionValue"/>
+    <testRef href="opf_xMetaDtbRevisionDateValue"/>
+    <testRef href="opf_xMetaDtbAudioFormatValue"/>
+    <testRef href="opf_xMetaDtbPrefixRestriction"/>
+    <testRef href="opf_mnfHrefUri"/>
+    <testRef href="opf_DcDcNamespace"/>
+    <testRef href="opf_DcOebNamespace"/>
+    <testRef href="opf_xMetaTotTimeValue"/>
+	</testProcessor>
+
+  <testProcessor id="opf_3" type="XSL" uses="oebpkg101.xsl" appliesToFile="opf">
+		<label>Package XSL tests</label>
+		<testRef href="opf_DcIdentifierValue" />
+		<testRef href="opf_DcIdUniqIdref" />
+		<testRef href="opf_DcTitleValue" />
+		<testRef href="opf_DcPubPresent" />
+		<testRef href="opf_DcPubValue" />
+		<testRef href="opf_DcDatePresent" />
+		<testRef href="opf_DcDateValue" />
+		<testRef href="opf_DcFormatPresent" />
+		<testRef href="opf_DcFormatValue" />
+		<testRef href="opf_DcLangPresent" />
+		<testRef href="opf_DcLangValue" />
+		<testRef href="opf_xMetaMmTypePresence" />
+        <testRef href="opf_xMetaDtbSourceDatePresence" />
+        <testRef href="opf_xMetaDtbSourceEditionPresence" />
+        <testRef href="opf_xMetaDtbSourcePublisherPresence" />
+        <testRef href="opf_xMetaDtbSourceRightsPresence" />
+        <testRef href="opf_xMetaDtbSourceTitlePresence" />
+        <testRef href="opf_xMetaTotTimePresence" />
+        <testRef href="opf_xMetaDtbProducedDatePresence" />
+        <testRef href="opf_xMetaDtbRevisionPresence" />
+        <testRef href="opf_xMetaDtbRevisionDatePresence" />
+        <testRef href="opf_xMetaDtbRevisionDescriptionPresence" />
+        <testRef href="opf_mnfNcxId" />
+        <testRef href="opf_mnfDistInfo" />
+        <testRef href="opf_mnfHrefUnique" />
+        <testRef href="opf_mnfHrefFrag" />
+        <testRef href="opf_opfInManifest" />
+	</testProcessor>
+
+    <testProcessor id="opf_4" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ManifestIntegrity" appliesToFile="opf">
+        <label>Package manifest integrity tests</label>
+        <testRef href="opf_mnfIntegrityExists" />
+        <testRef href="opf_mnfIntegrityReadable" />
+        <testRef href="opf_mnfOneSmil" />
+        <testRef href="opf_mnfNcxMediaType" />
+        <testRef href="opf_mnfOpfMediaType" />
+        <testRef href="opf_mnfResMediaType" />
+    </testProcessor>
+
+    <testProcessor id="opf_5a" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ManifestAudio" appliesToFile="opf">
+        <label>Package manifest integrity, audiobook tests</label>
+        <testRef href="opf_mnfOneAudio" />
+    </testProcessor>
+
+    <testProcessor id="opf_5b" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ManifestNonAudio" appliesToFile="opf">
+        <label>Package manifest integrity, non-audiobook tests</label>
+        <testRef href="opf_mnfZeroAudio" />
+    </testProcessor>
+
+    <testProcessor id="opf_6a" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ManifestText" appliesToFile="opf">
+        <label>Package manifest integrity, text book tests</label>
+        <testRef href="opf_mnfOneDtbook" />
+    </testProcessor>
+
+    <testProcessor id="opf_6b" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ManifestNonText" appliesToFile="opf">
+        <label>Package manifest integrity, non-text book tests</label>
+        <testRef href="opf_mnfZeroDtbook" />
+    </testProcessor>
+
+    <testProcessor id="opf_7" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.SpineIntegrity" appliesToFile="opf">
+        <label>Package spine integrity</label>
+        <testRef href="opf_xMetaTotTimeAccurate" />
+        <testRef href="opf_SpineRefAllSmilInMnf" />
+        <testRef href="opf_spnItemRefIdrefSmil" />
+    </testProcessor>
+
+	<testProcessor id="ncx_1" type="DTD" uses="ncx110.dtd" appliesToFile="ncx">
+		<label>NCX DTD validity</label>
+		<testRef href="ncx_isDtdValid" />
+	</testProcessor>
+
+	<testProcessor id="ncx_2" type="RNG" uses="ncx110.rng" appliesToFile="ncx">
+	    <label>NCX schema tests</label>
+	    <testRef href="ncx_metaDtbDepthValue"/>
+	    <testRef href="ncx_metaDtbPrefixRestriction"/>	    
+	    <!-- maxPageNormal etc values are currently tested by rng if they occur maxPageNormal etc existence is tested by xsl, see ncx_3 below -->
+	    <testRef href="ncx_metaDtbMaxPageNormalContentAttrValue"/>
+	    <testRef href="ncx_metaDtbPageNormalContentAttrValue"/>
+	    <testRef href="ncx_metaDtbPageSpecialContentAttrValue"/>
+	    <testRef href="ncx_metaDtbPageFrontContentAttrValue"/>	    
+	    <testRef href="ncx_navPointValueAttrValue"/>
+	    <testRef href="ncx_contentSrcAttrValue"/>
+	    <testRef href="ncx_navTargetClassAttrValue"/>
+	    <testRef href="ncx_navTargetValueAttrValue"/>
+	    <testRef href="ncx_clipBeginValue"/>
+	    <testRef href="ncx_clipEndValue"/>
+	    <testRef href="ncx_audioSrcValue"/>
+	    <testRef href="ncx_imgSrcValue"/>
+	    <testRef href="ncx_navListClassAttrValue"/>
+	</testProcessor>
+
+    <testProcessor id="ncx_3" type="XSL" uses="ncx110.xsl" appliesToFile="ncx">
+        <label>NCX XSL tests</label>
+        <testRef href="ncx_metaDtbUid" />
+        <testRef href="ncx_metaDbtDepthPresence" />
+        <testRef href="ncx_metaDtbGeneratorPresence" />
+        <testRef href="ncx_metaDtbMaxPageNormalPresence" />
+        <testRef href="ncx_metaDtbPageNormalPresence" />
+        <testRef href="ncx_metaDtbPageSpecialPresence" />
+        <testRef href="ncx_metaDtbPageFrontPresence" />
+        <testRef href="ncx_audioFileExists" />
+        <testRef href="ncx_clipEndAfterclipBegin" />
+        <testRef href="ncx_clipEndBeforeEOF" />
+        <testRef href="ncx_multiNavLabel" />
+<!-- This map no longer in testMap (JP, 4/26/2005)
+        <testRef href="ncx_mapRef" /> 
+-->
+        <testRef href="ncx_srcSMILFragment" />
+        <testRef href="ncx_navPointToPage" />
+        <testRef href="ncx_mapRefToNavPoint" />
+    </testProcessor>
+
+    <testProcessor id="ncx_4" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.NcxIntegrity" appliesToFile="ncx" >
+        <label>NCX integrity tests</label>
+        <testRef href="ncx_fileExtn" />
+    </testProcessor>
+
+    <testProcessor id="ncx_5" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.NcxInternal" appliesToFile="ncx">
+        <label>NCX internal tests</label>
+        <testRef href="NCX_PrologPubId" />
+        <testRef href="NCX_Version" />
+        <testRef href="ncx_metaDtbDepthValueCorrelated" />
+    </testProcessor>
+
+    <testProcessor id="ncx_6" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.NcxRelations" appliesToFile="ncx">
+        <label>NCX relational tests</label>
+        <testRef href="ncx_UidOpfUid" />
+        <testRef href="ncx_manifestRefs" />
+        <testRef href="ncx_srcSMIL" />
+        <testRef href="ncx_srcAudio" />
+        <testRef href="ncx_srcImg" />
+    </testProcessor>
+
+	<testProcessor id="smil_1" type="DTD" uses="dtbsmil110.dtd" appliesToFile="smil">
+		<label>SMIL DTD validity</label>
+		<testRef href="smil_isDtdValid" />
+	</testProcessor>
+
+	<testProcessor id="smil_2" type="RNG" uses="dtbsmil110.rng" appliesToFile="smil">
+    <label>SMIL schema tests</label>
+    <testRef href="smil_metaDtbPrefixRestriction"/>
+    <testRef href="smil_metaDtbTotElaSyntax"/>
+    <testRef href="smil_CstTstDefStAttr"/>
+    <testRef href="smil_CstTstOverrideAttr"/>
+    <testRef href="smil_layoutXmlLangValue"/>
+    <testRef href="smil_customAttrsXmlLangValue"/>
+    <testRef href="smil_customTestXmlLangValue"/>
+    <testRef href="smil_bodyXmlLangValue"/>
+    <testRef href="smil_seqDurValue"/>
+    <testRef href="smil_parContent"/>
+    <testRef href="smil_textSrcValue"/>
+    <testRef href="smil_audioSrcValue"/>
+    <testRef href="smil_imgSrcValue"/>
+    <testRef href="smil_clipBeginValue"/>
+    <testRef href="smil_clipEndValue"/>
+    <testRef href="smil_anchorXmlLangValue"/>
+    <testRef href="smil_CstTestIdValue"/>
+    <testRef href="smil_seqParClassAttr"/>
+    <testRef href="smil_hrefValue"/>
+  </testProcessor>
+
+    <testProcessor id="smil_3" type="XSL" uses="dtbsmil110.xsl" appliesToFile="smil">
+        <label>SMIL XSL tests</label>
+        <testRef href="smil_metaDtbGenPresence" />
+        <testRef href="smil_metaDtbTotElaPresence" />
+        <testRef href="smil_metaDtbUidPresence" />
+        <testRef href="smil_clipEndAfterclipBegin" />
+        <testRef href="smil_clipEndBeforeEOF" />
+        <testRef href="ncx_smilCustomTest" />
+        <testRef href="smil_metaTextDtbTotElaAccurate" />
+        <testRef href="smil_validRegion" />
+    </testProcessor>
+
+
+    <testProcessor id="smil_4" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.SmilInternal" appliesToFile="smil">
+        <label>SMIL internal tests</label>
+        <testRef href="smil_prologPubId" />
+    </testProcessor>
+
+    <testProcessor id="smil_5" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.SmilRelations" appliesToFile="smil">
+        <label>SMIL relational tests</label>
+        <testRef href="smil_metaDtbUidValue" />
+        <testRef href="smil_metaAudioDtbTotElaAccurate" />
+        <testRef href="smil_manifestRefs" />
+        <testRef href="smil_srcDtbook" />
+        <testRef href="smil_srcAudio" />
+        <testRef href="smil_srcImg" />
+        <testRef href="smil_hrefSMIL" />
+    </testProcessor>
+    
+    <testProcessor id="smil_6" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.SmilDtbookRelations" appliesToFile="smil">
+        <label>SMIL-dtbook relational tests</label>
+        <testRef href="dtbook_SmilRef" />
+        <testRef href="smil_textSrcResolves" />
+    </testProcessor>
+
+    <testProcessor id="dtbook_0" type="DTD" uses="dtbook110.dtd" appliesToFile="dtbook">
+        <label>Text file DTD validity</label>
+        <testRef href="dtbook_isDtdValid" />
+    </testProcessor>
+
+    <testProcessor id="dtbook_10" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.TextInternal" appliesToFile="dtbook">
+        <label>Text file internal tests</label>
+        <testRef href="dtbook_prologPubId" />
+        <testRef href="dtbook_Version" />
+    </testProcessor>
+
+    <testProcessor id="dtbook_11" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.TextRelations" appliesToFile="dtbook">
+        <label>Text file relational tests</label>
+        <testRef href="dtbk_manifestRefs" />
+    </testProcessor>
+
+    <testProcessor id="dtbook_23" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.DtbookSmilRelations" appliesToFile="dtbook">
+        <label>dtbook-SMIL relational tests</label>
+        <testRef href="dtbook_SmilRefResolves" />
+    </testProcessor>
+
+	<!-- mg20070322: uses value wrong, sb 110
+	<testProcessor id="res_1" type="DTD" uses="resource101.dtd" appliesToFile="resource">
+	-->
+	<testProcessor id="res_1" type="DTD" uses="resource110.dtd" appliesToFile="resource">	
+		<label>Resource file DTD validity</label>
+		<testRef href="res_isDtdValid" />
+	</testProcessor>
+
+	<!-- mg20070322: uses value wrong, sb 110
+	<testProcessor id="res_2" type="RNG" uses="resource101.rng" appliesToFile="resource">
+	-->
+	<testProcessor id="res_2" type="RNG" uses="resource110.rng" appliesToFile="resource">
+	    <label>Resource file schema tests</label>
+		<testRef href="res_elmRefTypeNcx"/>
+		<testRef href="res_elmRefTypeDtbook"/>
+		<testRef href="res_langAttr"/>
+    	<testRef href="res_audioSrcValue"/>
+    	<testRef href="res_clipBeginValue"/>
+    	<testRef href="res_clipEndValue"/>
+		<testRef href="res_imgSrcValue"/>
+	</testProcessor>
+
+    <testProcessor id="res_3" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ResIntegrity" appliesToFile="resource" >
+        <label>Resource file integrity tests</label>
+        <testRef href="res_fileExtn" />
+    </testProcessor>
+
+    <testProcessor id="res_4" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ResInternal" appliesToFile="resource">
+        <label>Resource file internal tests</label>
+        <testRef href="res_prologPubId" />
+        <testRef href="resource_Version" />
+    </testProcessor>
+
+    <testProcessor id="res_5" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ResRelations" appliesToFile="resource">
+        <label>Resource file relational tests</label>
+        <testRef href="res_manifestRefs" />
+    </testProcessor>
+
+    <testProcessor id="audio_1" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.AudioTests" appliesToFile="audio">
+        <label>Audio file tests</label>
+        <testRef href="audio_fileExtn" />
+        <testRef href="audio_format" />
+    </testProcessor>
+
+    <testProcessor id="image_1" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2002.ImageTests" appliesToFile="image">
+        <label>Image file tests</label>
+        <testRef href="img_fileExtn" />
+        <testRef href="img_format" />
+    </testProcessor>
+
+</zedProcessorMap>

@@ -1,0 +1,789 @@
+<category name="dtbook"> <!-- 2007-12-19 -->
+	<!-- TODO when done, check that all specref links are ok -->
+	<category name="dtbook_fileIntegrity">
+		<!-- tests for file-system-level stuff -->
+		<test id="dtbook_fileExtn" type="requirement">
+			<testDesc>dtbook file has .xml extension</testDesc>
+			<appliesToFile>dtbook</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#para_53c"/>
+			<onFalseMsg>
+				<msg class="long">dtbook file does not have a .xml extension</msg>
+				<msg class="short">file extension</msg>
+			</onFalseMsg>
+		</test>
+		
+		<test id="dtbook_fileName" type="requirement">
+			<testDesc>dtbook file filename contains only characters as specified in
+				section 3.3.1 of z3986-2005 specification</testDesc>
+			<appliesToFile>dtbook</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#Allowed-Char"/>
+			<onFalseMsg>
+				<msg class="long">dtbook file name contains disallowed characters</msg>
+				<msg class="short">filename chars</msg>
+			</onFalseMsg>
+		</test>
+		
+		<test id="dtbook_relPath" type="requirement">
+			<testDesc>file path (relative to OPF) contains only characters as specified in
+				section 3.3.1 of z3986-2005 specification</testDesc>
+			<appliesToFile>dtbook</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#Allowed-Char"/>
+			<onFalseMsg>
+				<msg class="long">file path contains disallowed characters</msg>
+				<msg class="short">path chars</msg>
+			</onFalseMsg>
+		</test>
+		
+	</category>
+	
+	<category name="dtbook_internal"> <!-- tests for internal grammar stuff -->
+		<category name="dtbook_internal_generic">
+			<!-- internal grammar tests that reoccur for every XML file -->
+			<test id="dtbook_isDtdValid" type="requirement">
+				<testDesc>dtbook file is valid to DTD</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookReq"/>
+				<onFalseMsg>
+					<msg class="long">dtbook file is not valid to DTD</msg>
+					<msg class="short">invalid to DTD</msg>
+				</onFalseMsg>
+			</test>
+						
+			<test id="dtbook_prologPubId_2005_1" type="recommendation">
+				<testDesc>dtbook file public identifier equals "-//NISO//DTD dtbook v2005-1//EN"</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookDTD"/>
+				<onFalseMsg>
+					<msg class="long">dtbook file public identifier does not equal "-//NISO//DTD dtbook 2005-1//EN"</msg>
+					<msg class="short">public identifier</msg>
+				</onFalseMsg>
+			</test>
+
+			<test id="dtbook_prologPubId_2005_2" type="recommendation">
+				<testDesc>dtbook file public identifier equals "-//NISO//DTD dtbook v2005-2//EN"</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookDTD"/>
+				<onFalseMsg>
+					<msg class="long">dtbook file public identifier does not equal "-//NISO//DTD dtbook 2005-2//EN"</msg>
+					<msg class="short">public identifier</msg>
+				</onFalseMsg>
+			</test>			
+
+			<test id="dtbook_prologPubId_2005_3" type="recommendation">
+				<testDesc>dtbook file public identifier equals "-//NISO//DTD dtbook v2005-3//EN"</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookDTD"/>
+				<onFalseMsg>
+					<msg class="long">dtbook file public identifier does not equal "-//NISO//DTD dtbook 2005-3//EN"</msg>
+					<msg class="short">public identifier</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_versionPresence" type="requirement">
+				<testDesc>dtbook file must have a non-DTD-inferred version attribute on
+					the root element</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookReq"/>
+				<onFalseMsg>
+					<msg class="long">dtbooks version attribute missing</msg>
+					<msg class="short">version attribute</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_versionValue_2005_1" type="requirement">
+				<testDesc>version attribute on root element must have value 2005-1</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookReq"/>
+				<onFalseMsg>
+					<msg class="long">dtbook version attribute value is not 2005-1</msg>
+					<msg class="short">version attribute value</msg>
+				</onFalseMsg>
+			</test>
+
+			<test id="dtbook_versionValue_2005_2" type="requirement">
+				<testDesc>version attribute on root element must have value 2005-2</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookReq"/>
+				<onFalseMsg>
+					<msg class="long">dtbook version attribute value is not 2005-2</msg>
+					<msg class="short">version attribute value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_versionValue_2005_3" type="requirement">
+				<testDesc>version attribute on root element must have value 2005-3</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookReq"/>
+				<onFalseMsg>
+					<msg class="long">dtbook version attribute value is not 2005-3</msg>
+					<msg class="short">version attribute value</msg>
+				</onFalseMsg>
+			</test>
+						
+			<test id="dtbook_xmlnsPresence" type="requirement">
+				<testDesc>dtbook file must have a non-DTD-inferred xmlns attribute on the root element</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookReq"/>
+				<onFalseMsg>
+					<msg class="long">dtbook file does not have xmlns attribute</msg>
+					<msg class="short">xmlns attribute</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_xmlnsValue" type="requirement">
+				<testDesc>dtbook xmlns attribute value must be 'http://www.daisy.org/z3986/2005/dtbook/'</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookDTD"/>
+				<onFalseMsg>
+					<msg class="long">dtbook file xmlns attribute value is not
+						'http://www.daisy.org/z3986/2005/dtbook/' </msg>
+					<msg class="short">xmlns value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_xmlLangAttrValue" type="requirement">
+				<testDesc>any occuring xml:lang attribute value is valid to rfc3066</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#dtbookDTD"/>
+				<onFalseMsg>
+					<msg class="long">xml:lang attribute value is not valid to
+						rfc3066</msg>
+					<msg class="short">xml:lang value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_entityDeclInternal" type="requirement">
+				<testDesc>referenced entities must be declared in the internal DTD subset</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#FileConform"/>
+				<onFalseMsg>
+					<msg class="long">a reference occured to an entity that was not declared in the internal DTD subset</msg>
+					<msg class="short">entity decl</msg>
+				</onFalseMsg>
+				<comment>[mg]This test really only makes sense for opf since its the only
+					grammar where the DTD defines entities. Perhaps also to Dtbook if
+					someone hooks up a module</comment>
+			</test>
+		</category> <!-- end dtbook_internal_generic -->
+		
+		<category name="dtbook_internal_specific">
+			<!-- internal grammar tests that are unique to this grammar -->
+			<test id="dtbook_MetaUid" type="requirement">
+				<testDesc>dtb:uid meta element exists</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<specRef href="z3986.html#para_69a"/>
+				<onFalseMsg>
+					<msg class="long">There must be one and only one dtb:uid metadata in the textual content file.</msg>
+					<msg class="short">dtb:uid meta missing or duplicated.</msg>
+				</onFalseMsg>
+				<comment>AS 032205</comment>
+			</test>
+			<test id="dtbook_MetaTitle" type="requirement">
+				<testDesc>dc:Title meta element exists</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<specRef href="z3986.html#para_69a"/>
+				<onFalseMsg>
+					<msg class="long">There must be one and only one dc:Title metadata in the textual content file</msg>
+					<msg class="short">dc:Title meta missing or duplicated.</msg>
+				</onFalseMsg>
+				<comment>AS 032205</comment>
+			</test>
+			
+			<test id="dtbook_pageNumNormal" type="requirement">
+				<testDesc>pagenum with type=normal has a positive integer as
+					value</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">pagenum type=normal does not contain a positive integer value</msg>
+					<msg class="short">pagenum normal value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_pageNumFront" type="requirement">
+				<testDesc>pagenum with type=front has a roman numeral as
+					value</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">pagenum type=front does not contain a roman numeral value</msg>
+					<msg class="short">pagenum normal value</msg>
+				</onFalseMsg>
+			</test>
+
+			<test id="dtbook_idrefAnnotation" type="requirement">
+				<testDesc>annoref URI value resolves to an annotation element</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">annoref URI value does not resolve to a annotation element</msg>
+					<msg class="short">annoref URI</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_idrefNote" type="requirement">
+				<testDesc>noteref URI value resolves a note element</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">noteref URI value does not resolve to a note element</msg>
+					<msg class="short">noteref URI</msg>
+				</onFalseMsg>
+			</test>
+
+			<test id="dtbook_annotationFragment" type="requirement">
+				<testDesc>annoref URI value contains a fragment identifier</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">annoref URI value does not contain a fragment identifier</msg>
+					<msg class="short">annoref URI</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="dtbook_noteFragment" type="requirement">
+				<testDesc>noteref URI value contains a fragment identifier</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">noteref URI value does not contain a fragment identifier</msg>
+					<msg class="short">noteref URI</msg>
+				</onFalseMsg>
+			</test>
+
+			<test id="dtbook_internalLinks" type="requirement">
+				<testDesc>Fragment target of internal links must exist</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">interal link does not resolve</msg>
+					<msg class="short">href</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_enumAttrInList" type="strongRecommendation">
+				<testDesc>The enum attribute should only exist on numbered lists</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The enum attribute only allowed in numbered lists</msg>
+					<msg class="short">enum attr</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_depthList" type="requirement">
+				<testDesc>The depth attribute on list element must contain the list wrapping level</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The depth attribute on list element does not contain the list wrapping level</msg>
+					<msg class="short">depth attr</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_headersThTd" type="requirement">
+				<testDesc>All tokens in the headers attribute must match the id attributes of 'th' elements in this or a parent table.</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Not all the tokens in the headers attribute match the id attributes of 'th' elements in this or a parent table.</msg>
+					<msg class="short">headers attr</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_imgrefProdnote" type="requirement">
+				<testDesc>All tokens in the imgref attribute match the id attributes of 'img' elements.</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Not all the tokens in the imgref attribute match the id attributes of 'img' elements.</msg>
+					<msg class="short">imgref prodnote</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_imgrefCaption" type="requirement">
+				<testDesc>All tokens in the imgref attribute match the id attributes of 'img' elements.</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Not all the tokens in the imgref attribute match the id attributes of 'img' elements.</msg>
+					<msg class="short">imgref caption</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_accesskeyLength" type="requirement">
+				<testDesc>The accesskey attribute on &lt;a&gt; elements may only be one character long</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The accesskey attribute  is not one character long</msg>
+					<msg class="short">accesskey length</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_tabindexNumeric" type="requirement">
+				<testDesc>tabindex of &lt;a&gt; elements must be expressed in numbers only</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The tabindex attribute value is not expressed in numbers</msg>
+					<msg class="short">tabindex non-numeric</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_accesskeyUnique" type="strongRecommendation">
+				<testDesc>accesskey attribute values must be unique within the document</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The accesskey attribute value is not unique within the document</msg>
+					<msg class="short">accesskey unique</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_tabindexUnique" type="strongRecommendation">
+				<testDesc>tabindex attribute values must be unique within the document</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The tabindex attribute value is not unique within the document</msg>
+					<msg class="short">tabindex unique</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_charAttributeLength" type="strongRecommendation">
+				<testDesc>length of char attribute value must be one</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">length of char attribute value is not one</msg>
+					<msg class="short">char attr length</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_charAttributeAlign" type="strongRecommendation">
+				<testDesc>char attribute may only occur when align attribute value is 'char'</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">char attribute occurs although align attribute value is not 'char'</msg>
+					<msg class="short">char, align</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_imgWidth" type="requirement">
+				<testDesc>The width of images must be expressed in integer pixels or percentage</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The image width is not expressed in integer pixels or percentage</msg>
+					<msg class="short">image width value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_imgHeight" type="requirement">
+				<testDesc>The height of images must be expressed in integer pixels or percentage</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The image height is not expressed in integer pixels or percentage</msg>
+					<msg class="short">image height value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_tableWidth" type="requirement">
+				<testDesc>width of tables must be expressed in pixels or percentage</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Table width is not expressed in pixels or percentage</msg>
+					<msg class="short">table width value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_tableCellspacing" type="requirement">
+				<testDesc>cellspacing of tables must be expressed in pixels or percentage</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Table cellspacing is not expressed in pixels or percentage</msg>
+					<msg class="short">table cellspacing value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+						
+			<test id="dtbook_tableCellpadding" type="requirement">
+				<testDesc>cellpadding of tables must be expressed in pixels or percentage</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Table cellpadding is not expressed in pixels or percentage</msg>
+					<msg class="short">table cellpadding value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+	
+			<test id="dtbook_startAttrInList" type="strongRecommendation">
+				<testDesc>The start attribute is only allowed in numbered lists</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The start attribute occurs in a non-numbered lists</msg>
+					<msg class="short">start attr on non-numeric list</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_startAttrNonNegative" type="requirement">
+				<testDesc>The start attribute must be a non negative number</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The start attribute is not a non negative number</msg>
+					<msg class="short">start attr value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>		
+
+			<test id="dtbook_dcAttrNamePart" type="requirement">
+				<testDesc>The name part of a dublin core metadata element must be recognized</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Incorrect Dublin core metadata name</msg>
+					<msg class="short">dc name</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_dcAttrPrefixPart" type="requirement">
+				<testDesc>The prefix part of a dublin core metadata element must be lowercase ('dc')</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Incorrect Dublin core metadata prefix</msg>
+					<msg class="short">dc prefix</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_spanColColgroup" type="requirement">
+				<testDesc>span attribute on col and colgroup elements must be a positive integer</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">span attribute is not a positive integer</msg>
+					<msg class="short">span attribute value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_rowSpanValue" type="requirement">
+				<testDesc>The rowspan attribute value must be a positive integer</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The rowspan attribute value is not a positive integer</msg>
+					<msg class="short">rowspan attribute value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_colSpanValue" type="requirement">
+				<testDesc>The colspan attribute value must be a positive integer</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The colspan attribute value is not a positive integer</msg>
+					<msg class="short">colspan attribute value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+			
+			<test id="dtbook_rowSpanRelativeValue" type="strongRecommendation">
+				<testDesc>The rowspan attribute value must not be larger than the number of rows left in the table</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The rowspan attribute value is larger than the number of rows left in the table</msg>
+					<msg class="short">rowspan attribute value</msg>
+				</onFalseMsg>
+				<comment>MG20061101: added as a consequence of zedval feature request #1565049</comment>
+			</test>
+
+			<test id="dtbook_levelDepth" type="requirement">
+				<testDesc>The value of the depth attribute on the level element corresponds to actual nesting level</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">The value of the depth attribute on the level element does not correspond to actual nesting level</msg>
+					<msg class="short">level@depth</msg>
+				</onFalseMsg>
+				<comment>MG20070522: added as a consequence of zedval feature request #1593192</comment>
+			</test>			
+			
+						
+		</category> <!-- end dtbook_internal_specific -->
+		
+	</category> <!-- end dtbook_internal -->
+	
+	<category name="dtbook_relations">
+		<category name="dtbook_relations_generic">
+			<test id="dtbook_manifestRefs" type="requirement">
+				<testDesc>all local references to files are to files that are listed in manifest</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">a reference was made to a file that is not a member of manifest</msg>
+					<msg class="short">reference to nonmember</msg>
+				</onFalseMsg>
+				<comment>[mg] remember that this does not apply to SMIL external links
+					</comment>
+			</test>
+		</category> <!-- end dtbook_relations_generic -->
+		
+		<category name="dtbook_relations_specific">
+			<test id="dtbook_UidOpfUid" type="requirement">
+				<testDesc>dtb:uid value matches package unique-identifier</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_403"/>
+				<onFalseMsg>
+					<msg class="long">The unique ID in the textual content file does not match the uid of the dtb.</msg>
+					<msg class="short">dtbook/opf uid mismatch</msg>
+				</onFalseMsg>
+				<comment>added by jp, 7 Nov 2005</comment>
+			</test>
+
+			<test id="dtbook_SmilRefValue" type="requirement">
+				<testDesc>The smilRef attribute value is a valid URI </testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">smilRef URI is not valid</msg>
+					<msg class="short">smilRef URI</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+
+			<test id="dtbook_citeValue" type="requirement">
+				<testDesc>The cite attribute value is a valid URI </testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">cite URI is not valid</msg>
+					<msg class="short">cite URI</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+
+			<test id="dtbook_hrefValue" type="requirement">
+				<testDesc>The href attribute value is a valid URI </testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">href URI is not valid</msg>
+					<msg class="short">href URI</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+
+			<test id="dtbook_srcValue" type="requirement">
+				<testDesc>The src attribute value is a valid URI </testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">src URI is not valid</msg>
+					<msg class="short">src URI</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+			
+			<test id="dtbook_longdescValue" type="requirement">
+				<testDesc>The longdesc attribute value is a valid URI </testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">longdesc URI is not valid</msg>
+					<msg class="short">longdesc URI</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+
+			<test id="dtbook_profileValue" type="requirement">
+				<testDesc>The profile attribute value is a valid URI </testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">profile URI is not valid</msg>
+					<msg class="short">profile URI</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+			
+			<test id="dtbook_SmilRefResolves" type="requirement">
+				<testDesc>The smilRef attribute is a URI that resolves to a SMIL fragment</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_76"/>
+				<onFalseMsg>
+					<msg class="long">smilRef URI does not resolve</msg>
+					<msg class="short">smilRef URI does not resolve</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+			
+			<test id="dtbook_SmilRefResolvesToTimeContainers" type="requirement">
+				<testDesc>The smilRef attribute is a URI that resolves to a SMIL fragment on a time container</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_76"/>
+				<onFalseMsg>
+					<msg class="long">smilRef URI does not resolve to a
+						timecontainer</msg>
+					<msg class="short">smilRef URI does not resolve correctly</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+			
+			<test id="dtbook_SmilRefResolvesToText" type="requirement">
+				<testDesc>The smilRef attribute is a URI that resolves to a SMIL fragment on a text element</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>textOnly</appliesToDtbType>
+				<specRef href="z3986.html#para_76"/>
+				<onFalseMsg>
+					<msg class="long">smilRef URI does not resolve to a text element</msg>
+					<msg class="short">smilRef URI does not resolve correctly</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+			
+			<test id="dtbook_customTestMinimally" type="requirement">
+				<testDesc>all dtbook line numbers, notes, note references, annotations, page numbers, optional producer's notes, and optional sidebars must point to smil elements which have a customTest attribute</testDesc>
+				<appliesToFile>dtbook</appliesToFile>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#Skip"/>
+				<onFalseMsg>
+					<msg class="long">customTest attribute missing</msg>
+					<msg class="short">customTest attribute</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+			
+			<test id="dtbook_tableListClass" type="requirement">
+				<testDesc>Every dtbook table or list must refer to a smil element with class=table or class=list</testDesc>
+				<appliesToFile>smil</appliesToFile>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_109"/>
+				<onFalseMsg>
+					<msg class="long">table or list lacks class=table or class=list attribute</msg>
+					<msg class="short">missing or invalid class attribute: table or list</msg>
+				</onFalseMsg>
+				<comment>mg: only testable when dtbook is available. Bad req that sb
+					dropped from spec [mg]see smil_escStrucClassAttr </comment>
+			</test>
+			
+		</category> <!-- end dtbook_relations_specific -->
+		
+	</category> <!-- end dtbook_relations -->
+	
+	<!-- dtbook collection area for tests commented out during map authoring -->
+	<!-- mg: this is for smil-relations:
+	<test id="dtbook_SmilRef" type="requirement">
+	<testDesc>each dtbook element referenced from smil contains a smilRef attribute</testDesc>
+	<appliesToFile>dtbook</appliesToFile>
+	<appliesToDtbType>audioNCX</appliesToDtbType>
+	<appliesToDtbType>audioPartText</appliesToDtbType>
+	<appliesToDtbType>audioFullText</appliesToDtbType>
+	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	<appliesToDtbType>textNCX</appliesToDtbType>
+	<specRef href="z3986.html#para_76"/>
+	<onFalseMsg>
+	<msg class="long">element referenced from smil lacks smilRef attribute</msg>
+	<msg class="short">smilRef attribute missing</msg>
+	</onFalseMsg>
+	<comment/>
+	</test>
+	-->
+	<!-- end dtbook collection area for commented out tests -->
+	
+	<!-- end dtbook -->
+</category>

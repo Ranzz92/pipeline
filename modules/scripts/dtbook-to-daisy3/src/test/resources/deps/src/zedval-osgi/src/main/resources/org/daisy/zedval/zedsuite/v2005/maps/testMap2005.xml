@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE zedTestMap [
+<!ENTITY testmap_opf SYSTEM "testmap_opf.xml">
+<!ENTITY testmap_smil SYSTEM "testmap_smil.xml">
+<!ENTITY testmap_ncx SYSTEM "testmap_ncx.xml">
+<!ENTITY testmap_dtbook SYSTEM "testmap_dtbook.xml">
+<!ENTITY testmap_res SYSTEM "testmap_res.xml">
+<!ENTITY testmap_audio SYSTEM "testmap_audio.xml">
+<!ENTITY testmap_img SYSTEM "testmap_img.xml">
+<!ENTITY testmap_math SYSTEM "testmap_math.xml">
+<!ELEMENT testDesc (#PCDATA)*>
+<!ELEMENT appliesToFile (#PCDATA)*>
+<!ELEMENT specRef EMPTY>
+<!ATTLIST specRef href CDATA #REQUIRED>
+<!ELEMENT category (((category|test))*)>
+<!ATTLIST category name CDATA #REQUIRED>
+<!ELEMENT appliesToDtbType (#PCDATA)*>
+<!ELEMENT msg (#PCDATA)*>
+<!ATTLIST msg class (long|short) #REQUIRED>
+<!ELEMENT zedTestMap ((category)+)>
+<!ATTLIST zedTestMap 
+	version CDATA #REQUIRED
+    date CDATA #REQUIRED>
+<!ELEMENT onFalseMsg ((msg)*)>
+<!ELEMENT comment (#PCDATA)*>
+<!ELEMENT test (testDesc,appliesToFile,(appliesToDtbType)+,specRef,onFalseMsg,(comment)?)>
+<!ATTLIST test 
+	id ID #REQUIRED
+    type (requirement|recommendation|strongRecommendation) #REQUIRED>		
+]>	
+
+<zedTestMap version="2.0" date="2007-12-19">
+  &testmap_ncx;
+  &testmap_smil;
+  &testmap_dtbook; 
+  &testmap_opf;
+  &testmap_res;
+  &testmap_img;
+  &testmap_audio;		
+  &testmap_math;
+</zedTestMap>

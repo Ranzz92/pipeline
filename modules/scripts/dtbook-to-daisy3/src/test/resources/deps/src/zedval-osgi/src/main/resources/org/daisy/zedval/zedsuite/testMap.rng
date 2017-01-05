@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar 
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+	xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:sch="http://www.ascc.net/xml/schematron"
+>
+	<a:documentation> 
+		<a:note>UNDER DEVELOPMENT RelaxNg schema for ZedVal testMap 2005</a:note>
+		<a:note>Last edit by: mgylling 2007-12-19</a:note> 
+	</a:documentation>
+
+	<start>
+		<ref name="root"/>
+	</start>
+	
+	<define name="root">
+		<element name="zedTestMap">
+			<attribute name="version"/>
+			<attribute name="date"/>
+			<oneOrMore>
+				<ref name="element.category"/>
+			</oneOrMore>
+		</element>
+	</define>
+	
+	<define name="element.category">
+		<attribute name="name"/>
+		<zeroOrMore>
+			<ref name="element.category"/>
+		</zeroOrMore>
+		<zeroOrMore>
+			<ref name="element.test"/>
+		</zeroOrMore>
+	</define>
+	
+	<define name="element.test">
+		<element name="test">
+			<ref name="attribute.id"/>
+			<ref name="attribute.type"/>
+			<ref name="element.testDesc"/>
+			<ref name="element.appliesToFile"/>
+			<ref name="element.appliesToDtbType"/>
+			<ref name="element.specRef"/>
+			<ref name="element.onFalseMsg"/>
+			<optional>
+				<ref name="element.comment"/>
+			</optional>
+		</element>
+	</define>
+	
+	<define name="attribute.type">
+		<attribute name="type">
+			<choice>
+				<value>recommendation</value>
+				<value>requirement</value>
+				<value>strongRecommendation</value>
+			</choice>
+		</attribute>
+	</define>
+	
+	<define name="attribute.id">
+		<attribute name="id">
+			<data type="ID"
+				datatypeLibrary="http://relaxng.org/ns/compatibility/datatypes/1.0"/>
+		</attribute>
+	</define>
+	
+	<define name="element.testDesc">
+		<element name="testDesc">
+			<text/>
+		</element>
+	</define>
+	
+	<define name="element.appliesToFile">
+		<element name="appliesToFile">
+			<choice>
+				<value>opf</value>
+				<value>ncx</value>
+				<value>resource</value>
+				<value>smil</value>
+				<value>image</value>
+				<value>audio</value>
+				<value>dtbook</value>
+			</choice>
+		</element>
+	</define>
+	
+	<define name="element.appliesToDtbType">
+		<element name="appliesToDtbType">
+			<choice>
+				<value>all</value>
+				<value>audioOnly</value>
+				<value>audioNCX</value>
+				<value>audioPartText</value>
+				<value>audioFullText</value>
+				<value>textPartAudio</value>
+				<value>textNCX</value>
+			</choice>
+		</element>
+	</define>
+	
+	<define name="element.specRef">
+		<element name="specRef">
+			<data type="anyURI"/>
+		</element>
+	</define>
+	
+	<define name="element.onFalseMsg">
+		<element name="onFalseMsg">
+			<ref name="element.msg"/>
+   		    <ref name="element.msg"/>
+		</element>
+	</define>
+	
+	<define name="element.msg">
+		<element name="msg">
+			<attribute name="class">
+				<choice>
+					<value>long</value>
+					<value>short</value>
+				</choice>
+			</attribute>
+			<text/>
+		</element>		
+	</define>	
+		
+	<define name="element.comment">
+		<element name="comment">
+			<text/>
+		</element>
+	</define>
+	
+</grammar>

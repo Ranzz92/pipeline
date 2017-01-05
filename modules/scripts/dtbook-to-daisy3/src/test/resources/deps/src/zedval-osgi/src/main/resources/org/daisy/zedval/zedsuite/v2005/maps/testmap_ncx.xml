@@ -1,0 +1,697 @@
+<category name="ncx"> <!-- 2007-12-19 -->
+	<!-- TODO when done, check that all specref links are ok -->
+	<category name="ncx_fileIntegrity"> <!-- tests for file-system-level stuff -->
+		<test id="ncx_fileExtn" type="requirement">
+			<testDesc>ncx file has .ncx extension</testDesc>
+			<appliesToFile>ncx</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#para_53c"/>
+			<onFalseMsg>
+				<msg class="long">ncx file does not have a .ncx extension</msg>
+				<msg class="short">file extension</msg>
+			</onFalseMsg>
+			<comment/>
+		</test>
+		
+		<test id="ncx_fileName" type="requirement">
+			<testDesc>ncx file filename contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+			<appliesToFile>ncx</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#Allowed-Char"/>
+			<onFalseMsg>
+				<msg class="long">ncx file name contains disallowed characters</msg>
+				<msg class="short">filename chars</msg>
+			</onFalseMsg>
+		</test>
+		
+    <test id="ncx_relPath" type="requirement">
+      <testDesc>file path (relative to OPF) contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+      <appliesToFile>ncx</appliesToFile>
+      <appliesToDtbType>all</appliesToDtbType>
+      <specRef href="z3986.html#Allowed-Char"/>
+      <onFalseMsg>
+        <msg class="long">file path contains disallowed characters</msg>
+        <msg class="short">path chars</msg>
+      </onFalseMsg>
+    </test> 		
+	</category>
+	
+	<category name="ncx_internal"> <!-- tests for internal grammar stuff -->
+		<category name="ncx_internal_generic">
+			<!-- internal grammar tests that reoccur for every XML file -->
+			<test id="ncx_isDtdValid" type="requirement">
+				<testDesc>ncx file is valid to DTD</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#NCXReq"/>
+				<onFalseMsg>
+					<msg class="long">ncx file is not valid to DTD</msg>
+					<msg class="short">invalid to DTD</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="ncx_prologPubId" type="recommendation">
+				<testDesc>ncx file public identifier equals "-//NISO//DTD ncx v2005-1//EN"</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#NCXDTD"/>
+				<onFalseMsg>
+					<msg class="long">ncx file public identifier does not equal "-//NISO//DTD ncx 2005-1//EN"</msg>
+					<msg class="short">public identifier</msg>
+				</onFalseMsg>
+				<comment>NOTE: should only test if public ID is present</comment>
+			</test>
+			
+			<test id="ncx_versionPresence" type="requirement">
+				<testDesc>ncx file must have a non-DTD-inferred version attribute on the root element</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#NCXReq"/>
+				<onFalseMsg>
+					<msg class="long">ncxs version attribute missing</msg>
+					<msg class="short">version attribute</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="ncx_versionValue" type="requirement">
+				<testDesc>version attribute on root element must have value 2005-1</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#NCXReq"/>
+				<onFalseMsg>
+					<msg class="long">ncx version attribute value is not 2005-1</msg>
+					<msg class="short">version attribute value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="ncx_xmlnsPresence" type="requirement">
+				<testDesc>ncx file must have a non-DTD-inferred xmlns attribute on the root element</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#NCXReq"/>
+				<onFalseMsg>
+					<msg class="long">ncx file does not have xmlns attribute</msg>
+					<msg class="short">xmlns attribute</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="ncx_xmlnsValue" type="requirement">
+				<testDesc>ncx xmlns attribute value must be 'http://www.daisy.org/z3986/2005/ncx/'</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#NCXDTD"/>
+				<onFalseMsg>
+					<msg class="long">ncx file xmlns attribute value is not
+						'http://www.daisy.org/z3986/2005/ncx/' </msg>
+					<msg class="short">xmlns value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="ncx_xmlLangAttrValue" type="requirement">
+				<testDesc>any occuring xml:lang attribute value is valid to rfc3066</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#NCXDTD"/>
+				<onFalseMsg>
+					<msg class="long">xml:lang attribute value is not valid to rfc3066</msg>
+					<msg class="short">xml:lang value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="ncx_entityDeclInternal" type="requirement">
+				<testDesc>referenced entities must be declared in the internal DTD subset</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#FileConform"/>
+				<onFalseMsg>
+					<msg class="long">a reference occured to an entity that was not declared in the internal DTD subset</msg>
+					<msg class="short">entity decl</msg>
+				</onFalseMsg>
+				<comment>[jp] Can test by validating, then parsing without external
+					references. If it's valid, then it must also be well-formed without the
+					DTD. </comment>
+			</test>
+			
+		</category> <!-- end ncx_internal_generic -->
+		
+		<category name="ncx_internal_specific">
+			<!-- internal grammar tests that are unique to this grammar -->
+			<test id="ncx_metaDtbUidPresence" type="requirement">
+				<testDesc>dtb:uid meta element exists</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_403"/>
+				<onFalseMsg>
+					<msg class="long">dtb:uid metadata does not exist in NCX</msg>
+					<msg class="short">uid meta missing</msg>
+				</onFalseMsg>
+				<comment>[TN95]</comment>
+			</test>
+			<test id="ncx_metaDtbDepthPresence" type="requirement">
+				<testDesc>dtb:depth meta element exists</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_406"/>
+				<onFalseMsg>
+					<msg class="long">dtb:depth metadata does not exist in NCX</msg>
+					<msg class="short">dtb:depth missing</msg>
+				</onFalseMsg>
+				<comment>[TN96]</comment>
+			</test>
+			<test id="ncx_metaDtbDepthValue" type="requirement">
+				<testDesc>dtb:depth value is a positive integer</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_406"/>
+				<onFalseMsg>
+					<msg class="long">the value of dtb:depth is invalid</msg>
+					<msg class="short">dtb:depth value invalid</msg>
+				</onFalseMsg>
+				<comment>[TN96]</comment>
+			</test>
+			<test id="ncx_metaDtbDepthValueCorrelated" type="requirement">
+				<testDesc>dtb:depth content attribute value indicates depth of structure of the DTB as exposed by the NCX</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_406"/>
+				<onFalseMsg>
+					<msg class="long">the content of dtb:depth does not correspond to depth of structure of the DTB.</msg>
+					<msg class="short">dtb:depth value is incorrect</msg>
+				</onFalseMsg>
+				<comment>[TN96]</comment>
+			</test>
+			<test id="ncx_metaDtbGeneratorPresence" type="recommendation">
+				<testDesc>dtb:generator meta element exists</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_409"/>
+				<onFalseMsg>
+					<msg class="long">dtb:generator metadata does not exist in NCX</msg>
+					<msg class="short">dtb:generator missing</msg>
+				</onFalseMsg>
+				<comment>[TN97]</comment>
+			</test>
+			<test id="ncx_metaDtbtotPageCountPresence" type="requirement">
+				<testDesc>dtb:totalPageCount meta element exists</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_147"/>
+				<onFalseMsg>
+					<msg class="long">metadata dtb:totalPageCount does not exist in NCX</msg>
+					<msg class="short">dtb:totalPageCount missing</msg>
+				</onFalseMsg>
+				<comment>AS092004</comment>
+			</test>
+			<test id="ncx_metaDtbtotPageCountValue" type="requirement">
+				<testDesc>dtb:totalPageCount value is a non-negative integer</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">the value of dtb:totalPageCount is invalid</msg>
+					<msg class="short">dtb:totalPageCount value invalid</msg>
+				</onFalseMsg>
+				<comment>Added by jp, 1 Nov 2005</comment>
+			</test>
+			<test id="ncx_metaDtbtotPageCountValueCorrelated" type="requirement">
+				<testDesc>dtb:totalPageCount content attribute value indicates total number of pages in NCX</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">the content of dtb:totalPageCount does not correspond to the number of pages in the NCX</msg>
+					<msg class="short">dtb:totalPageCount value is incorrect</msg>
+				</onFalseMsg>
+				<comment>jp, added 23 Feb 2006</comment>
+			</test>
+			<test id="ncx_metaDtbmaxPageNumPresence" type="requirement">
+				<testDesc>dtb:maxPageNumber meta element exists</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_147"/>
+				<onFalseMsg>
+					<msg class="long">metadata dtb:maxPageNumber does not exist in NCX</msg>
+					<msg class="short">dtb:maxPageNumber missing</msg>
+				</onFalseMsg>
+				<comment>AS092004</comment>
+			</test>
+			<test id="ncx_metaDtbmaxPageNumValue" type="requirement">
+				<testDesc>dtb:maxPageNumber value is a non-negative integer</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">the value of dtb:maxPageNumber is invalid</msg>
+					<msg class="short">dtb:maxPageNumber value invalid</msg>
+				</onFalseMsg>
+				<comment>Added by jp, 1 Nov 2005</comment>
+			</test>
+			<test id="ncx_allPageTargetsHaveValueAttribute" type="strongRecommendation">
+				<testDesc>All pageTarget elements have a value attribute</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_150a"/>
+				<onFalseMsg>
+					<msg class="long">pageTarget element without value attribute exists</msg>
+					<msg class="short">pageTarget@value missing</msg>
+				</onFalseMsg>
+				<comment>Added by mg, 9 Dec 2007</comment>
+			</test>
+			
+			<test id="ncx_metaDtbmaxPageNumValueCorrelated" type="requirement">
+				<testDesc>dtb:maxPageNumber content attribute value indicates highest page value</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">the content of dtb:maxPageNumber does not correspond to the highest page value in the NCX</msg>
+					<msg class="short">dtb:maxPageNumber value is incorrect</msg>
+				</onFalseMsg>
+				<comment>jp, added 23 Feb 2006</comment>
+			</test>
+			<test id="ncx_metaDtbPrefixRestriction" type="requirement">
+				<testDesc>meta elements whose name attribute value begins with "dtb:" concludes with one of: uid, generator, depth, totalPageCount, or maxPageNumber.</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_147"/>
+				<onFalseMsg>
+					<msg class="long">unknown dtb: metadata item is present in NCX</msg>
+					<msg class="short">dtb: prefix not allowed</msg>
+				</onFalseMsg>
+				<comment>[TN93]</comment>
+			</test>
+			<test id="ncx_ValueAttrValue" type="requirement">
+				<testDesc>value of value attributes on navTargets and pageTargets are positive integers</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_396"/>
+				<onFalseMsg>
+					<msg class="long">navTarget/pageTarget value attribute value is not a positive integer</msg>
+					<msg class="short">navTarget value invalid</msg>
+				</onFalseMsg>
+				<comment>[jp] This combines the two @value tests</comment>
+			</test>
+			<test id="ncx_pageTargUniqValTypeComb" type="requirement">
+				<testDesc>pageTarget combination of value and type attributes is unique</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Appendix_3"/>
+				<onFalseMsg>
+					<msg class="long">pageTarget combination of value and type is not unique</msg>
+					<msg class="short">pageTarget duplicated value/type combination</msg>
+				</onFalseMsg>
+				<comment>AS092004</comment>
+			</test>
+			<test id="ncx_playOrderPosInt" type="requirement">
+				<testDesc>playOrder attribute value is a positive integer</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_149"/>
+				<onFalseMsg>
+					<msg class="long">playOrder value is invalid</msg>
+					<msg class="short">invalid playOrder value</msg>
+				</onFalseMsg>
+				<comment>AS092004</comment>
+			</test>
+			<test id="ncx_playOrderOrigin" type="requirement">
+				<testDesc>The sequence of play orders begins with value 1</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">first playOrder value is not 1</msg>
+					<msg class="short">invalid initial playOrder value</msg>
+				</onFalseMsg>
+				<comment>Added by jp, 1 Nov 2005</comment>
+			</test>
+			<test id="ncx_playOrderNoGaps" type="requirement">
+				<testDesc>The sequence of playOrder must have no gaps</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_149"/>
+				<onFalseMsg>
+					<msg class="long">playOrder sequence has gaps</msg>
+					<msg class="short">invalid playOrder sequence</msg>
+				</onFalseMsg>
+				<comment>AS092004</comment>
+			</test>
+			<test id="ncx_playOrderMatch" type="requirement">
+				<testDesc>navPoints, navTargets, and pageTargets that point to same SMIL container have identical playOrder values</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_149"/>
+				<onFalseMsg>
+					<msg class="long">content of navPoint, navTarget, pageTarget refer to same SMIL container but playOrder values don't match</msg>
+					<msg class="short">playOrder fails to match for identical navPoint/navTarget/pageTarget</msg>
+				</onFalseMsg>
+				<comment>AS092004</comment>
+			</test>
+			<test id="ncx_playOrderMatch2" type="requirement">
+				<testDesc>navPoints, navTargets, and pageTargets that have identical playOrder values point to same SMIL container</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_149"/>
+				<onFalseMsg>
+					<msg class="long">identical playOrder values for navPoint/navTarget/pageTarget, but these do not refer to same SMIL container</msg>
+					<msg class="short">identical playOrders for different navPoint/navTarget/pageTarget</msg>
+				</onFalseMsg>
+				<comment>Added by jp, 1 Nov 2005</comment>
+			</test>
+			<test id="ncx_clipBeginValue" type="requirement">
+				<testDesc>audio element clipBegin attribute value uses valid syntax</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#li_368"/>
+				<onFalseMsg>
+					<msg class="long">audio element clipBegin attribute value does not use valid syntax</msg>
+					<msg class="short">clipBegin value</msg>
+				</onFalseMsg>
+			</test>
+			<test id="ncx_clipEndValue" type="requirement">
+				<testDesc>audio element clipEnd attribute value uses valid syntax</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#li_368"/>
+				<onFalseMsg>
+					<msg class="long">audio element clipEnd attribute value does not use valid syntax</msg>
+					<msg class="short">clipEnd value</msg>
+				</onFalseMsg>
+			</test>
+			<test id="ncx_clipEndAfterclipBegin" type="requirement">
+				<testDesc>audio element clipEnd attribute value is greater than clipBegin</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#li_368"/>
+				<onFalseMsg>
+					<msg class="long">audio element clipEnd attribute value is less than or equal to clipBegin</msg>
+					<msg class="short">clipEnd before clipBegin</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_contentSrcAttrValue" type="requirement">
+				<testDesc>content element src attribute value is a valid uri</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_390"/>
+				<onFalseMsg>
+					<msg class="long">content element src attribute value is not a valid uri</msg>
+					<msg class="short">content src value</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_audioSrcValue" type="requirement">
+				<testDesc>audio element src attribute value is a valid URI</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#li_368"/>
+				<onFalseMsg>
+					<msg class="long">audio element src attribute value is not a valid URI</msg>
+					<msg class="short">audio src value</msg>
+				</onFalseMsg>
+			</test>
+			<test id="ncx_imgSrcValue" type="requirement">
+				<testDesc>img element src attribute value is a valid URI</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_386"/>
+				<onFalseMsg>
+					<msg class="long">img element src attribute value is not a valid URI</msg>
+					<msg class="short">img src value</msg>
+				</onFalseMsg>
+			</test>
+			<test id="ncx_multiNavLabel" type="recommendation">
+				<testDesc>multiple navLabels within an NCX node have unique xml:lang values</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_384"/>
+				<onFalseMsg>
+					<msg class="long">Multiple navLabels with same xml:lang attribute within an NCX node</msg>
+					<msg class="short">Multiple navLabels in same language</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_multiNavInfo" type="recommendation">
+				<testDesc>multiple navInfos within an NCX node have unique xml:lang values</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#???"/>
+				<onFalseMsg>
+					<msg class="long">Multiple navInfos with same xml:lang attribute within an NCX node</msg>
+					<msg class="short">Multiple navInfos in same language</msg>
+				</onFalseMsg>
+				<comment>Added by jp, 1 Nov 2005</comment>
+			</test>
+		</category> <!-- end ncx_internal_specific -->
+		
+	</category> <!-- end ncx_internal -->
+	
+	<category name="ncx_relations">
+		<category name="ncx_relations_generic">
+			<test id="ncx_manifestRefs" type="requirement">
+				<testDesc>all local references to files are to files that are listed in manifest</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">a reference was made to a file that is not a member of manifest</msg>
+					<msg class="short">reference to nonmember</msg>
+				</onFalseMsg>
+			</test>
+		</category> <!-- end ncx_relations_generic -->
+		
+		<category name="ncx_relations_specific">
+			<test id="ncx_UidOpfUid" type="requirement">
+				<testDesc>dtb:uid value matches package unique-identifier</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_403"/>
+				<onFalseMsg>
+					<msg class="long">The unique ID in the navigation control file does not match the uid of the dtb.</msg>
+					<msg class="short">ncx/opf uid mismatch</msg>
+				</onFalseMsg>
+				<comment>original (nls) was: the value of the ncx meta element named
+					dtb:uid is equal to the value of the dc:identifier element in the
+					opf</comment>
+			</test>
+			
+			<test id="ncx_smilCustomTestMatch" type="requirement">
+				<testDesc>each smilCustomTest element in NCX has its id, override, and
+					defaultState attrs duplicated in one or more customTest elements in
+					one or more SMIL files</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_150"/>
+				<onFalseMsg>
+					<msg class="long">smilCustomTest in NCX that is not in any SMIL</msg>
+					<msg class="short">NCX smilCustomTest missing in SMIL</msg>
+				</onFalseMsg>
+				<comment>Added by jp, 1 Nov 2005</comment>
+			</test>
+			
+			<test id="ncx_bookStructReq" type="requirement">
+				<testDesc>smilCustomTests for linenum, pagenum, note, noteref,
+					annotation, optional prodnote and optional sidebar have bookStruct
+					attributes</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textOnly</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_150m"/>
+				<onFalseMsg>
+					<msg class="long">missing required bookStruct attribute in smilCustomTest</msg>
+					<msg class="short">missing bookStruct attribute</msg>
+				</onFalseMsg>
+				<comment>AS092004</comment>
+			</test>
+			
+			<test id="ncx_bookStructReqNoText" type="requirement">
+				<testDesc>smilCustomTests for linenum, pagenum, note, noteref, annotation, optional prodnote and optional sidebar have bookStruct attributes</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<specRef href="z3986.html#para_150m"/>
+				<onFalseMsg>
+					<msg class="long">missing required bookStruct attribute in smilCustomTest</msg>
+					<msg class="short">missing bookStruct attribute</msg>
+				</onFalseMsg>
+				<comment>AS092004</comment>
+			</test>
+			
+			<test id="ncx_bookStructValue" type="requirement">
+				<testDesc>smilCustomTests for linenum, pagenum, note, noteref, annotation, optional prodnote and optional sidebar have corresponding bookStruct values</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textOnly</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_150m"/>
+				<onFalseMsg>
+					<msg class="long">invalidbookStruct attribute value in smilCustomTest</msg>
+					<msg class="short">invalid bookStruct attribute</msg>
+				</onFalseMsg>
+				<comment>Added by jp, 1 Nov 2005 (split presence/value tests)</comment>
+			</test>
+			
+			<test id="ncx_bookStructValueNoText" type="requirement">
+				<testDesc>smilCustomTests for linenum, pagenum, note, noteref, annotation, optional prodnote and optional sidebar have corresponding bookStruct values</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<specRef href="z3986.html#para_150m"/>
+				<onFalseMsg>
+					<msg class="long">invalidbookStruct attribute value in smilCustomTest</msg>
+					<msg class="short">invalid bookStruct attribute</msg>
+				</onFalseMsg>
+				<comment>Added by jp, 1 Nov 2005 (split presence/value tests)</comment>
+			</test>
+			
+			<test id="ncx_defaultStateSame" type="requirement">
+				<testDesc>For a given customTest, defaultState must have the same value in all SMIL files</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textOnly</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_110d"/>
+				<onFalseMsg>
+					<msg class="long">defaultState of given customTest differs in different SMIL files</msg>
+					<msg class="short">defaultState for customTest differs</msg>
+				</onFalseMsg>
+				<comment>[mg] this in NCX although it really doesnt belong
+					here...</comment>
+			</test>
+			
+			<test id="ncx_defaultStateSameNoText" type="requirement">
+				<testDesc>For a given customTest, defaultState must have the same value in all SMIL files</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<specRef href="z3986.html#para_110d"/>
+				<onFalseMsg>
+					<msg class="long">defaultState of given customTest differs in different SMIL files</msg>
+					<msg class="short">defaultState for customTest differs</msg>
+				</onFalseMsg>
+				<comment>[mg] this in NCX although it really doesnt belong
+					here...</comment>
+			</test>
+			
+			<test id="ncx_clipEndBeforeEOF" type="requirement">
+				<testDesc>audio element clipEnd attribute value is less than or equal to end of file</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#li_368"/>
+				<onFalseMsg>
+					<msg class="long">audio element clipEnd attribute value is greater than end of file</msg>
+					<msg class="short">clipEnd after EOF</msg>
+				</onFalseMsg>
+			</test>
+			<test id="ncx_srcSMIL" type="requirement">
+				<testDesc>src attribute on content element references SMIL file</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_392"/>
+				<onFalseMsg>
+					<msg class="long">content element src attribute does not reference SMIL</msg>
+					<msg class="short">content src not SMIL</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+			<test id="ncx_contentSrcHasFragment" type="requirement">
+				<testDesc>src attribute URI on content element contains a fragment identifier</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_392"/>
+				<onFalseMsg>
+					<msg class="long">content element src attribute does contain a fragment identifier</msg>
+					<msg class="short">content src no fragment</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+
+			<test id="ncx_contentSrcFragmentResolves" type="requirement">
+				<testDesc>src attribute URI on content element contains a fragment identifier that resolves</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_392"/>
+				<onFalseMsg>
+					<msg class="long">content element src attribute fragment identifier does not resolve</msg>
+					<msg class="short">content src fragment</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+
+			
+			<test id="ncx_srcAudio" type="requirement">
+				<testDesc>src attribute on audio element references audio file</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#li_371"/>
+				<onFalseMsg>
+					<msg class="long">audio element src attribute does not reference audio file</msg>
+					<msg class="short">audio src not audio</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="ncx_srcImg" type="requirement">
+				<testDesc>src attribute on img element references image file</testDesc>
+				<appliesToFile>ncx</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_389"/>
+				<onFalseMsg>
+					<msg class="long">img element src attribute does not reference image file</msg>
+					<msg class="short">img src not image</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+		</category> <!-- end ncx_relations_specific -->
+		
+	</category> <!-- end ncx_relations -->
+	
+	<!-- ncx collection area for tests commented out during map authoring -->
+	<!--
+	<test id="ncx_smilCustomTestAtts" type="requirement">
+	<testDesc>SMIL/NCX smilCustomTest id/override/defaultState attribute values are identical</testDesc>
+	<appliesToFile>smil</appliesToFile>
+	<appliesToDtbType>all</appliesToDtbType>
+	<specRef href="z3986.html#para_150"/>
+	<onFalseMsg>
+	<msg class="long">smilCustomTest attribute values do not match between NCX and SMIL</msg>
+	<msg class="short">smilCustomTest attribute value mismatch</msg>
+	</onFalseMsg>
+	<comment>
+	Added by jp, 1 Nov 2005 (separating presence/value tests)
+	Mg: overriden by and ncx_smilCustomTestMatch and smil_ncxCustomTestMatch
+	</comment>
+	</test>
+	-->
+	<!-- end ncx collection area for commented out tests -->
+	
+	<!-- end ncx -->
+</category>

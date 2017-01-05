@@ -1,0 +1,53 @@
+<category name="img"> <!-- 2007-12-19 -->
+  <!-- [pk] specref links are ok -->
+    <category name="img_fileIntegrity"> <!-- tests for file-system-level stuff -->        
+	    <test id="img_fileExtn" type="requirement">
+	      <testDesc>image file has a .jpg .png or .svg extension</testDesc>
+	      <appliesToFile>image</appliesToFile>
+	      <appliesToDtbType>all</appliesToDtbType>
+	      <specRef href="z3986.html#para_92"/>
+	      <onFalseMsg>
+	        <msg class="long">image file does not have a .jpg .png or .svg extension</msg>
+	        <msg class="short">image file extension invalid</msg>
+	      </onFalseMsg>      
+	    </test>  
+	    
+	    <test id="img_fileName" type="requirement">
+          <testDesc>Image file filename contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+          <appliesToFile>image</appliesToFile>
+          <appliesToDtbType>all</appliesToDtbType>
+          <specRef href="z3986.html#Allowed-Char"/>
+          <onFalseMsg>
+            <msg class="long">image file name contains disallowed characters</msg>
+            <msg class="short">filename chars</msg>
+          </onFalseMsg>
+        </test>  
+
+	<test id="img_relPath" type="requirement">
+      <testDesc>file path (relative to OPF) contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+      <appliesToFile>image</appliesToFile>
+      <appliesToDtbType>all</appliesToDtbType>
+      <specRef href="z3986.html#Allowed-Char"/>
+      <onFalseMsg>
+        <msg class="long">file path contains disallowed characters</msg>
+        <msg class="short">path chars</msg>
+      </onFalseMsg>
+    </test> 		
+    
+    </category>
+	
+	<category name="image_internal">
+		<test id="img_format" type="requirement">
+			<testDesc>image file format is valid</testDesc>
+			<appliesToFile>image</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986.html#para_92"/>
+			<onFalseMsg>
+				<msg class="long">image file format invalid</msg>
+				<msg class="short">image invalid</msg>
+			</onFalseMsg>
+			<comment>One example of a test done by reading and parsing info in image file header.</comment>
+		</test>
+	</category>
+</category>
+    

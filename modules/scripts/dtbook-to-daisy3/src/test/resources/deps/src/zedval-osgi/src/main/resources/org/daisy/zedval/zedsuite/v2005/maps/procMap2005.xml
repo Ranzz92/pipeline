@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE zedProcessorMap [
+<!ELEMENT zedProcessorMap (testProcessor|testGroup)+>
+<!ATTLIST zedProcessorMap 
+	version CDATA #REQUIRED 
+	date CDATA #REQUIRED 
+	basefile CDATA #REQUIRED 
+	specVersion CDATA #REQUIRED 
+	>
+<!ELEMENT testProcessor (label,testRef*,groupRef*)>
+<!ATTLIST testProcessor 
+	id ID #REQUIRED 
+	type (DTD|RNG|SCH|XSL|CUSTOM|MANUAL) #REQUIRED 
+	uses CDATA #REQUIRED 
+	appliesToFile (opf|ncx|smil|dtbook|resource|audio|image) #REQUIRED
+	appliesToGrammarVersion CDATA #IMPLIED >
+<!ELEMENT testGroup (testRef+)>	
+<!ATTLIST testGroup
+	id ID #REQUIRED >
+<!ELEMENT testRef EMPTY >
+<!ATTLIST testRef 
+	name CDATA #IMPLIED 
+	href CDATA #REQUIRED 
+	comment CDATA #IMPLIED >
+<!ELEMENT groupRef EMPTY >
+<!ATTLIST groupRef 
+	idref IDREF #REQUIRED >
+<!ELEMENT label (#PCDATA)>
+]>
+
+<zedProcessorMap version="2.1" date="2008-06-16" basefile="testMap2005.xml" specVersion="ANSI/NISO Z39.86-2005">
+
+   <!--
+   comment mg 20061105:
+   appliesToGrammarVersion, groupRef and testGroup are new in 2.0 RC2, and were added to enable minor version handling without any duplication.
+   
+   The appliesToGrammarVersion has two states:
+   1) not present = testProcessor applies to any grammar version
+   2) present = the testProcessor applies only to the version  namedropped as value
+   
+   In other words, the combination of appliesToFile and appliesToGrammarVersion decides whether a specific fileset member is associated with a processor.
+  
+   To avoid testRef element duplication in procMap, a new element testGroup is added to procMap grammar, that testProcessors
+   can reference through the groupRef element. A testProcessor can contain any number of groupRef and testRef elements in any combination. 
+     
+   -->
+
+
+   <!--
+   ***************************************************
+   ***************************************************
+   *****************  resource file ******************
+   ***************************************************   
+   ***************************************************   
+   -->
+
+  <testProcessor id="res_1" type="DTD" uses="resource-2005-1.dtd" appliesToFile="resource">
+    <label>Resource DTD validity</label>
+    <testRef href="resource_isDtdValid" />
+  </testProcessor>
+  
+  <testProcessor id="res_2" type="RNG" uses="resource-2005-1.rng" appliesToFile="resource">
+    <label>Resource RelaxNG tests</label>
+    <testRef href="resource_versionPresence"/>
+    <testRef href="resource_versionValue"/>
+    <testRef href="resource_xmlnsPresence"/>
+    <testRef href="resource_xmlnsValue"/>
+    <testRef href="resource_xmlLangAttrValue"/>
+    <testRef href="resource_entityDeclInternal"/>
+    <testRef href="resource_XPathSubset" comment="refine this pattern"/>
+    <testRef href="resource_clipBeginValue"/>
+    <testRef href="resource_clipEndValue"/>
+    <!--  <testRef href="resource_resourceSrcValue"/> mg: moved to custom: datatype anyURI is no good -->
+  </testProcessor>
+
+  <testProcessor id="res_3" type="SCH" uses="resource-2005-1.rng" appliesToFile="resource">
+    <label>Resource Schematron tests</label>
+    <testRef href="resource_nodeSetLangUnique"/>
+    <testRef href="resource_resNsUriAtt"/>
+  </testProcessor>
+
+  <testProcessor id="res_4" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.ResourceTests" appliesToFile="resource">
+      <label>Resource Custom tests</label>
+      <testRef href="resource_fileExtn"/>
+      <testRef href="resource_prologPubId"/>
+      <testRef href="resource_fileName"/>
+      <testRef href="resource_relPath"/>
+      <testRef href="resource_manifestRefs"/>  
+      <testRef href="resource_escStructResEntry"/>
+      <testRef href="resource_skipStructResEntry"/>   	
+	  <testRef href="resource_resourceSrcValue"/> <!--  mg: moved from RNG, anyURI dataype is no good. -->
+  </testProcessor>
+  
+  <testProcessor id="res_5" type="MANUAL" uses="human" appliesToFile="resource">
+    <label>Resource Manual tests</label>
+    <testRef href="resource_chldrNodeSet"/>  
+  </testProcessor>
+  
+   <!--
+   ***************************************************
+   ***************************************************
+   ********************  dtbook  *********************
+   ***************************************************   
+   ***************************************************   
+   -->
+    
+  <testProcessor id="dtbook_dtd_1" type="DTD" uses="dtbook-2005-1.dtd" appliesToFile="dtbook" appliesToGrammarVersion="2005-1">
+    <label>DTBook DTD validity 2005-1</label>
+    <!-- minor version split: see comment mg 20061105 at procMap top -->
+    <groupRef idref="dtbook_dtd_group"/>    
+  </testProcessor>
+
+  <testProcessor id="dtbook_dtd_2" type="DTD" uses="dtbook-2005-2.dtd" appliesToFile="dtbook" appliesToGrammarVersion="2005-2">
+    <label>DTBook DTD validity 2005-2</label>
+    <!-- minor version split: see comment mg 20061105 at procMap top -->    
+    <groupRef idref="dtbook_dtd_group"/>
+  </testProcessor>
+
+  <testProcessor id="dtbook_dtd_3" type="DTD" uses="dtbook-2005-3.dtd" appliesToFile="dtbook" appliesToGrammarVersion="2005-3">
+    <label>DTBook DTD validity 2005-3</label>
+    <!-- minor version split: see comment mg 20061105 at procMap top -->    
+    <groupRef idref="dtbook_dtd_group"/>
+  </testProcessor>
+
+  <testGroup id="dtbook_dtd_group">
+	<testRef href="dtbook_isDtdValid" />
+  </testGroup>	
+
+  <testProcessor id="dtbook_rng_1" type="RNG" uses="dtbook-2005-1.rng" appliesToFile="dtbook" appliesToGrammarVersion="2005-1">
+    <label>DTBook RelaxNG tests 2005-1</label>
+    <!-- minor version split: see comment mg 20061105 at procMap top -->    
+    <testRef href="dtbook_versionValue_2005_1"/>
+    <groupRef idref="dtbook_rng_group"/>    
+  </testProcessor>
+
+  <testProcessor id="dtbook_rng_2" type="RNG" uses="dtbook-2005-2.rng" appliesToFile="dtbook" appliesToGrammarVersion="2005-2">
+      <label>DTBook RelaxNG tests 2005-2</label>
+      <!-- minor version split: see comment mg 20061105 at procMap top -->      
+      <testRef href="dtbook_versionValue_2005_2"/>
+      <groupRef idref="dtbook_rng_group"/>    
+  </testProcessor>
+
+  <testProcessor id="dtbook_rng_3" type="RNG" uses="dtbook-2005-3.rng" appliesToFile="dtbook" appliesToGrammarVersion="2005-3">
+      <label>DTBook RelaxNG tests 2005-3</label>
+      <!-- minor version split: see comment mg 20061105 at procMap top -->      
+      <testRef href="dtbook_versionValue_2005_3"/>
+      <groupRef idref="dtbook_rng_group"/>    
+  </testProcessor>
+
+  <testGroup id="dtbook_rng_group">    
+    <testRef href="dtbook_versionPresence"/>    
+    <testRef href="dtbook_xmlnsPresence"/>
+    <testRef href="dtbook_xmlnsValue"/>
+    <testRef href="dtbook_xmlLangAttrValue" comment="TODO fix for non-root occurences (inside anyelement)"/>
+    <testRef href="dtbook_entityDeclInternal"/>
+    <testRef href="dtbook_pageNumNormal"/>
+    <testRef href="dtbook_pageNumFront"/>
+  </testGroup>
+
+  <testProcessor id="dtbook_3" type="SCH" uses="dtbook-2005.rng" appliesToFile="dtbook">    
+    <label>DTBook Schematron tests</label>
+    <testRef href="dtbook_MetaUid"/>
+    <testRef href="dtbook_MetaTitle"/>
+    <testRef href="dtbook_idrefAnnotation"/>
+    <testRef href="dtbook_idrefNote"/>	
+    <testRef href="dtbook_noteFragment"/>
+    <testRef href="dtbook_annotationFragment"/>
+    <!-- start MG20061101: added as a consequence of zedval feature request #1565049 -->
+    <testRef href="dtbook_internalLinks"/>
+    <testRef href="dtbook_enumAttrInList"/>
+    <testRef href="dtbook_depthList"/>
+    <testRef href="dtbook_headersThTd"/>
+    <testRef href="dtbook_imgrefProdnote"/>
+    <testRef href="dtbook_imgrefCaption"/>
+    <testRef href="dtbook_accesskeyLength"/>
+    <testRef href="dtbook_tabindexNumeric"/>
+    <testRef href="dtbook_accesskeyUnique"/>
+    <testRef href="dtbook_tabindexUnique"/>
+    <testRef href="dtbook_charAttributeLength"/>
+    <testRef href="dtbook_charAttributeAlign"/>
+    <testRef href="dtbook_imgWidth"/>
+    <testRef href="dtbook_imgHeight"/>
+    <testRef href="dtbook_tableWidth"/>
+    <testRef href="dtbook_tableCellspacing"/>
+    <testRef href="dtbook_tableCellpadding"/>
+    <testRef href="dtbook_startAttrInList"/>
+    <testRef href="dtbook_startAttrNonNegative"/>
+    <testRef href="dtbook_dcAttrNamePart"/>
+    <testRef href="dtbook_dcAttrPrefixPart"/>
+    <testRef href="dtbook_spanColColgroup"/>
+    <testRef href="dtbook_rowSpanValue"/>
+    <testRef href="dtbook_colSpanValue"/>
+    <testRef href="dtbook_rowSpanRelativeValue"/>
+    <!-- end MG20061101: added as a consequence of zedval feature request #1565049 -->    
+
+    <!--  MG20070522: added as a consequence of zedval feature request #1593192 -->
+    <testRef href="dtbook_levelDepth"/>    
+    <!--  end MG20070522: added as a consequence of zedval feature request #1593192 -->
+    
+           
+  </testProcessor>
+  
+  <testProcessor id="dtbook_cst_1" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.DtbookTests" appliesToFile="dtbook" appliesToGrammarVersion="2005-1">
+    <label>DTBook Custom tests 2005-1</label>      
+    <testRef href="dtbook_prologPubId_2005_1"/>
+    <groupRef idref="dtbook_cst_group"/>
+  </testProcessor>
+
+  <testProcessor id="dtbook_cst_2" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.DtbookTests" appliesToFile="dtbook" appliesToGrammarVersion="2005-2">
+    <label>DTBook Custom tests 2005-2</label>      
+    <testRef href="dtbook_prologPubId_2005_2"/>
+    <groupRef idref="dtbook_cst_group"/>
+  </testProcessor>
+
+  <testProcessor id="dtbook_cst_3" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.DtbookTests" appliesToFile="dtbook" appliesToGrammarVersion="2005-3">
+    <label>DTBook Custom tests 2005-3</label>      
+    <testRef href="dtbook_prologPubId_2005_3"/>
+    <groupRef idref="dtbook_cst_group"/>
+  </testProcessor>
+
+  <testGroup id="dtbook_cst_group">
+    <testRef href="dtbook_fileExtn"/>
+    <testRef href="dtbook_fileName"/>
+    <testRef href="dtbook_relPath"/>	  
+    <testRef href="dtbook_manifestRefs"/>
+    <testRef href="dtbook_UidOpfUid"/>
+    <testRef href="dtbook_SmilRefResolves"/>
+    <testRef href="dtbook_SmilRefResolvesToTimeContainers"/>
+    <testRef href="dtbook_SmilRefResolvesToText"/>
+    <testRef href="dtbook_customTestMinimally"/>
+    <testRef href="dtbook_tableListClass"/>		
+    <testRef href="dtbook_SmilRefValue"/>
+    <testRef href="dtbook_srcValue"/>
+    <testRef href="dtbook_hrefValue"/>
+    <testRef href="dtbook_citeValue"/>
+    <testRef href="dtbook_longdescValue"/>
+    <testRef href="dtbook_profileValue"/>
+    <testRef href="math_opfExtensionVersionMetadata"/>
+    <testRef href="math_xsltMetadataPresent"/>
+    <testRef href="math_smilrefPresent"/>
+  </testGroup>
+
+  <testProcessor id="dtbook_sch_math" type="SCH" uses="dtbook-math-extension.sch" appliesToFile="dtbook">
+    <label>DTBook Schematron MathML extension tests</label>      
+    <testRef href="math_attributeAltTextPresent"/>
+    <testRef href="math_attributeAltTextValue"/>
+    <testRef href="math_attributeAltImgPresent"/>
+    <testRef href="math_attributeAltImgValue"/>    
+  </testProcessor>
+  
+  <testProcessor id="dtbook_manual" type="MANUAL" uses="human" appliesToFile="dtbook">
+    <label>DTBook Manual tests</label>
+    <testRef href="math_contentMathML"/>  
+  </testProcessor>
+  
+   <!--
+   ***************************************************
+   ***************************************************
+   *********************  smil  **********************
+   ***************************************************   
+   ***************************************************   
+   -->
+
+  <testProcessor id="smil_1" type="DTD" uses="dtbsmil-2005-1.dtd" appliesToFile="smil" appliesToGrammarVersion="2005-1">
+    <label>SMIL DTD validity 2005-1</label>
+    <groupRef idref="smil_dtd_group"/>
+  </testProcessor>
+
+  <testProcessor id="smil_2" type="DTD" uses="dtbsmil-2005-2.dtd" appliesToFile="smil" appliesToGrammarVersion="2005-2">
+    <label>SMIL DTD validity 2005-2</label>
+    <groupRef idref="smil_dtd_group"/>
+  </testProcessor>
+
+  <testGroup id="smil_dtd_group">
+    <testRef href="smil_isDtdValid" />
+  </testGroup>
+
+  <testProcessor id="smil_rng_1" type="RNG" uses="dtbsmil-2005-1.rng" appliesToFile="smil" appliesToGrammarVersion="2005-1">
+    <label>SMIL RelaxNG tests 2005-1</label>
+    <groupRef idref="smil_rng_group"/>
+  </testProcessor>
+
+  <testProcessor id="smil_rng_2" type="RNG" uses="dtbsmil-2005-2.rng" appliesToFile="smil" appliesToGrammarVersion="2005-2">
+    <label>SMIL RelaxNG tests 2005-2</label>
+    <groupRef idref="smil_rng_group"/>
+  </testProcessor>
+
+  <testGroup id="smil_rng_group">
+    <testRef href="smil_xmlnsPresence" />
+    <testRef href="smil_xmlnsValue" />
+    <testRef href="smil_entityDeclInternal"/>
+    <testRef href="smil_xmlLangAttrValue" />
+    <testRef href="smil_metaDtbPrefixRestriction" />
+    <testRef href="smil_metaDtbTotElaSyntax" />
+    <testRef href="smil_CstTstDefStAttr" />
+    <testRef href="smil_CstTstOverrideAttr" />
+    <testRef href="smil_seqDurValue" />
+    <testRef href="smil_clipBeginValue" />
+    <testRef href="smil_clipEndValue" />
+    <testRef href="smil_anchorsNotNested" />
+    <testRef href="smil_overrideVis" />
+    <!-- <testRef href="smil_metaDtbGenPresence" /> see SCH -->
+    <!-- <testRef href="smil_metaDtbTotElaPresence" /> see SCH -->
+    <!-- <testRef href="smil_hrefValue" /> mg: move to custom: anyURI datatype is no good -->    
+    <!-- <testRef href="smil_textSrcValue" /> mg: move to custom: anyURI datatype is no good-->
+    <!-- <testRef href="smil_audioSrcValue" /> mg: move to custom: anyURI datatype is no good-->
+    <!-- <testRef href="smil_imgSrcValue" /> mg: move to custom: anyURI datatype is no good-->
+    <!-- <testRef href="smil_metaDtbUidPresence" /> see SCH -->
+  </testGroup>
+
+  <testProcessor id="smil_3" type="SCH" uses="dtbsmil-2005.rng" appliesToFile="smil">    
+    <label>SMIL Schematron tests</label>
+    <testRef href="smil_parContent" />
+    <testRef href="smil_validRegion" />
+    <testRef href="smil_endValue" comment="implement validation of a possible 'Clock-value'" />
+    <testRef href="smil_escStructIsSeq" />
+    <testRef href="smil_escStructHasChildTc" />
+    <testRef href="smil_escStructChildIdValue" comment="is it not a subset to smil_endValue?" />
+    <testRef href="smil_escStrucClassAttr" />
+    <testRef href="smil_pauseStructIsSeq" />
+    <testRef href="smil_pauseStructHasChildTc" />
+	<testRef href="smil_customTestAttrResolvesToCustomTestElement"/>	
+	<testRef href="smil_metaDtbGenPresence"/>
+	<testRef href="smil_metaDtbTotElaPresence"/>
+	<testRef href="smil_metaDtbUidPresence"/>
+	<testRef href="math_escapable"/>
+  </testProcessor>
+
+  <testProcessor id="smil_4" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.SmilTests" appliesToFile="smil" appliesToGrammarVersion="2005-1">
+    <label>SMIL Custom tests 2005-1</label>
+    <testRef href="smil_prologPubId_2005_1" />
+    <groupRef idref="smil_cst_group"/>
+  </testProcessor>
+
+  <testProcessor id="smil_4b" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.SmilTests" appliesToFile="smil" appliesToGrammarVersion="2005-2">
+    <label>SMIL Custom tests 2005-2</label>
+    <testRef href="smil_prologPubId_2005_2" />
+    <groupRef idref="smil_cst_group"/>
+  </testProcessor>
+                
+  <testGroup id="smil_cst_group">
+    <testRef href="smil_fileExtn" />
+    <testRef href="smil_fileName" />
+    <testRef href="smil_relPath"/>	  	  
+  	<testRef href="smil_metaDtbUidValue" />
+	<testRef href="smil_srcDtbook" />
+	<testRef href="smil_srcAudio" />
+	<testRef href="smil_srcImg" />		
+    <testRef href="smil_textSrcResolves" />
+    <testRef href="smil_metaAudioDtbTotElaAccurate" />
+    <testRef href="smil_anchorManifestExternalAttributeFalse" />
+    <testRef href="smil_anchorManifestExternalAttributeTrue" />
+    <testRef href="smil_hrefSMIL" />
+    <testRef href="smil_clipEndBeforeEOF" />
+    <testRef href="smil_ncxCustomTestMatch" comment="see ncx_smilCustomTestMatch for reverse"/>
+	<testRef href="smil_metaTextDtbTotElaAccurate"/>
+    <testRef href="smil_clipEndAfterclipBegin" />
+	<testRef href="smil_noterefLink" comment="assumes that the anchor nests a tc that is refd by noteref in dtbook" /> 
+    <testRef href="smil_annorefLink" comment="assumes that the anchor nests a tc that is refd by annoref in dtbook" />	  
+    <testRef href="smil_hrefValue" /> <!--  mg: moved here from RNG: anyURI datatype is no good-->
+    <testRef href="smil_textSrcValue" /> <!--  mg: moved here from RNG: anyURI datatype is no good-->
+    <testRef href="smil_audioSrcValue" /> <!--  mg: moved here from RNG: anyURI datatype is no good-->
+    <testRef href="smil_imgSrcValue" /> <!--  mg: moved here from RNG: anyURI datatype is no good-->
+    <testRef href="math_textDestination" />   
+    <testRef href="math_SMILTextTypeAttribute" />     
+  </testGroup>
+                
+  <testProcessor id="smil_5" type="MANUAL" uses="org.daisy.zedval.zedsuite.v2005.SmilTests" appliesToFile="smil">
+    <label>SMIL Manual tests</label>
+    <testRef href="smil_annorefLinkNoText"/>
+	<testRef href="smil_noterefNoText"/>
+  </testProcessor> 
+
+   <!--
+   ***************************************************
+   ***************************************************
+   *********************  opf  ***********************
+   ***************************************************   
+   ***************************************************   
+   -->
+   
+  <testProcessor id="opf_1" type="DTD" uses="oebpkg12.dtd" appliesToFile="opf">
+    <label>OPF DTD validity</label>
+    <testRef href="opf_isDtdValid" />
+  </testProcessor>
+   
+  <testProcessor id="opf_2" type="RNG" uses="oebpkg12.rng" appliesToFile="opf">
+    <label>OPF RelaxNG tests</label>
+    <testRef href="opf_entityDecl" />
+    <testRef href="opf_xmlnsPresence" />
+    <testRef href="opf_xmlnsValue" />
+    <testRef href="opf_xmlLangAttrValue" />
+    <testRef href="opf_dc-metadata-xmlns" />
+    <testRef href="opf_DcTitlePresent" />
+    <testRef href="opf_DcTitleValue" />
+    <testRef href="opf_DcIdentifierPresent" />
+    <testRef href="opf_DcIdentifierValue" />
+    <testRef href="opf_DcPubPresent" />
+    <testRef href="opf_DcPubValue" />
+    <testRef href="opf_DcDatePresent" />
+    <testRef href="opf_DcDateValue" />
+    <testRef href="opf_DcFormatPresent" />
+    <testRef href="opf_DcFormatValue" />
+    <testRef href="opf_DcLangPresent" />
+    <testRef href="opf_DcLangValue" />
+    <testRef href="opf_xMetaDtbSourceDateValue" />
+    <testRef href="opf_xMetaMmTypeValue" />
+    <testRef href="opf_xMetaMmContentValue" />
+    <testRef href="opf_xMetaTotTimeValue" />
+    <testRef href="opf_xMetaDtbProducedDateValue" />    
+    <testRef href="opf_xMetaDtbRevisionValue" />
+    <testRef href="opf_xMetaDtbRevisionDateValue" />    
+    <testRef href="opf_xMetaDtbAudioFormatValue" />
+    <testRef href="opf_xMetaDtbPrefixRestriction" />
+	<!-- <testRef href="opf_mnfHrefUriVal" />  mg: moved to custom: anyURI datatype is no good. -->
+	<testRef href="opf_mnfMimeValue"/>
+  </testProcessor> 
+
+  <testProcessor id="opf_3" type="SCH" uses="oebpkg12.rng" appliesToFile="opf">
+    <label>OPF Schematron tests</label>
+    <testRef href="opf_xMetaDtbSourceDatePresence" />
+    <testRef href="opf_xMetaMmTypePresence" />
+    <testRef href="opf_xMetaDtbRevisionPresence" />
+    <testRef href="opf_xMetaDtbRevisionDatePresence" />
+    <testRef href="opf_xMetaDtbRevisionDescriptionPresence" />
+    <testRef href="opf_xMetaDtbSourceEditionPresence" />
+    <testRef href="opf_xMetaDtbSourcePublisherPresence" />
+    <testRef href="opf_xMetaDtbSourceRightsPresence" />
+    <testRef href="opf_xMetaDtbSourceTitlePresence" />
+    <testRef href="opf_xMetaTotTimePresence" />
+    <testRef href="opf_xMetaDtbProducedDatePresence" /> 
+    <testRef href="opf_xMetaMmContentPresence" />   
+    <testRef href="opf_DcIdUniqIdref" />    
+  </testProcessor> 
+
+  <testProcessor id="opf_4" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.PackageTests" appliesToFile="opf">
+    <label>OPF custom tests</label>
+    <testRef href="opf_fileExists" />
+    <testRef href="opf_isReadable" />
+    <testRef href="opf_fileExtn" />  
+    <testRef href="opf_fileName" />
+    <testRef href="opf_prologPubId" />
+	<testRef href="opf_mnfIntegrityExists"/>
+	<testRef href="opf_mnfIntegrityReadable"/>
+    <testRef href="opf_xMetaTotTimeAccurate"/>
+    <testRef href="opf_mnfHrefUriUni"/>
+    <testRef href="opf_mnfHrefUriFrag"/>
+    <testRef href="opf_mnfDTBmembers"/>
+	<testRef href="opf_mnfMimeMatch"/>       
+	<testRef href="opf_spnItemRefIdrefSmil" />
+	<testRef href="opf_mnfOneSmil" />  
+ 	<testRef href="opf_mnfOneAudio" />
+  	<testRef href="opf_mnfZeroAudio" />
+	<testRef href="opf_mnfOneDtbook" />
+  	<testRef href="opf_mnfZeroDtbook" />	  
+    <testRef href="opf_opfInManifest"/>
+    <testRef href="opf_mnfResCount"/>
+    <testRef href="opf_mnfNcxCount"/>
+	<testRef href="opf_mnfResCountWhenSkippable"/>
+    <testRef href="opf_SpineRefAllSmilInMnf" />  
+	<testRef href="opf_xMetaMmContentValueManifestAudio"/>
+    <testRef href="opf_xMetaMmContentValueManifestImage"/>
+    <testRef href="opf_xMetaMmContentValueManifestText"/>  
+    <testRef href="opf_mnfNcxId"/>
+    <testRef href="opf_mnfResId"/>	   
+   	<testRef href="opf_mnfHrefUriVal" />  <!--  mg: moved from RNG: anyURI datatype is no good. -->
+   	<testRef href="math_opfMathExtensionVersionMeta" />
+   	<testRef href="math_xsltMetadataValue" />
+   	<testRef href="math_xsltInManifest" />
+  </testProcessor>
+
+   
+   <!--
+   ***************************************************
+   ***************************************************
+   *********************  ncx  ***********************
+   ***************************************************   
+   ***************************************************   
+   -->
+  
+  <testProcessor id="ncx_1" type="DTD" uses="ncx-2005-1.dtd" appliesToFile="ncx">
+    <label>NCX DTD validity</label>
+    <testRef href="ncx_isDtdValid" />
+  </testProcessor>
+  
+  <testProcessor id="ncx_2" type="RNG" uses="ncx-2005-1.rng" appliesToFile="ncx">
+    <label>NCX RelaxNG tests</label>
+    <testRef href="ncx_versionPresence" />
+    <testRef href="ncx_versionValue" />
+    <testRef href="ncx_xmlnsPresence" />
+    <testRef href="ncx_xmlnsValue" />
+    <testRef href="ncx_xmlLangAttrValue" />
+    <testRef href="ncx_entityDeclInternal" />        
+    <testRef href="ncx_metaDtbDepthValue" />
+	<testRef href="ncx_metaDtbtotPageCountValue" />   
+    <testRef href="ncx_metaDtbmaxPageNumValue" />
+    <testRef href="ncx_metaDtbPrefixRestriction" />
+    <testRef href="ncx_ValueAttrValue" />
+    <testRef href="ncx_playOrderPosInt" />
+    <testRef href="ncx_clipBeginValue" />
+    <testRef href="ncx_clipEndValue" />
+    <testRef href="ncx_contentSrcHasFragment" />
+    <!-- mg: moved these to custom: anyURI datatype is no good.
+    <testRef href="ncx_contentSrcAttrValue" />
+    <testRef href="ncx_audioSrcValue" />
+    <testRef href="ncx_imgSrcValue" />
+     -->
+  </testProcessor>
+
+  <testProcessor id="ncx_3" type="SCH" uses="ncx-2005-1.rng" appliesToFile="ncx">
+    <label>NCX Schematron tests</label>
+    <testRef href="ncx_metaDtbUidPresence" />
+    <testRef href="ncx_metaDtbGeneratorPresence" />
+    <testRef href="ncx_metaDtbDepthPresence" />
+    <testRef href="ncx_metaDtbtotPageCountPresence" />
+    <testRef href="ncx_metaDtbmaxPageNumPresence" />
+    <testRef href="ncx_pageTargUniqValTypeComb" />
+    <testRef href="ncx_playOrderOrigin" />
+    <testRef href="ncx_multiNavLabel" comment="TODO use lang() to take inherited into account?" />
+    <testRef href="ncx_multiNavInfo" comment="TODO use lang() to take inherited into account?" />            
+    <testRef href="ncx_metaDtbtotPageCountValueCorrelated" />
+    <testRef href="ncx_playOrderNoGaps"/>
+    <testRef href="ncx_playOrderMatch2" />
+    <testRef href="ncx_playOrderMatch" />
+  </testProcessor>
+  
+  <testProcessor id="ncx_4" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.NcxTests" appliesToFile="ncx">
+    <label>NCX Custom tests</label>
+    <testRef href="ncx_fileExtn" />
+    <testRef href="ncx_fileName" />
+    <testRef href="ncx_relPath"/>	  	  	  
+    <testRef href="ncx_prologPubId" />
+    <testRef href="ncx_manifestRefs" />
+    <testRef href="ncx_UidOpfUid" />
+    <testRef href="ncx_clipEndBeforeEOF" />
+    <testRef href="ncx_metaDtbDepthValueCorrelated" />
+    <testRef href="ncx_srcSMIL" />
+    <testRef href="ncx_srcAudio" />
+    <testRef href="ncx_srcImg" />
+    <testRef href="ncx_smilCustomTestMatch" comment="see smil_ncxCustomTestMatch for reverse"/>
+    <testRef href="ncx_bookStructReq" />
+    <testRef href="ncx_bookStructValue" />
+    <testRef href="ncx_defaultStateSame" /> 
+    <testRef href="ncx_clipEndAfterclipBegin" />
+    <testRef href="ncx_contentSrcFragmentResolves" />
+  	<testRef href="ncx_metaDtbmaxPageNumValueCorrelated"/>	   	
+  	<testRef href="ncx_allPageTargetsHaveValueAttribute"/>
+    <testRef href="ncx_contentSrcAttrValue" /> <!-- mg: moved from RNG: anyURI datatype is no good. -->
+    <testRef href="ncx_audioSrcValue" /> <!-- mg: moved from RNG: anyURI datatype is no good. -->
+    <testRef href="ncx_imgSrcValue" /> <!-- mg: moved from RNG: anyURI datatype is no good. -->  	
+  </testProcessor>
+	
+  <testProcessor id="ncx_5" type="MANUAL" uses="human" appliesToFile="ncx">
+    <label>NCX Manual tests</label>
+    <testRef href="ncx_bookStructReqNoText" />
+    <testRef href="ncx_bookStructValueNoText" />
+    <testRef href="ncx_defaultStateSameNoText" />
+  </testProcessor>
+	
+
+   <!--
+   ***************************************************
+   ***************************************************
+   *********************  img  ***********************
+   ***************************************************   
+   ***************************************************   
+   -->
+   
+   <testProcessor id="img_1" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.ImageTests" appliesToFile="image">
+     <label>Image custom tests</label>
+     <testRef href="img_fileExtn" />
+     <testRef href="img_fileName" />
+     <testRef href="img_relPath"/>	  	  	  	   
+     <testRef href="img_format" />
+   </testProcessor>  
+
+   <!--
+   ***************************************************
+   ***************************************************
+   *********************  audio  *********************
+   ***************************************************   
+   ***************************************************   
+   -->
+
+   <testProcessor id="audio_1" type="CUSTOM" uses="org.daisy.zedval.zedsuite.v2005.AudioTests" appliesToFile="audio">
+     <label>Audio custom tests</label>
+     <testRef href="audio_fileExtn" />
+     <testRef href="audio_fileName" />
+     <testRef href="audio_relPath"/>	  	  	  	   	   
+     <testRef href="audio_format" />
+     <testRef href="audio_mp3vbr" />
+   </testProcessor>  
+
+</zedProcessorMap>

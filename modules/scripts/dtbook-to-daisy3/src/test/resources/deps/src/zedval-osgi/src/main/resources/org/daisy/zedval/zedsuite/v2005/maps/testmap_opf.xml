@@ -1,0 +1,980 @@
+<category name="opf"> <!-- 2007-12-19 -->
+	<!-- TODO when done, check that all specref links are ok -->
+	<category name="opf_fileIntegrity">
+		<!-- tests for file-system-level stuff -->
+		<test id="opf_fileExists" type="requirement">
+			<testDesc>opf file exists</testDesc>
+			<appliesToFile>opf</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986-2005.html#para_34"/>
+			<onFalseMsg>
+				<msg class="long">opf file not found</msg>
+				<msg class="short">not found</msg>
+			</onFalseMsg>
+			<comment/>
+		</test>
+		
+		<test id="opf_isReadable" type="requirement">
+			<testDesc>is opf file readable</testDesc>
+			<appliesToFile>opf</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986-2005.html#?"/>
+			<onFalseMsg>
+				<msg class="long">opf file not readable</msg>
+				<msg class="short">not readable</msg>
+			</onFalseMsg>
+			<comment/>
+		</test>
+		
+		<test id="opf_fileExtn" type="requirement">
+			<testDesc>opf file has .opf extension</testDesc>
+			<appliesToFile>opf</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986-2005.html#para_34"/>
+			<onFalseMsg>
+				<msg class="long">opf file does not have a .opf extension</msg>
+				<msg class="short">file extension</msg>
+			</onFalseMsg>
+			<comment/>
+		</test>
+		
+		<test id="opf_fileName" type="requirement">
+			<testDesc>opf file filename contains only characters as specified in section 3.3.1 of z3986-2005 specification</testDesc>
+			<appliesToFile>opf</appliesToFile>
+			<appliesToDtbType>all</appliesToDtbType>
+			<specRef href="z3986-2005.html#Allowed-Char"/>
+			<onFalseMsg>
+				<msg class="long">opf file name contains disallowed characters</msg>
+				<msg class="short">filename chars</msg>
+			</onFalseMsg>
+		</test>
+		
+	</category>
+	<!-- end opf_fileIntegrity -->
+	<category name="opf_internal">
+		<category name="opf_internal_generic">
+			<test id="opf_isDtdValid" type="requirement">
+				<testDesc>opf file is valid to DTD</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986-2005.html#opfReq"/>
+				<onFalseMsg>
+					<msg class="long">opf file is not valid to DTD</msg>
+					<msg class="short">invalid to DTD</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_prologPubId" type="recommendation">
+				<testDesc>opf file public identifier equals "+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986-2005.html#opfDTD"/>
+				<onFalseMsg>
+					<msg class="long">opf file public identifier does not equal "+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"</msg>
+					<msg class="short">public identifier</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_entityDecl" type="requirement">
+				<testDesc>referenced entities must be declared in the internal DTD subset</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986-2005.html#?"/>
+				<onFalseMsg>
+					<msg class="long">a reference occured to an entity that was not declared in the internal DTD subset</msg>
+					<msg class="short">entity declaration</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_xmlnsPresence" type="requirement">
+				<testDesc>package file must have a non-DTD-inferred xmlns attribute on the root element</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#FileConform"/>
+				<onFalseMsg>
+					<msg class="long">package file does not have xmlns attribute</msg>
+					<msg class="short">xmlns attribute</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_xmlnsValue" type="requirement">
+				<testDesc>package root xmlns attribute value must be 'http://openebook.org/namespaces/oeb-package/1.0/'</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#App1DTDs"/>
+				<onFalseMsg>
+					<msg class="long">package file xmlns attribute value is not 'http://openebook.org/namespaces/oeb-package/1.0/' </msg>
+					<msg class="short">xmlns value</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_xmlLangAttrValue" type="requirement">
+				<testDesc>any occuring xml:lang attribute value is valid to
+					rfc3066</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986-2005.html#opfDTD"/>
+				<onFalseMsg>
+					<msg class="long">xml:lang attribute value is not valid to rfc3066</msg>
+					<msg class="short">xml:lang value</msg>
+				</onFalseMsg>
+			</test>
+		</category>
+		<!-- end opf_internal_generic -->
+		
+		<category name="opf_internal_specific">
+			<category name="opf_internal_dc_metadata">
+				<test id="opf_dc-metadata-xmlns" type="requirement">
+					<testDesc>the dc-metadata element has the non-DTD-inferred attributes 'xmlns:dc="http://purl.org/dc/elements/1.1/"' and 'xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/"'</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#App1DTDs"/>
+					<onFalseMsg>
+						<msg class="long">package file dc-metadata element xmlns
+							attribute values are incorrect or missing</msg>
+						<msg class="short">dc-metadata xmlns values</msg>
+					</onFalseMsg>
+				</test>
+				
+				<test id="opf_DcIdUniqIdref" type="requirement">
+					<testDesc>dc:Identifier id attribute matches the value of
+						unique-identifier attribute</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_37"/>
+					<onFalseMsg>
+						<msg class="long">Value of unique-identifier attribute on
+							package element does not match id value of any
+							dc:Identifier.</msg>
+						<msg class="short">unique-identifier doesn't match any
+							dc:Identifier</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcTitlePresent" type="requirement">
+					<testDesc>dc:Title is present at least once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_161"/>
+					<onFalseMsg>
+						<msg class="long">dc:Title is missing.</msg>
+						<msg class="short">dc:Title missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcTitleValue" type="requirement">
+					<testDesc>dc:Title contains a value</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_146"/>
+					<onFalseMsg>
+						<msg class="long">dc:Title is not valued</msg>
+						<msg class="short">dc:Title not valued</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcIdentifierPresent" type="requirement">
+					<testDesc>dc:Identifier is present at least once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_161"/>
+					<onFalseMsg>
+						<msg class="long">dc:Identifier is missing.</msg>
+						<msg class="short">dc:Identifier missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcIdentifierValue" type="requirement">
+					<testDesc>dc:Identifier contains a value</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_181"/>
+					<onFalseMsg>
+						<msg class="long">dc:Identifier is not valued</msg>
+						<msg class="short">dc:Identifier not valued</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcPubPresent" type="requirement">
+					<testDesc>dc:Publisher is present at least once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_161"/>
+					<onFalseMsg>
+						<msg class="long">dc:Publisher is missing.</msg>
+						<msg class="short">dc:Publisher missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcPubValue" type="requirement">
+					<testDesc>dc:Publisher element value is not null</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_161"/>
+					<onFalseMsg>
+						<msg class="long">dc:Publisher is not valued</msg>
+						<msg class="short">dc:Publisher not valued</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcDatePresent" type="requirement">
+					<testDesc>dc:Date is present at least once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_170"/>
+					<onFalseMsg>
+						<msg class="long">dc:Date is missing.</msg>
+						<msg class="short">dc:Date missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcDateValue" type="requirement">
+					<testDesc>dc:Date value complies with ISO8601</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_170"/>
+					<onFalseMsg>
+						<msg class="long">dc:Date value is not compliant with
+							ISO8601.</msg>
+						<msg class="short">dc:Date value invalid</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcFormatPresent" type="requirement">
+					<testDesc>dc:Format is present at least once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_178"/>
+					<onFalseMsg>
+						<msg class="long">dc:Format is missing</msg>
+						<msg class="short">dc:Format missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcFormatValue" type="requirement">
+					<testDesc>dc:Format value is "ANSI/NISO Z39.86-2005"</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_178"/>
+					<onFalseMsg>
+						<msg class="long">value in dc:Format is not "ANSI/NISO
+							Z39.86-2005"</msg>
+						<msg class="short">dc:Format invalid value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcLangPresent" type="requirement">
+					<testDesc>dc:Language is present at least once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_189"/>
+					<onFalseMsg>
+						<msg class="long">dc:Language is missing.</msg>
+						<msg class="short">dc:Language missing</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_DcLangValue" type="requirement">
+					<testDesc>dc:Language value is a valid RFC 3066 code</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_189"/>
+					<onFalseMsg>
+						<msg class="long">value in dc:Language is not valid RFC 3066
+							code</msg>
+						<msg class="short">dc:Language value invalid</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+			</category>
+			<!-- end opf_internal_dc_metadata -->
+			
+			<category name="opf_internal_x_metadata">
+				<test id="opf_xMetaDtbSourceDatePresence" type="requirement">
+					<testDesc>x-metadata element dtb:sourceDate occurs zero or
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_201"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:sourceDate occured
+							more than one time</msg>
+						<msg class="short">dtb:sourceDate ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				<test id="opf_xMetaDtbSourceDateValue" type="requirement">
+					<testDesc>x-metadata element dtb:sourceDate value is valid to
+						iso8601</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_201"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:sourceDate value is
+							not valid to iso8601</msg>
+						<msg class="short">dtb:sourceDate value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbSourceEditionPresence" type="requirement">
+					<testDesc>x-metadata element dtb:sourceEdition occurs zero or
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_204"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:sourceEdition
+							occured more than one time</msg>
+						<msg class="short">dtb:sourceEdition ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbSourcePublisherPresence" type="requirement">
+					<testDesc>x-metadata element dtb:sourcePublisher occurs zero or
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_207"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:sourcePublisher
+							occured more than one time</msg>
+						<msg class="short">dtb:sourcePublisher ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbSourceRightsPresence" type="requirement">
+					<testDesc>x-metadata element dtb:sourceRights occurs zero or
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_210"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:sourceRights
+							occured more than one time</msg>
+						<msg class="short">dtb:sourceRights ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbSourceTitlePresence" type="requirement">
+					<testDesc>x-metadata element dtb:sourceTitle occurs zero or
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_213"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:sourceTitle occured
+							more than one time</msg>
+						<msg class="short">dtb:sourceTitle ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaMmTypePresence" type="requirement">
+					<testDesc>x-metadata element dtb:multimediaType occurs exactly
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_216"/>
+					<onFalseMsg>
+						<msg class="long">dtb:multimediaType is missing or duplicated
+							in x-metadata</msg>
+						<msg class="short">zero or several dtb:multimediaType</msg>
+					</onFalseMsg>
+					<comment>[TN31]</comment>
+				</test>
+				<test id="opf_xMetaMmTypeValue" type="requirement">
+					<testDesc>x-metadata dtb:multimediaType value is one of:
+						audioOnly, audioNCX, audioPartText, audioFullText,
+						textPartAudio, textNCX</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_216"/>
+					<onFalseMsg>
+						<msg class="long">invalid value in dtb:multimediaType</msg>
+						<msg class="short">invalid dtb:multimediaType value</msg>
+					</onFalseMsg>
+					<comment>[TN31]</comment>
+				</test>
+				<test id="opf_xMetaMmContentPresence" type="requirement">
+					<testDesc>x-metadata element meta dtb:multimediaContent occurs
+						exactly once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986-2005.html#?"/>
+					<onFalseMsg>
+						<msg class="long">dtb:multimediaContent is missing or
+							duplicated in x-metadata</msg>
+						<msg class="short">dtb:multimediaContent occurrence</msg>
+					</onFalseMsg>
+				</test>
+				<test id="opf_xMetaMmContentValue" type="requirement">
+					<testDesc>dtb:multimediaContent must contain a comma-delimited
+						list of allowed top-level media types</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986-2005.html#?"/>
+					<onFalseMsg>
+						<msg class="long">dtb:multimediaContent not audio, text, and
+							image</msg>
+						<msg class="short">dtb:multimediaContent value</msg>
+					</onFalseMsg>
+				</test>
+				
+				<test id="opf_xMetaMmContentValueManifestAudio"
+					type="requirement">
+					<testDesc>when dtb:multimediaContent includes the top-level media
+						type "audio", there is at least one audio file in
+						manifest</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986-2005.html#?"/>
+					<onFalseMsg>
+						<msg class="long">dtb:multimediaContent value 'audio' does
+							not correspond to manifest</msg>
+						<msg class="short">dtb:multimediaContent audio:
+							manifest</msg>
+					</onFalseMsg>
+				</test>
+				
+				<test id="opf_xMetaMmContentValueManifestImage"
+					type="requirement">
+					<testDesc>when dtb:multimediaContent includes the top-level media
+						type "image", there is at least one image file in
+						manifest</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986-2005.html#?"/>
+					<onFalseMsg>
+						<msg class="long">dtb:multimediaContent value 'image' does
+							not correspond to manifest</msg>
+						<msg class="short">dtb:multimediaContent image:
+							manifest</msg>
+					</onFalseMsg>
+				</test>
+				
+				<test id="opf_xMetaMmContentValueManifestText" type="requirement">
+					<testDesc>when dtb:multimediaContent includes the top-level media
+						type "text", there is at least one dtbook file in
+						manifest</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986-2005.html#?"/>
+					<onFalseMsg>
+						<msg class="long">dtb:multimediaContent value 'text' does not
+							correspond to manifest</msg>
+						<msg class="short">dtb:multimediaContent text:
+							manifest</msg>
+					</onFalseMsg>
+				</test>
+				
+				<test id="opf_xMetaTotTimePresence" type="requirement">
+					<testDesc>x-metadata element dtb:totalTime occurs exactly
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_234"/>
+					<onFalseMsg>
+						<msg class="long">dtb:totalTime is missing or duplicated in
+							x-metadata</msg>
+						<msg class="short">zero or several dtb:totalTime</msg>
+					</onFalseMsg>
+					<comment>[TN36]</comment>
+				</test>
+				<test id="opf_xMetaTotTimeValue" type="requirement">
+					<testDesc>x-metadata dtb:totalTime value uses valid
+						syntax</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_234"/>
+					<onFalseMsg>
+						<msg class="long">Format of value in dtb:totalTime is
+							invalid</msg>
+						<msg class="short">dtb:totalTime invalid</msg>
+					</onFalseMsg>
+					<comment>[TN36]</comment>
+				</test>
+				
+				<test id="opf_xMetaDtbProducedDatePresence" type="requirement">
+					<testDesc>x-metadata element dtb:producedDate occurs zero or
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_225"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:producedDate
+							occured more than one time</msg>
+						<msg class="short">dtb:producedDate ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbProducedDateValue" type="requirement">
+					<testDesc>x-metadata element dtb:producedDate value is valid to
+						iso8601</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_225"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:producedDate value
+							is not valid to iso8601</msg>
+						<msg class="short">dtb:producedDate value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbRevisionPresence" type="requirement">
+					<testDesc>x-metadata element dtb:revision occurs zero or
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_228"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:revision occured
+							more than one time</msg>
+						<msg class="short">dtb:revision ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbRevisionValue" type="requirement">
+					<testDesc>x-metadata element dtb:revision value is a non negative
+						integer</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_228"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:revision value is not
+							a non negative integer</msg>
+						<msg class="short">dtb:revision value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbRevisionDatePresence" type="requirement">
+					<testDesc>x-metadata element dtb:revisionDate occurs zero or
+						once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_231"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:revisionDate
+							occured more than one time</msg>
+						<msg class="short">dtb:revisionDate ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbRevisionDateValue" type="requirement">
+					<testDesc>x-metadata element dtb:revisionDate value is valid to
+						iso8601</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_231"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:revisionDate value
+							is not valid to iso8601</msg>
+						<msg class="short">dtb:revisionDate value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbRevisionDescriptionPresence"
+					type="requirement">
+					<testDesc>x-metadata element dtb:revisionDescription occurs zero
+						or once</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_231a"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element
+							dtb:revisionDescription occured more than one time</msg>
+						<msg class="short">dtb:revisionDescription ocurrence</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbAudioFormatValue" type="requirement">
+					<testDesc>x-metadata element dtb:audioFormat has allowed
+						value</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#li_237"/>
+					<onFalseMsg>
+						<msg class="long">x-metadata element dtb:audioFormat value is
+							not allowed</msg>
+						<msg class="short">dtb:audioFormat value</msg>
+					</onFalseMsg>
+					<comment/>
+				</test>
+				
+				<test id="opf_xMetaDtbPrefixRestriction" type="requirement">
+					<testDesc>x-metadata meta element name attributes beginning with
+						the prefix "dtb:" concludes with one of the following strings:
+						sourceDate sourceEdition sourcePublisher sourceRights
+						sourceTitle multimediaType narrator producer producedDate
+						revision revisionDate totalTime audioFormat</testDesc>
+					<appliesToFile>opf</appliesToFile>
+					<appliesToDtbType>all</appliesToDtbType>
+					<specRef href="z3986.html#para_50"/>
+					<onFalseMsg>
+						<msg class="long">metadata names may not begin with the prefix
+							"dtb:" unless defined in Z39.86</msg>
+						<msg class="short">dtb: prefix not allowed</msg>
+					</onFalseMsg>
+					<comment>[TN25]</comment>
+				</test>
+			</category>
+			<!-- end opf_internal_x_metadata -->
+		</category>
+		<!-- end opf_internal_specific -->
+		
+		<category name="opf_internal_manifest">
+			<test id="opf_mnfMimeValue" type="requirement">
+				<testDesc>media-type attribute values conform to the subset of RFC 2046
+					defined by Z3986-2005</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">media-type attribute values not conformant to RFC
+						2046 and Z3986-2005</msg>
+					<msg class="short">non-conformant media type</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_mnfNcxId" type="requirement">
+				<testDesc>the manifest item representing the NCX has id value
+					"ncx"</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">NCX manifest item in opf must have id="ncx"</msg>
+					<msg class="short">manifest: no ncx id value</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+			
+			<test id="opf_mnfResId" type="requirement">
+				<testDesc>a manifest item with representing the resource file has id value
+					"resource"</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">Resource manifest item in opf must have
+						id="resource"</msg>
+					<msg class="short">manifest: no resource id value</msg>
+				</onFalseMsg>
+				<comment></comment>
+			</test>
+			
+			<test id="opf_mnfNcxCount" type="requirement">
+				<testDesc>Exactly one file of type NCX is listed in manifest</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">Zero or several NCX are listed in manifest</msg>
+					<msg class="short">manifest: ncx count</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+			<test id="opf_mnfResCount" type="requirement">
+				<testDesc>Zero or one file of type Resource is listed in
+					manifest</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#Manifest"/>
+				<onFalseMsg>
+					<msg class="long">several resource files are listed in
+						manifest</msg>
+					<msg class="short">manifest: res count</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+		</category>
+		<!-- end opf_internal_manifest -->
+		
+		<category name="opf_spine">
+			<test id="opf_xMetaTotTimeAccurate" type="requirement">
+				<testDesc>x-metadata dtb:totalTime value is the sum of the durations of
+					all SMIL files in the spine</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#li_234"/>
+				<onFalseMsg>
+					<msg class="long">Value in dtb:totalTime does not match sum of actual
+						durations of all SMIL files in spine</msg>
+					<msg class="short">dtb:totalTime inaccurate</msg>
+				</onFalseMsg>
+				<comment>Added by jwpritchett, 25 Oct 2004 for version 1.0.1</comment>
+			</test>
+			<test id="opf_SpineRefAllSmilInMnf" type="requirement">
+				<testDesc>each smil file listed in manifest is referenced by
+					spine</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_58"/>
+				<onFalseMsg>
+					<msg class="long">smil file in manifest not referenced in
+						spine</msg>
+					<msg class="short">spine omits smil file</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="opf_spnItemRefIdrefSmil" type="requirement">
+				<testDesc>spine itemref idref attributes points to the id of a SMIL file
+					listed in manifest</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_58"/>
+				<onFalseMsg>
+					<msg class="long">Manifest item referenced by itemref in spine is not
+						a SMIL file</msg>
+					<msg class="short">spine references non-SMIL file</msg>
+				</onFalseMsg>
+				<comment>The IDREF DTD validation is not enough to make sure the target is
+					actually a smil item. [TN43]</comment>
+			</test>
+		</category>
+		
+	</category>
+	<!-- end opf_internal -->
+	
+	<category name="opf_relations">
+		<category name="opf_relations_generic">
+			<!-- [mg] guess there are none here for opf... -->
+		</category>
+		<!-- end opf_relations_generic -->
+		<category name="opf_relations_specific">
+			<test id="opf_mnfIntegrityExists" type="requirement">
+				<testDesc>manifest only lists files that exist</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">File listed in manifest does not exist</msg>
+					<msg class="short">manifest: missing file</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			<test id="opf_mnfIntegrityReadable" type="requirement">
+				<testDesc>manifest only lists files that are readable</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">File listed in manifest is not readable</msg>
+					<msg class="short">file unreadable</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+			<test id="opf_mnfMimeMatch" type="requirement">
+				<testDesc>each manifest media-type mime declaration match actual file
+					types</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_101"/>
+				<onFalseMsg>
+					<msg class="long">manifest mime declaration doesnt match actual
+						file type</msg>
+					<msg class="short">mime-file mismatch</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_mnfOneSmil" type="requirement">
+				<testDesc>manifest references at least one SMIL file</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_101"/>
+				<onFalseMsg>
+					<msg class="long">no SMIL file found</msg>
+					<msg class="short">no smil</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_mnfDTBmembers" type="requirement">
+				<testDesc>manifest lists all, and only those files that are part of the
+					DTB</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">manifest file listing is incomplete/listing
+						files that are not part of DTB</msg>
+					<msg class="short">manifest illegal files</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_mnfHrefUriVal" type="requirement">
+				<testDesc>item element href attribute value is a valid URI</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">item element href attribute value is not a valid
+						URI</msg>
+					<msg class="short">item href value</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+			<test id="opf_mnfHrefUriUni" type="requirement">
+				<testDesc>item element href attribute value, when resolved, is unique
+					among item elements</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">Same file listed more than once in manifest</msg>
+					<msg class="short">duplicate filename in manifest</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+			<test id="opf_mnfHrefUriFrag" type="requirement">
+				<testDesc>item element href attribute URI does not include a fragment
+					identifier</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">uri includes fragment identifer</msg>
+					<msg class="short">uri fragment identifier</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_opfInManifest" type="requirement">
+				<testDesc>exactly one package file is listed in manifest</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">Zero or several package files listed in
+						manifest</msg>
+					<msg class="short">manifest: opf count</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+			<test id="opf_mnfResCountWhenSkippable" type="requirement">
+				<testDesc>when the DTB contains skippable or escapable structures,
+					exactly one resource file is listed in manifest </testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>all</appliesToDtbType>
+				<specRef href="z3986.html#para_52"/>
+				<onFalseMsg>
+					<msg class="long">Zero or several resource files listed in manifest:
+						DTB is skippable/escapable and must include one resource
+						file</msg>
+					<msg class="short">manifest: resource</msg>
+				</onFalseMsg>
+				<comment/>
+			</test>
+			
+			<test id="opf_mnfOneAudio" type="requirement">
+				<testDesc>manifest references at least one audio file</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<appliesToDtbType>audioNCX</appliesToDtbType>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<specRef href="z3986.html#para_101"/>
+				<onFalseMsg>
+					<msg class="long">no audio file found</msg>
+					<msg class="short">no audio</msg>
+				</onFalseMsg>
+			</test>
+			<test id="opf_mnfOneDtbook" type="requirement">
+				<testDesc>manifest references at least one dtbook file</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>audioPartText</appliesToDtbType>
+				<appliesToDtbType>audioFullText</appliesToDtbType>
+				<appliesToDtbType>textPartAudio</appliesToDtbType>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#para_101"/>
+				<onFalseMsg>
+					<msg class="long">no dtbook document found</msg>
+					<msg class="short">no dtbook</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_mnfZeroDtbook" type="requirement">
+				<testDesc>manifest does not reference dtbook files</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>audioOnly</appliesToDtbType>
+				<specRef href="z3986.html#para_101"/>
+				<onFalseMsg>
+					<msg class="long">dtbook document found</msg>
+					<msg class="short">dtbook</msg>
+				</onFalseMsg>
+			</test>
+			
+			<test id="opf_mnfZeroAudio" type="requirement">
+				<testDesc>manifest does not reference audio files</testDesc>
+				<appliesToFile>opf</appliesToFile>
+				<appliesToDtbType>textNCX</appliesToDtbType>
+				<specRef href="z3986.html#para_101"/>
+				<onFalseMsg>
+					<msg class="long">audio file found</msg>
+					<msg class="short">audio</msg>
+				</onFalseMsg>
+			</test>
+			
+		</category>
+		<!-- end opf_relations_specific -->
+	</category>
+	<!-- end opf_relations -->
+	
+	<!-- opf collection area for tests commented out during map authoring -->
+	<!--
+	<test id="opf_mnfDistInfo" type="requirement">
+	<testDesc>manifest does not reference a distInfo file</testDesc>
+	<appliesToFile>opf</appliesToFile>
+	<appliesToDtbType>all</appliesToDtbType>
+	<specRef href="z3986.html#para_52"/>
+	<onFalseMsg>
+	<msg class="long">distInfo file listed in manifest - not allowed</msg>
+	<msg class="short">manifest: distInfo listed</msg>
+	</onFalseMsg>
+	<comment>mg: redundant because of "only list files allowed"</comment>
+	</test>
+	
+	<test id="opf_mnfFileTypes" type="requirement">
+	<testDesc>manifest lists only files of types permitted by standard</testDesc>
+	<appliesToFile>opf</appliesToFile>
+	<appliesToDtbType>all</appliesToDtbType>
+	<specRef href="z3986.html#para_52"/>
+	<onFalseMsg>
+	<msg class="long">manifest contains files of types outside the standard </msg>
+	<msg class="short">manifest illegal file types listed</msg>
+	</onFalseMsg>
+	<comment>redundant via the media-type exclusive check (opf_mnfMimeValue) and the custom validation of these</comment>
+	</test>
+	
+	-->
+	
+	<!-- end opf collection area for commented out tests -->
+	<!-- end opf -->
+</category>

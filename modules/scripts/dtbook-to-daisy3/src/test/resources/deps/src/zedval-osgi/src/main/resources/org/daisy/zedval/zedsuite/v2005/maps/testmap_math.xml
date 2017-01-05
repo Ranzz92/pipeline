@@ -1,0 +1,200 @@
+<category name="math"> <!-- 2008-06-16 -->    
+   <test id="math_opfMathExtensionVersionMeta" type="requirement">
+      <testDesc>When the package file includes the MathML-in-DAISY extension-version metadata entry, DTBook must include at least one MathML island</testDesc>
+      <appliesToFile>dtbook</appliesToFile>      
+      <appliesToDtbType>audioPartText</appliesToDtbType>
+	  <appliesToDtbType>audioFullText</appliesToDtbType>
+	  <appliesToDtbType>textPartAudio</appliesToDtbType>
+	  <appliesToDtbType>textNCX</appliesToDtbType>
+      <specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Publication_Metadata"/>
+      <onFalseMsg>
+        <msg class="long">The OPF file metadata indicates MathML is present in the DTB, but no MathML elements found in Dtbook document.</msg>
+        <msg class="short">No MathML in DTBook</msg>
+      </onFalseMsg>      
+    </test>
+    
+   <test id="math_opfExtensionVersionMetadata" type="requirement">
+      <testDesc>When DTBook includes at least one MathML island, the package file must contain one meta element with @name="z39-86-extension-version" and @scheme="http://www.w3.org/1998/Math/MathML"</testDesc>
+      <appliesToFile>opf</appliesToFile>      
+      <appliesToDtbType>audioPartText</appliesToDtbType>
+	  <appliesToDtbType>audioFullText</appliesToDtbType>
+	  <appliesToDtbType>textPartAudio</appliesToDtbType>
+	  <appliesToDtbType>textNCX</appliesToDtbType>
+      <specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Publication_Metadata"/>
+      <onFalseMsg>
+        <msg class="long">Dtbook contains MathML, but no or incorrect z39-86-extension-version meta element in the package file.</msg>
+        <msg class="short">MathML extension-version metadata missing</msg>
+      </onFalseMsg>      
+    </test>
+    
+   <test id="math_xsltMetadataPresent" type="requirement">
+      <testDesc>When DTBook includes at least one MathML island, the package file must contain one meta element with @name="DTBook-XSLTFallback" and @scheme="http://www.w3.org/1998/Math/MathML"</testDesc>
+      <appliesToFile>opf</appliesToFile>      
+      <appliesToDtbType>audioPartText</appliesToDtbType>
+	  <appliesToDtbType>audioFullText</appliesToDtbType>
+	  <appliesToDtbType>textPartAudio</appliesToDtbType>
+	  <appliesToDtbType>textNCX</appliesToDtbType>
+      <specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Publication_Metadata"/>
+      <onFalseMsg>
+        <msg class="long">Dtbook contains MathML, but no or incorrect DTBook-XSLTFallback meta element in the package file.</msg>
+        <msg class="short">MathML XSLT metadata missing</msg>
+      </onFalseMsg>      
+    </test>
+    
+    <test id="math_xsltMetadataValue" type="requirement">
+      <testDesc>The MathML XSLT meta element content attribute resolves to an XSLT document</testDesc>
+      <appliesToFile>opf</appliesToFile>      
+      <appliesToDtbType>audioPartText</appliesToDtbType>
+	  <appliesToDtbType>audioFullText</appliesToDtbType>
+	  <appliesToDtbType>textPartAudio</appliesToDtbType>
+	  <appliesToDtbType>textNCX</appliesToDtbType>
+      <specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Publication_Metadata"/>
+      <onFalseMsg>
+        <msg class="long">DTBook-XSLTFallback meta element content attribute does not resolve to an XSLT document</msg>
+        <msg class="short">MathML XSLT missing</msg>
+      </onFalseMsg>      
+    </test>
+    
+    <test id="math_xsltInManifest" type="requirement">
+      <testDesc>A MathML fallback XSLT file defined in x-metadata must also be listed in manifest</testDesc>
+      <appliesToFile>opf</appliesToFile>      
+      <appliesToDtbType>audioPartText</appliesToDtbType>
+	  <appliesToDtbType>audioFullText</appliesToDtbType>
+	  <appliesToDtbType>textPartAudio</appliesToDtbType>
+	  <appliesToDtbType>textNCX</appliesToDtbType>
+      <specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Publication_Metadata"/>
+      <onFalseMsg>
+        <msg class="long">MathML fallback XSLT not listed in manifest</msg>
+        <msg class="short">MathML fallback XSLT not listed in manifest</msg>
+      </onFalseMsg>      
+    </test>
+            
+    <test id="math_attributeAltTextPresent" type="requirement">
+		<testDesc>math element must have attribute alttext</testDesc>
+		<appliesToFile>dtbook</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Requirements_for_Including_MathML"/>
+		<onFalseMsg>
+			<msg class="long">math element alttext attribute missing</msg>
+			<msg class="short">alttext missing</msg>
+		</onFalseMsg>
+	</test>
+		
+    <test id="math_attributeAltTextValue" type="recommendation">
+		<testDesc>math element alttext attribute is not empty/whitespace only</testDesc>
+		<appliesToFile>dtbook</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Requirements_for_Including_MathML"/>
+		<onFalseMsg>
+			<msg class="long">math element alttext attribute is empty</msg>
+			<msg class="short">empty alttext</msg>
+		</onFalseMsg>
+	</test>
+		
+    <test id="math_attributeAltImgPresent" type="requirement">
+		<testDesc>math element must have attribute altimg</testDesc>
+		<appliesToFile>dtbook</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Requirements_for_Including_MathML"/>
+		<onFalseMsg>
+			<msg class="long">math element altimg attribute missing</msg>
+			<msg class="short">altimg missing</msg>
+		</onFalseMsg>
+	</test>
+    
+    <test id="math_attributeAltImgValue" type="requirement">
+		<testDesc>math element altimg attribute is not empty/whitespace</testDesc>
+		<appliesToFile>dtbook</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Requirements_for_Including_MathML"/>
+		<onFalseMsg>
+			<msg class="long">math element altimg attribute is empty</msg>
+			<msg class="short">empty altimg</msg>
+		</onFalseMsg>
+	</test>
+    
+    <test id="math_smilrefPresent" type="requirement">
+		<testDesc>math element must have dtbook:smilref attribute</testDesc>
+		<appliesToFile>dtbook</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Using_MathML_in_the_DTBook_Element_Set"/>
+		<onFalseMsg>
+			<msg class="long">math element dtbook:smilref attribute missing</msg>
+			<msg class="short">math smilref attribute missing</msg>
+		</onFalseMsg>
+	</test>
+    
+    <test id="math_textDestination" type="requirement">
+	  <testDesc>Any SMIL text URI that refers to Dtbook content within the MathML namespace refers only to the math element</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Using_the_SMIL_Element_Set"/>
+		<onFalseMsg>
+			<msg class="long">The SMIL text URI must refer to a math element</msg>
+			<msg class="short">math text element URI</msg>
+		</onFalseMsg>
+	</test>     
+    
+    <test id="math_SMILTextTypeAttribute" type="requirement">
+		<testDesc>In a SMIL par referring to MathML, the text element must carry a type attribute with the value of the MathML Namespace URI.</testDesc>
+		<appliesToFile>smil</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>		
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Using_the_SMIL_Element_Set"/>
+		<onFalseMsg>
+			<msg class="long">SMIL text type attribute must be: type="http://www.w3.org/1998/Math/MathML"</msg>
+			<msg class="short">SMIL text type attribute not MathML target</msg>
+		</onFalseMsg>
+	</test>
+    
+    <test id="math_escapable" type="requirement">
+		<testDesc>Any SMIL construct whose text URI is referring to elements in the MathML namespace must be escapable</testDesc>
+		<appliesToFile>smil</appliesToFile>		
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Escapable_Structures"/>
+		<onFalseMsg>
+			<msg class="long">The SMIL entry referencing MathML is not escapable</msg>
+			<msg class="short">MathML SMIL not escapable</msg>
+		</onFalseMsg>
+	</test> 
+    
+    <test id="math_contentMathML" type="requirement">
+		<testDesc>content MathML elements listed in Chapter 4 of the W3C MathML Specification, except for those in Section 4.4.11 
+		(Semantic Mapping Elements), of the MathML-in-Daisy spec should appear inside of an annotation-xml element inside 
+		of a semantics element</testDesc>
+		<appliesToFile>dtbook</appliesToFile>
+		<appliesToDtbType>audioPartText</appliesToDtbType>
+	  	<appliesToDtbType>audioFullText</appliesToDtbType>
+	  	<appliesToDtbType>textPartAudio</appliesToDtbType>
+	  	<appliesToDtbType>textNCX</appliesToDtbType>
+		<specRef href="http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html#_Requirements_for_Including_MathML"/>
+		<onFalseMsg>
+			<msg class="long">content MathML element must be embedded within annotation-xml element and semantics element</msg>
+			<msg class="short">content MathML must be embedded</msg>
+		</onFalseMsg>	
+	</test>
+    
+</category>    

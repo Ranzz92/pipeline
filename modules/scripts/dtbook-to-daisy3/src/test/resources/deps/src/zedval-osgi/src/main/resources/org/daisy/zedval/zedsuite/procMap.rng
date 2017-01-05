@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+	xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:sch="http://www.ascc.net/xml/schematron">
+	<a:documentation> 
+		<a:note>UNDER DEVELOPMENT RelaxNg schema for ZedVal procMap 2005</a:note>
+		<a:note>Last edit by: mgylling 2006-12-19</a:note> 
+	</a:documentation>
+	
+	<start>
+		<ref name="root"/>
+	</start>
+	
+	<define name="root">
+		<element name="zedProcessorMap">
+			<attribute name="version"/>
+			<attribute name="date"/>
+			<attribute name="baseFile">
+				<data type="anyURI"/>
+			</attribute>
+			<attribute name="specVersion"/>
+			<oneOrMore>
+				<ref name="element.testProcessor"/>
+			</oneOrMore>
+			<zeroOrMore>
+			   <ref name="element.testGroup"/>
+			</zeroOrMore>
+		</element>
+	</define>
+	
+	<define name="element.testProcessor">
+		<element name="testProcessor">
+			<ref name="attribute.id"/>
+			<ref name="attribute.type"/>
+			<ref name="attribute.uses"/>
+			<ref name="attribute.appliesToFile"/>
+			<ref name="attribute.appliesToGrammarVersion"/>
+			<element name="label">
+				<text/>
+			</element>
+			<zeroOrMore>
+				<ref name="element.testRef"/>
+			</zeroOrMore>
+			<zeroOrMore>
+				<ref name="element.groupRef"/>
+			</zeroOrMore>
+		</element>
+	</define>
+	
+	<define name="element.testGroup">
+		<element name="testGroup">
+			<oneOrMore>
+				<ref name="element.testRef"/>
+			</oneOrMore>
+		</element>
+	</define>
+	
+	<define name="element.testRef"/>
+	<element name="testRef">
+		<attribute name="href">
+			<text/>
+			<sch:pattern name="hrefMatchesTestMapId" id="hrefMatchesTestMapId">
+				<sch:rule context="//testRef/@href">
+					<sch:assert
+						test="count(document(string(../../@implements)//test[@id=current()])=1">
+					</sch:assert>
+				</sch:rule>
+			</sch:pattern>
+			<!--
+			<sch:pattern name="hrefHasUniqueValueInProcMap" id="hrefHasUniqueValueInProcMap">
+				<sch:rule context="//testRef/@href">
+					<sch:assert
+						test="count(//testRef/@href = current())=1">
+					</sch:assert>
+				</sch:rule>
+			</sch:pattern>
+			-->	
+		</attribute>
+	</element>
+	</define>
+	
+	<define name="element.groupRef">
+	  <element name="groupRef">
+	    <attribute name="idref"/>
+	  </element>
+	</define>
+	
+	<define name="attribute.id">
+		<attribute name="id">
+			<data type="ID"
+				datatypeLibrary="http://relaxng.org/ns/compatibility/datatypes/1.0"/>
+		</attribute>
+	</define>
+	
+	<define name="attribute.type">
+		<attribute name="type">
+			<choice>
+				<value>DTD</value>
+				<value>RNG</value>
+				<value>SCH</value>
+				<value>CUSTOM</value>
+				<value>MANUAL</value>
+			</choice>
+		</attribute>
+	</define>
+	
+	<define name="attribute.uses">
+		<attribute name="uses">
+			<text/>
+		</attribute>
+	</define>
+	
+	<define name="attribute.appliesToFile">
+		<attribute name="appliesToFile">
+			<choice>
+				<value>opf</value>
+				<value>ncx</value>
+				<value>resource</value>
+				<value>smil</value>
+				<value>image</value>
+				<value>audio</value>
+				<value>dtbook</value>
+			</choice>
+		</attribute>
+	</define>
+	
+	<define name="attribute.appliesToSpecVersion">
+		<attribute name="appliesToSpecVersion">
+			<text/>
+		</attribute>
+	</define>
+	
+</grammar>

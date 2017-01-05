@@ -312,9 +312,9 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr-runtime</artifactId>
-			<version>3.5.2</version>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
+			<version>3.5.2_1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.nekohtml</groupId>

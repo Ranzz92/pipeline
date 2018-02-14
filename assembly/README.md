@@ -10,7 +10,6 @@ The project allows to build the following distributions:
  - the "CLI" distribution (with the command line user interface), packaged as a ZIP (_default_)
  - the "macOS Application Bundle" distribution
  - the "Windows installer" distribution
- - the "Developers" distribution generates the configuration files and launcher scripts for a development environment
  - the "Debian" distribution (DEB package)
  - the "CentOS" distribution (RPM package)
  - the "Desktop Web UI" distribution that includes the Web UI
@@ -51,18 +50,6 @@ The `win` profile will package the DAISY Pipeline into an executable installer.
 
 The installer is created with [NSIS](http://nsis.sourceforge.net/Main_Page). 
 
-Developers Distribution
------------------------
-
-Build the development environment with:
-
-    mvn clean package -P dev-launcher
-
-This distribution includes a launcher script for the Pipeline engine, as well as configuration files to include
-modules installed in the user's default Maven repository (in `~/.m2/`).
-
-Configuration files are generated for all the POM modules, including the braille modules.
-    
 Debian Distribution
 -------------------
 

@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -37,7 +38,15 @@ import net.sf.saxon.xpath.XPathFactoryImpl;
 
 import org.daisy.maven.xproc.api.XProcExecutionException;
 import org.daisy.maven.xproc.api.XProcEngine;
+import org.daisy.pipeline.modules.AbstractModuleBuilder;
+import org.daisy.pipeline.modules.Module;
+import org.daisy.pipeline.modules.ModuleRegistry;
+import org.daisy.pipeline.modules.ResourceLoader;
+import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -53,6 +62,7 @@ import org.xml.sax.InputSource;
 public class XProcSpecRunner {
 	
 	private XProcEngine engine;
+	private static boolean pipelineModuleRegistered = false;
 	
 	@Reference(
 		name = "XProcEngine",
@@ -111,12 +121,39 @@ public class XProcSpecRunner {
 	                   File reportsDir,
 	                   File surefireReportsDir,
 	                   File tempDir,
-	                   File catalog,
+	                   File catalogFile,
 	                   Reporter reporter) {
 		
 		if (engine == null)
 			activate();
-		engine.setCatalog(catalog);
+		
+		URL catalog = null;
+		if (catalogFile != null)
+			try {
+				catalog = catalogFile.toURL(); }
+			catch (MalformedURLException e) {
+				throw new RuntimeException(e); }
+			
+		// register catalog file that contains http://www.daisy.org/xprocspec/custom-assertion-steps.xpl
+		if (engine.getClass().getName().equals("org.daisy.maven.xproc.calabash.Calabash")) {
+			
+			// if you want to specify a catalog AND use custom-assertion-steps.xpl, you're out of luck
+			if (catalog == null)
+				catalog = XProcSpecRunner.class.getResource("/xprocspec-extra/custom-assertion-steps/META-INF/catalog.xml");
+		} else if (engine.getClass().getName().equals("org.daisy.maven.xproc.pipeline.DaisyPipeline2")) {
+			
+			// manually register Pipeline module
+			// only need to do this once
+			if (!pipelineModuleRegistered) {
+				
+				// assumes we are running inside OSGi
+				OSGiHelper.registerPipelineModule();
+				pipelineModuleRegistered = true;
+			}
+		}
+		
+		if (catalog != null)
+			engine.setCatalog(catalog);
 		
 		// register Java implementation of px:message
 		// FIXME: make a generic step that can be used by all XProc engines
@@ -405,5 +442,56 @@ public class XProcSpecRunner {
 				throw new RuntimeException("Cannot evaluate to a " + type.getName()); }
 		catch (Exception e) {
 			throw new RuntimeException("Exception occured during XPath evaluation.", e); }
+	}
+
+	// static nested class in order to delay class loading
+	private static final class OSGiHelper {
+		
+		static void registerPipelineModule() {
+			try {
+				BundleContext context = FrameworkUtil.getBundle(XProcSpecRunner.class).getBundleContext();
+				ModuleRegistry moduleRegistry; {
+					moduleRegistry = null;
+					ServiceReference<? extends ModuleRegistry> ref = context.getServiceReference(ModuleRegistry.class);
+					if (ref != null)
+						moduleRegistry = context.getService(ref);
+					if (moduleRegistry == null)
+						throw new RuntimeException("No module registry found");
+				}
+				XmlCatalogParser catalogParser; {
+					catalogParser = null;
+					ServiceReference<? extends XmlCatalogParser> ref = context.getServiceReference(XmlCatalogParser.class);
+					if (ref != null)
+						catalogParser = context.getService(ref);
+					if (catalogParser == null)
+						throw new RuntimeException("No catalog parser found");
+				}
+				Module module = new AbstractModuleBuilder() { protected AbstractModuleBuilder self() { return this; }}
+					.withName("custom-assertion-steps")
+					.withVersion("1.2.0")
+					.withLoader(new ResourceLoader() {
+							@Override
+							public URL loadResource(String path) {
+								// Paths are assumed to be relative to META-INF
+								if (!path.startsWith("../")) {
+									throw new RuntimeException("Paths must start with '../' but got '" + path + "'");
+								}
+								path = path.substring(3);
+								return XProcSpecRunner.class.getResource("/xprocspec-extra/custom-assertion-steps/" + path);
+							}
+							@Override
+							public Iterable<URL> loadResources(final String path) {
+								throw new UnsupportedOperationException("Not supported without OSGi.");
+							}
+						})
+					.withCatalog(
+						catalogParser.parse(
+							XProcSpecRunner.class.getResource("/xprocspec-extra/custom-assertion-steps/META-INF/catalog.xml").toURI()))
+					.build();
+				moduleRegistry.addModule(module);
+			} catch (Exception e) {
+				throw new RuntimeException("Something went wrong while registering Pipeline module", e);
+			}
+		}
 	}
 }

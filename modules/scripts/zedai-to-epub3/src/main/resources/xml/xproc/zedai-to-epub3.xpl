@@ -49,6 +49,16 @@
       </p:documentation>
     </p:option>
 
+    <p:option name="chunk-size" required="false" px:type="integer" select="'-1'">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h2 px:role="name">Chunk size</h2>
+        <p px:role="desc" xml:space="preserve">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+Top-level sections in the ZedAI become separate HTML files in the resulting EPUB. Each of these HTML files is
+further split up if they exceed the given maximum size.</p>
+      </p:documentation>
+    </p:option>
+
     <p:import href="zedai-to-epub3.convert.xpl"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>

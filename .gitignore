@@ -21,3 +21,5 @@ bin/
 target/
 /build/
 /node-modules/
+#whitelist
+!assembly/src/main/resources/bin/

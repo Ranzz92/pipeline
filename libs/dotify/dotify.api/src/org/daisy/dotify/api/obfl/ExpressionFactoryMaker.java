@@ -1,11 +1,9 @@
-package org.daisy.dotify.consumer.obfl;
+package org.daisy.dotify.api.obfl;
 
 import java.util.ServiceLoader;
 
-import org.daisy.dotify.api.obfl.ExpressionFactory;
-
 /**
- * <p>Like all classes in the org.daisy.dotify.consumer sub packages, this
+ * <p>Like all maker classes in the api, this
  * class is only used directly in SPI context. Unlike some other classes however,
  * this class does not implement a service interface that can be used from
  * OSGi. The reason for this is that the implementation <i>simply returns
@@ -20,16 +18,27 @@ import org.daisy.dotify.api.obfl.ExpressionFactory;
 public class ExpressionFactoryMaker {
 	private final ExpressionFactory proxy;
 
+	/**
+	 * Creates a new expression factory maker
+	 */
 	public ExpressionFactoryMaker() {
 		// Gets the first formatter engine (assumes there is at least one).
 		proxy = ServiceLoader.load(ExpressionFactory.class).iterator().next();
 		proxy.setCreatedWithSPI();
 	}
 
+	/**
+	 * Creates a new expression factory maker instance
+	 * @return returns a new expression factory maker instance
+	 */
 	public static ExpressionFactoryMaker newInstance() {
 		return new ExpressionFactoryMaker();
 	}
 
+	/**
+	 * Gets an expression factory.
+	 * @return returns an expression factory
+	 */
 	public ExpressionFactory getFactory() {
 		return proxy;
 	}

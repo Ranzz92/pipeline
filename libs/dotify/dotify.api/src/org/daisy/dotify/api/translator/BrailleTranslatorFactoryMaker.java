@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.translator;
+package org.daisy.dotify.api.translator;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,17 +13,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
-import org.daisy.dotify.api.translator.BrailleTranslator;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactoryService;
-import org.daisy.dotify.api.translator.TranslatorConfigurationException;
-import org.daisy.dotify.api.translator.TranslatorSpecification;
-import org.daisy.dotify.consumer.hyphenator.HyphenatorFactoryMaker;
-
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * Provides a braille translator factory maker. This class will look for 
@@ -45,6 +38,9 @@ public class BrailleTranslatorFactoryMaker implements
 	private final Map<String, BrailleTranslatorFactoryService> map;
 	private final Logger logger;
 
+	/**
+	 * Creates a new braille translator factory maker.
+	 */
 	public BrailleTranslatorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		factories = new CopyOnWriteArrayList<>();
@@ -78,15 +74,27 @@ public class BrailleTranslatorFactoryMaker implements
 		return ret;
 	}
 	
-	@Reference(type = '*')
+	/**
+	 * Adds a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to add
+	 */
+	@Reference(cardinality=ReferenceCardinality.MULTIPLE, policy=ReferencePolicy.DYNAMIC)
 	public void addFactory(BrailleTranslatorFactoryService factory) {
-		logger.finer("Adding factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Adding factory: " + factory);
+		}
 		factories.add(factory);
 	}
 
+	/**
+	 * Removes a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to remove
+	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(BrailleTranslatorFactoryService factory) {
-		logger.finer("Removing factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Removing factory: " + factory);
+		}
 		// this is to avoid adding items to the cache that were removed while
 		// iterating
 		synchronized (map) {
@@ -121,7 +129,9 @@ public class BrailleTranslatorFactoryMaker implements
 			synchronized (map) {
 				for (BrailleTranslatorFactoryService h : factories) {
 					if (h.supportsSpecification(locale, grade)) {
-						logger.fine("Found a factory for " + locale + " (" + h.getClass() + ")");
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Found a factory for " + locale + " (" + h.getClass() + ")");
+						}
 						map.put(toKey(locale, grade), h);
 						template = h;
 						break;

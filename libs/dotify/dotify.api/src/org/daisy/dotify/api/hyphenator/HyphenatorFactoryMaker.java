@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.hyphenator;
+package org.daisy.dotify.api.hyphenator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,16 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
-import org.daisy.dotify.api.hyphenator.HyphenatorFactory;
-import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
-import org.daisy.dotify.api.hyphenator.HyphenatorFactoryService;
-import org.daisy.dotify.api.hyphenator.HyphenatorInterface;
-
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * Provides a hyphenator factory maker. This is the entry point for
@@ -32,6 +29,9 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 	private final Map<String, HyphenatorFactoryService> map;
 	private final Logger logger;
 	
+	/**
+	 * Creates a new formatter factory maker.
+	 */
 	public HyphenatorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		filters = new CopyOnWriteArrayList<>();
@@ -57,21 +57,36 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 		{
 			Iterator<HyphenatorFactoryService> i = ServiceLoader.load(HyphenatorFactoryService.class).iterator();
 			while (i.hasNext()) {
-				ret.addFactory(i.next());
+				HyphenatorFactoryService f = i.next();
+				f.setCreatedWithSPI();
+				ret.addFactory(f);
 			}
 		}
 		return ret;
 	}
 
-	@Reference(type = '*')
+	/**
+	 * Adds a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to add
+	 */
+	@Reference(cardinality=ReferenceCardinality.MULTIPLE, policy=ReferencePolicy.DYNAMIC)
 	public void addFactory(HyphenatorFactoryService factory) {
-		logger.finer("Adding factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Adding factory: " + factory);
+		}
 		filters.add(factory);
 	}
 
+
+	/**
+	 * Removes a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to remove
+	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(HyphenatorFactoryService factory) {
-		logger.finer("Removing factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Removing factory: " + factory);
+		}
 		// this is to avoid adding items to the cache that were removed while
 		// iterating
 		synchronized (map) {
@@ -89,7 +104,9 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 			synchronized (map) {
 				for (HyphenatorFactoryService h : filters) {
 					if (h.supportsLocale(target)) {
-						logger.fine("Found a hyphenator factory for " + target + " (" + h.getClass() + ")");
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Found a hyphenator factory for " + target + " (" + h.getClass() + ")");
+						}
 						map.put(target.toLowerCase(), h);
 						template = h;
 						break;
